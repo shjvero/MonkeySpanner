@@ -277,45 +277,50 @@ class Prefetch(object):
 	def prettyPrint(self):
 		# Prints important Prefetch data in a structured format
 		banner = "=" * (len(ntpath.basename(self.pFileName)) + 2)
-		print("\n{0}\n{1}\n{0}\n".format(banner, ntpath.basename(self.pFileName)))
-		print("Executable Name: {}\n".format(self.executableName))
-		print("Run count: {}".format(self.runCount))
+		_data = "\n{0}\n{1}\n{0}\n".format(banner, ntpath.basename(self.pFileName))
+		_data += "Executable Name: {}\n".format(self.executableName)
+		_data += "Run count: {}\n".format(self.runCount)
 
 		if len(self.timestamps) > 1:
-			print("Last Executed:")
+			_data += "Last Executed:\n"
 			for i in self.timestamps:
-				print("	" + i)
+				_data += "	{}\n".format(i)
 		else:
-			print("Last Executed: {}".format(self.timestamps[0]))
+			_data += "Last Executed: {}\n".format(self.timestamps[0])
 		
-		print("\nVolume Information:")
+		_data += "\nVolume Information:\n"
 		for i in self.volumesInformationArray:
-			print("	Volume Name: " + i["Volume Name"])
-			print("	Creation Date: " + i["Creation Date"])
-			print("	Serial Number: " + i["Serial Number"])
-			print("")
+			_data += "	Volume Name: {}\n".format(i["Volume Name"])
+			_data += "	Creation Date: {}\n".format(i["Creation Date"])
+			_data += "	Serial Number: {}\n".format(i["Serial Number"])
+			_data += "\n"
 
-		print("Directory Strings:")
+		_data += "\nMFT Information:"
+		_data += "	Sequence Number: {}.\n".format(self.mftSeqNumber)
+		_data += "	Record Number: {}\n".format(self.mftRecordNumber)
+
+		_data += "\nDirectory Strings:\n"
 		for volume in self.directoryStringsArray:
 			for i in volume:
-				print("	" + i)
-		print("")
+				_data += "	{}\n".format(i)
+		_data += "\n"
 
-		print("Resources loaded:\n")
+		_data += "Resources loaded:\n\n"
 		count = 1
 		for i in self.resources:
 			if i:
 				if count > 999:
-					print("{}: {}".format(count, i))
+					_data += "{}: {}\n".format(count, i)
 				if count > 99:
-					print("{}:  {}".format(count, i))							
+					_data += "{}:  {}\n".format(count, i)
 				elif count > 9:
-					print("{}:   {}".format(count, i))
+					_data += "{}:   {}\n".format(count, i)
 				else:
-					print("{}:    {}".format(count, i))
+					_data += "{}:    {}\n".format(count, i)
 			count += 1
+		_data += "\n"
 
-		print("")
+		return _data
 
 class DecompressWin10(object):
 	def __init__(self):
@@ -394,8 +399,7 @@ class DecompressWin10(object):
 				ctypes.byref(ntWorkspace))
 
 			if ntstatus:
-				sys.exit('Decompression failed, err: {}'.format(
-					tohex(ntstatus, 32)))
+				sys.exit('Decompression failed, err: {}'.format(self.tohex(ntstatus, 32)))
 
 			if ntFinalUncompressedSize.value != decompressed_size:
 				sys.exit('Decompressed with a different size than original!')
@@ -435,71 +439,3 @@ def sortTimestamps(directory):
 
 def convertTimestamp(timestamp):
 		return str(datetime(1601,1,1) + timedelta(microseconds=timestamp / 10.))
-
-
-
-def main():
-	p = ArgumentParser()
-	p.add_argument("-c", "--csv", help="Present results in CSV format", action="store_true")
-	p.add_argument("-d", "--directory", help="Parse all PF files in a given directory")
-	p.add_argument("-e", "--executed", help="Sort PF files by ALL execution times")
-	p.add_argument("-f", "--file", help="Parse a given Prefetch file")
-	args = p.parse_args()
-
-	if args.file:
-		if args.file.endswith(".pf"):
-			if os.path.getsize(args.file) > 0:
-				try:
-					p = Prefetch(args.file)
-				except Exception as e:
-					print("[ - ] {}".format(e))
-					sys.exit("[ - ] {} could not be parsed".format(args.file))
-				
-				if args.csv:
-					print("Last Executed, Executable Name, Run Count")
-					print("{}, {}-{}, {}".format(p.timestamps[0], p.executableName, p.hash, p.runCount))
-				else:
-					p.prettyPrint()
-			else:
-				print("[ - ] {}: Zero byte Prefetch file".format(args.file))
-
-	elif args.directory:
-		if not (args.directory.endswith("/") or args.directory.endswith("\\")):
-			sys.exit("\n[ - ] When enumerating a directory, add a trailing slash\n")
-
-		if os.path.isdir(args.directory):
-			if args.csv:
-				print("Last Executed, MFT Seq Number, MFT Record Number, Executable Name, Run Count")
-
-				for i in os.listdir(args.directory):
-					if i.endswith(".pf"):
-						if os.path.getsize(args.directory + i) > 0:
-							try:
-								p = Prefetch(args.directory + i)
-							except Exception as e:
-								print("[ - ] {} could not be parsed".format(i))
-							print("{},{},{},{},{}".format(p.timestamps[0], p.mftSeqNumber, p.mftRecordNumber, p.executableName, p.runCount))
-						else:
-							print("[ - ] {}: Zero-byte Prefetch File".format(i))
-					else:
-						continue
-
-			else:
-				for i in os.listdir(args.directory):
-					if i.endswith(".pf"):
-						if os.path.getsize(args.directory + i):
-							try:
-								p = Prefetch(args.directory + i)
-								p.prettyPrint()
-							except Exception as e:
-								print("[ - ] {} could not be parsed".format(i))
-						else:
-							print("[ - ] Zero-byte Prefetch file")
-
-	elif args.executed:
-		print("Execution Time, File Executed")
-		for i in  sortTimestamps(args.executed):
-			print("{}, {}".format(convertTimestamp(i[0]), i[1]))
-
-if __name__ == '__main__':
-	main()

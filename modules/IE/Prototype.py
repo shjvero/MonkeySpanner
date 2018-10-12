@@ -1,6 +1,7 @@
 import sys
 import libs.ParseEvtx.Evtx as evtx
 import libs.ParseEvtx.Views as e_views
+from modules.Prototype import *
 
 def evtx_dump(_path, eid):
 	with evtx.Evtx(_path) as log:
@@ -24,5 +25,9 @@ if __name__ == '__main__':
 	__path = "C:\Windows\System32\winevt\Logs\System.evtx"
 	eid = 7001
 	recordID = 20844
-	evtx_dump(__path, eid)
+	#evtx_dump(__path, eid)
 	#evtx_extract_record(__path, recordID)
+	pfArr = getPrefetchItems("CMD")
+	for p in pfArr:
+		print(p[0])
+		print(p[1])

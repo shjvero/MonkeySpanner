@@ -1,4 +1,6 @@
 __all__ = [
+    'constant',
+    'Prototype',
     'AdobeFlashPlayer',
     'HWP',
     'IE',
