@@ -11,7 +11,7 @@ def getFiletime(dt):
             microseconds = dt / 10
             seconds, microseconds = divmod(microseconds, 1000000)
             days, seconds = divmod(seconds, 86400)
-            return datetime.datetime(1601, 1, 1) + datetime.timedelta(days, seconds, microseconds)
+            return "{}".format(datetime.datetime(1601, 1, 1) + datetime.timedelta(days, seconds, microseconds))
         except:
             return "-"
 

@@ -1,5 +1,7 @@
 import os, sys
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMessageBox
+
+from PyQt5.QtGui import QColor
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMessageBox, QTableWidget, QTableWidgetItem
 from PyQt5.QtCore import QCoreApplication
 
 class Exam(QWidget):
@@ -21,7 +23,14 @@ class Exam(QWidget):
         #self.setGeometry(300, 300, 400, 500) # 창크기 조절
         self.resize(500, 500) # 바탕화면 정중앙 배치.
         self.setWindowTitle("TEST Title")
-
+        self.table = QTableWidget(self)
+        self.table.resize(400, 300)
+        self.table.setColumnCount(4)
+        self.table.setRowCount(5)
+        for i in range(4):
+            self.table.setItem(2, i, QTableWidgetItem("TEST"))
+            self.table.item(2, i).setBackground(QColor(255, 0, 0))
+        self.table.setHorizontalHeaderLabels([])
         self.show()
 
     ''' from PyQt5.QtCore import pyqtSlot

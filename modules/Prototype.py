@@ -238,7 +238,7 @@ def getWebArtifactItems(env, type=None):
         flag = 0
         with open(".\\repo\\target.txt", "r") as f:
             for line in f.readlines():
-                if line == "\n":
+                if line == "\n" or line.startswith("backgroundTaskHost"):
                     continue
                 t = line.split()[0]
                 if os.system('taskkill /f /im "%s"'.format(t)) != 0:
@@ -248,10 +248,10 @@ def getWebArtifactItems(env, type=None):
             return items
 
     for fname in filenames:
-        if fname.startwith("WebCacheV") and fname.endswith(".dat"):
+        if fname.startswith("WebCacheV") and fname.endswith(".dat"):
             fullname = os.path.join(dirname, fname)
-            items["history"] = WebArtifact.getHistory(fullname)
-            items["content"] = WebArtifact.getContent(fullname)
+            items["History"] = WebArtifact.getHistory(fullname)
+            items["Cache"] = WebArtifact.getContent(fullname)
             # items = WebArtifact.getCookies(fullname)
             # items = WebArtifact.getDom(fullname)
             # items = WebArtifact.getDownloads(fullname)

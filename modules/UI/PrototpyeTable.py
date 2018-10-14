@@ -3,10 +3,17 @@ from PyQt5.Qt import *
 import modules.IE.Prototype as InternetExplorerPrototype
 
 class PrototypeTable(QTableWidget):
-    def __init__(self, sw):
+    def __init__(self, sw, env):
         super().__init__()
         self.sw = sw
+        self.env = env
         self.prototype = []
+        self.colors = {
+            "Prefetch": QColor(255, 0, 0),
+            "EventLog": QColor(0, 255, 0),
+            "History": QColor(0, 0, 255),
+            "Cache": QColor(125, 125, 125)
+        }
         # 사이즈, 기타 기능 준비
         self.load(sw)
         '''
@@ -25,8 +32,8 @@ class PrototypeTable(QTableWidget):
         elif sw == 2:
             print("HWP")
         elif sw == 3:
-            self.prototype = InternetExplorerPrototype.getPrototype()
-            self.columnHeaders = InternetExplorerPrototype.getColumnHeader()
+            self.prototype, self.row = InternetExplorerPrototype.getPrototype(self.env)
+            self.customHeaders = InternetExplorerPrototype.getColumnHeader()
         elif sw == 4:
             print("Office")
         elif sw == 5:
@@ -40,18 +47,38 @@ class PrototypeTable(QTableWidget):
         else:
             print("타임라인 설정 X")
 
-    def initUI(self, prototype):
+    def initUI(self):
         print("initUI")
-        self.setColumnCount(8)
+        self.setColumnCount(6)
+        self.setRowCount(self.row)
         # self.prototype 에 저장된 데이터들 모두 테이블에 로드
-        # 행마다 색 지정
+        self.setHorizontalHeaderLabels(["", "", "", "", "", ""])
+        row = 0
+        # print(self.prototype)
+        for header, list in self.prototype.items():
+            for prototypeItem in list:
+                self.setVerticalHeaderItem(row, QTableWidgetItem(header))
+                print(prototypeItem)
+                self.setItem(row, 0, QTableWidgetItem(prototypeItem[0]))
+                self.setItem(row, 1, QTableWidgetItem(prototypeItem[1]))
+                self.setItem(row, 2, QTableWidgetItem(prototypeItem[2]))
+                self.setItem(row, 3, QTableWidgetItem(prototypeItem[3]))
+                self.setItem(row, 4, QTableWidgetItem(prototypeItem[4]))
+                self.setItem(row, 5, QTableWidgetItem(""))
+                # self.item(row, 0).setBackground(self.colors[header])
+                # self.item(row, 1).setBackground(self.colors[header])
+                # self.item(row, 2).setBackground(self.colors[header])
+                # self.item(row, 3).setBackground(self.colors[header])
+                # self.item(row, 4).setBackground(self.colors[header])
+                # self.item(row, 5).setBackground(self.colors[header])
+                row += 1
+
         self.clicked.connect(self.changeColumnHeader)  # 원클릭
         self.doubleClicked.connect(self.showDetail)  # 더블 클릭
-        self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.table.resizeColumnsToContents()
-        self.table.resizeRowsToContents()
-        self.table.move(0, 110 + self.search.height())
-        self.table.resize(self.search.width() + 20, self.h + 100)
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.resizeColumnsToContents()
+        self.resizeRowsToContents()
+
 
     def search(self, keyword):
         print("search: " + keyword)
@@ -59,9 +86,11 @@ class PrototypeTable(QTableWidget):
     @pyqtSlot()
     def changeColumnHeader(self):
         print("changeColumnHeader\n")
-        self.table.setHorizontalHeaderLabels(self.columnHeaders[""])
-        for currentQTableWidgetItem in self.table.selectedItems():
-            print(currentQTableWidgetItem.row(), currentQTableWidgetItem.column(), currentQTableWidgetItem.text())
+        # header = ''
+        # for currentQTableWidgetItem in self.selectedItems():
+        #     header = self.item(currentQTableWidgetItem.row, 0).text()
+        #     print(currentQTableWidgetItem.row(), currentQTableWidgetItem.column(), currentQTableWidgetItem.text())
+        # self.table.setHorizontalHeaderLabels(self.customHeaders[header])
 
     @pyqtSlot()
     def showDetail(self):

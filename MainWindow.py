@@ -68,13 +68,17 @@ class Main(QMainWindow):
 
         # 테이블 기능
         # 로딩 시작
-        self.table = PrototypeTable(3)
+        self.table = PrototypeTable(3, self.env)
+        self.table.setParent(self)
         self.table.initUI() # self.table.hide()
-        self.table.show()
+        self.table.move(0, 110 + self.search.height())
+        self.table.resize(self.search.width() + 20, self.h + 100)
+
         # 로딩 끝
         self.layout.addWidget(self.table)
         self.layout.addStretch()
         self.setLayout(self.layout)
+        self.showMaximized()
 
     def toggledRadioBtn(self, b):
         msg = b.text()
@@ -111,5 +115,4 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     w = Main()
-    w.showMaximized()
     sys.exit(app.exec_())
