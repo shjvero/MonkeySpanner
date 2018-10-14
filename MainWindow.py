@@ -11,6 +11,16 @@ from modules.UI.PrototpyeTable import PrototypeTable
 class Main(QMainWindow):
     def __init__(self):
         super().__init__()
+        import platform
+        self.env = platform.system() + platform.release()
+        if self.env != "Windows7" and self.env != "Windows10":
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Critical)
+            msg.setWindowTitle("Error")
+            msg.setText("Not Supported")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.buttonClicked.connect(sys.exit)
+            msg.exec_()
         self.w = self.width()
         self.h = self.height()
         self.initUI()
@@ -57,7 +67,13 @@ class Main(QMainWindow):
         self.layout.addWidget(self.search)
 
         # 테이블 기능
-        self.createTable()
+        # 로딩 시작
+        self.table = PrototypeTable(3)
+        self.table.initUI() # self.table.hide()
+        self.table.show()
+        # 로딩 끝
+        self.layout.addWidget(self.table)
+        self.layout.addStretch()
         self.setLayout(self.layout)
 
     def toggledRadioBtn(self, b):
@@ -79,45 +95,6 @@ class Main(QMainWindow):
 
     def enterPressed(self):
         print("Entered: " + self.search.text())
-
-    def createTable(self):
-        self.table = QTableWidget(self)
-        self.table.setRowCount(10)
-        self.table.setColumnCount(6)
-        self.table.setItem(2, 3, QTableWidgetItem("TEST")) # 개별 항목
-        # 행 레이블
-        self.table.setVerticalHeaderItem(0, QTableWidgetItem("Prefetch"))
-        self.table.setVerticalHeaderItem(1, QTableWidgetItem("Event Log"))
-        self.table.setVerticalHeaderItem(2, QTableWidgetItem("[W] History"))
-        self.table.setVerticalHeaderItem(3, QTableWidgetItem("Event Log"))
-        self.table.setVerticalHeaderItem(4, QTableWidgetItem("$usnjrnl"))
-        self.table.setVerticalHeaderItem(5, QTableWidgetItem("$usnjrnl"))
-        self.table.setVerticalHeaderItem(6, QTableWidgetItem("Event Log"))
-        self.table.setVerticalHeaderItem(7, QTableWidgetItem("Event Log"))
-        self.table.setVerticalHeaderItem(8, QTableWidgetItem("Report.wer"))
-        self.table.setVerticalHeaderItem(9, QTableWidgetItem("[W] Cookie"))
-
-        # 열 레이블
-        self.table.setHorizontalHeaderItem(0, QTableWidgetItem("Timeline"))
-        self.table.setHorizontalHeaderItem(1, QTableWidgetItem("Path"))
-        self.table.setHorizontalHeaderItem(2, QTableWidgetItem("Value"))
-        self.table.setHorizontalHeaderItem(3, QTableWidgetItem(" - "))
-        self.table.setHorizontalHeaderItem(4, QTableWidgetItem(" - "))
-        self.table.setHorizontalHeaderItem(5, QTableWidgetItem(" - "))
-
-        self.table.move(0, 110 + self.search.height())
-        self.table.resize(self.search.width()+20, self.h+100)
-        self.layout.addWidget(self.table)
-        self.layout.addStretch()
-
-        # table selection change
-        self.table.clicked.connect(self.on_click)
-
-    @pyqtSlot()
-    def on_click(self):
-        print("\n")
-        for currentQTableWidgetItem in self.table.selectedItems():
-            print(currentQTableWidgetItem.row(), currentQTableWidgetItem.column(), currentQTableWidgetItem.text())
 
     def contextMenuEvent(self, QContextMenuEvent):
         # 윈도우에서 마우스 우클릭 핸들링

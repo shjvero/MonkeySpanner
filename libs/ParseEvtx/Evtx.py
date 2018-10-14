@@ -512,3 +512,4 @@ class Record(Block):
         '''
         import lxml.etree
         return lxml.etree.fromstring((e_views.XML_HEADER + self.xml()).encode('utf-8'))
+#

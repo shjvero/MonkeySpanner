@@ -1,33 +1,51 @@
 import sys
-import libs.ParseEvtx.Evtx as evtx
-import libs.ParseEvtx.Views as e_views
 from modules.Prototype import *
 
-def evtx_dump(_path, eid):
-	with evtx.Evtx(_path) as log:
-		print(e_views.XML_HEADER)
-		print("<Events>")
-		for record in log.records():
-			eventLog = record.xml()
-			if "{}</EventID>".format(eid) in eventLog:
-				print(eventLog)
-		print("</Events>")
+def getColumnHeader():
+	return {
+		"Prefetch": ["Timeline", "File Name", "Action", "File Size", "Executable Name"],		# 5 columns
+		"EventLog": ["Logged Time", "Level", "Event ID", "Provider Name", "Task", "Channel"],	# 5 columns
+		"History": ["Accessed Time", "URL", "Access Count", "File Name", "Created Time"],		# 5 columns
+		"Cache": ["Accessed Time", "File Name", "File Size", "URL", "Access Count", "Created Time"],	# 6 columns
+		# └ Response Header exists.
+	}
 
-def evtx_extract_record(_path, recordID):
-	# recordID : The record number of the record to extract
-	with evtx.Evtx(_path) as log:
-		record = log.get_record(recordID)
-		if record is None:
-			raise RuntimeError("Cannot find the record specified.")
-		print(record.xml())
+def getPrototype(env, timeline=None):
+	# 추가적인 프리패치 (시스템 프로세스 등)
+	prefetchList= ["IEXPLORER.EXE", "WERFAULT.EXE", "CMD.EXE", "POWERSHELL.EXE"]
+	evtxLogFor7 = {
+		"Application.evtx": {
+			'eid': ['1000'],
+			'providerName': ['Appllication Error']
+		},
+		"System.evtx": {
+			'eid': ['7036'],
+			'providerName': ['Service Control Manager']
+		},
+		"Microsoft-Windows-WER-Diag%4Operational.evtx": {
+			'eid': ['2'],
+			'providerName': ['Microsoft-Windows-WER-Diag']
+		},
+		"Microsoft-Windows-Fault-Tolerant-Heap%4Operational.evtx": {
+			'eid': ['1001'],
+			'providerName': ['Microsoft-Windows-Fault-Tolerant-Heap']
+		}
+	}
+	evtxLogFor10 = {
+		"Application.evtx": {
 
-if __name__ == '__main__':
-	__path = "C:\Windows\System32\winevt\Logs\System.evtx"
-	eid = 7001
-	recordID = 20844
-	#evtx_dump(__path, eid)
-	#evtx_extract_record(__path, recordID)
-	pfArr = getPrefetchItems("CMD")
-	for p in pfArr:
-		print(p[0])
-		print(p[1])
+		},
+		"System.evtx": {
+
+		}
+	}
+	prototype = {}
+	prototype["Prefetch"] = getPrefetchItems(prefetchList)
+	if env == "Windows7":
+		prototype["EventLog"] = getEventLogItemsForWin7(evtxLogFor7)
+	elif env == "Windows10":
+		prototype["EventLog"] = getEventLogItemsForWin10(evtxLogFor10)
+	prototype.update(getWebArtifactItems(env))
+	# 그 외 Report.wer or JumpList등등
+
+	return prototype

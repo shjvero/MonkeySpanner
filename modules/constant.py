@@ -9,7 +9,7 @@ SYSTEMROOT = os.environ["SYSTEMROOT"]       # C:\\Windows
 
 # Common Path
 PREFETCH = SYSTEMROOT + '\\Prefetch\\'
-WER = 'C:\\ProgramData\\Microsoft\\Windows\\WER\\'
+WER = 'C:\\ProgramData\\Microsoft\\Windows\\WER\\ReportArchive\\'
 EVENTLOG = SYSTEMROOT + '\\System32\\Winevt\\logs\\'
 JUMPLIST = [
     APPDATA + '\\Microsoft\\Windows\\Recent\\AutomaticDestinations\\',      # AutomaticDestinations

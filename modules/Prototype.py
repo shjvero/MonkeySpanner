@@ -1,43 +1,153 @@
 import os, sys
 from libs.ParsePrefetch.prefetch import *
-import modules.constant as PATH
 from libs.ParseJumpList.JumpListParser import *
+import libs.ParseEvtx.Evtx as evtx
+import libs.ParseEvtx.Views as e_views
+import libs.IE.WebArtifact as WebArtifact
+import modules.constant as PATH
 
-def getPrefetchItems(sw):
-    prototype = []
+'''
+sw = {
+    Win7 : {
+        Application.evtx: {
+            eid: [ ... ],
+            providerName: [ ... ],
+        },
+        System.evtx: {
+            eid: [ ... ],
+            providerName: [ ... ],
+        },
+        Microsoft-Windows-WER-Diag%4Operational.evtx: 이하 동일
+    },
+    Win10 : {
+        ...
+    }
+}
+'''
+def getEventLogItemsForWin7(evtxList, timeline=None):
+    items = []
+    for fileName, category in evtxList.items():
+        fullPath = PATH.EVENTLOG + fileName
+        eid = category['eid']
+        providerName = category['providerName']
+        with evtx.Evtx(fullPath) as log:
+            if fileName == "Application.evtx" or fileName == "Microsoft-Windows-WER-Diag%4Operational.evtx":       # Application.evtx
+                for event in log.records():
+                    systemTag = event.lxml()[0]
+                    if systemTag[1].text in eid and systemTag[0].get("Name") in providerName:
+                        level = ''
+                        if systemTag[2].text == '2':
+                            level = '오류'
+                        elif systemTag[2].text == '4':
+                            level = '정보'
+                        items.append([
+                            systemTag[5].get("SystemTime"),     # Timeline
+                            level,                              # Level
+                            systemTag[1].text,                  # Event ID
+                            systemTag[0].get("Name"),           # Provider Name
+                            systemTag[3].text,                  # Task
+                            systemTag[7].text,                  # Channel
+                            event.xml()                         # detail
+                        ])
+            elif fileName == "System.evtx" or fileName == "Microsoft-Windows-Fault-Tolerant-Heap%4Operational.evtx":
+                for event in log.records():
+                    systemTag = event.lxml()[0]
+                    if systemTag[1].text in eid and systemTag[0].get("Name") in providerName:
+                        level = ''
+                        if systemTag[3].text == '2':
+                            level = '오류'
+                        elif systemTag[3].text == '4':
+                            level = '정보'
+                        items.append([
+                            systemTag[7].get("SystemTime"),     # Timeline
+                            level,                              # Level
+                            systemTag[1].text,                  # EventID
+                            systemTag[0].get("Name"),           # Provider Name
+                            systemTag[4].text,                  # Task
+                            systemTag[11].text,                 # Channel
+                            event.xml()                         # detail
+                        ])
+    return items
+
+def getEventLogItemsForWin10(evtxList, timeline=None):
+    items = []
+    for fileName, category in evtxList.items():
+        fullPath = PATH.EVENTLOG + fileName
+        eid = category['eid']
+        providerName = category['providerName']
+        with evtx.Evtx(fullPath) as log:
+            if fileName == "Application.evtx":
+                for event in log.records():
+                    systemTag = event.lxml()[0]
+                    if systemTag[1].text in eid and systemTag[0].get("Name") in providerName:
+                        level = ''
+                        if systemTag[3].text == '2':
+                            level = '오류'
+                        elif systemTag[3].text == '4':
+                            level = '정보'
+                        items.append([
+                            systemTag[5].get("SystemTime"),     # Timeline
+                            level,                              # Level
+                            systemTag[1].text,                  # EventID
+                            systemTag[0].get("Name"),           # Provider Name
+                            systemTag[4].text,                  # Task
+                            systemTag[11].text,                 # Channel
+                            event.xml()                         # detail
+                        ])
+            elif fileName == "System.evtx":
+                for event in log.records():
+                    systemTag = event.lxml()[0]
+                    if systemTag[1].text in eid and systemTag[0].get("Name") in providerName:
+                        level = ''
+                        if systemTag[2].text == '2':
+                            level = '오류'
+                        elif systemTag[2].text == '4':
+                            level = '정보'
+                        items.append([
+                            systemTag[5].get("SystemTime"),     # Timeline
+                            level,                              # Level
+                            systemTag[1].text,                  # Event ID
+                            systemTag[0].get("Name"),           # Provider Name
+                            systemTag[3].text,                  # Task
+                            systemTag[7].text,                  # Channel
+                            event.xml()
+                        ])
+    return items
+
+def getPrefetchItems(exeNameList):
+    items = []
     for i in os.listdir(PATH.PREFETCH):
-        if i.startswith(sw) and i.endswith(".pf"):
-            if os.path.getsize(PATH.PREFETCH + i) > 0:
-                try:
-                    p = Prefetch(PATH.PREFETCH + i)
-                except Exception as e:
-                    print("[ - ] {} could not be parsed".format(i))
-                content = p.prettyPrint()
-                pf_name = "{}-{}.pf".format(p.executableName, p.hash)
-                prototype.append([
-                    p.volumesInformationArray[0]["Creation Date"],
-                    {
-                        "pf_name": pf_name,
-                        "action": "CREATE",
-                        "executableName": p.executableName,
-                        "detail": content,
-                    }
-                ])
-                for timestamp in p.timestamps:
-                    prototype.append([
-                        timestamp,
-                        {
-                            "pf_name": pf_name,
-                            "action": "EXECUTE",
-                            "executableName": p.executableName,
-                            "detail": content
-                        }
+        for sw in exeNameList:
+            if i.startswith(sw) and i.endswith(".pf"):
+                if os.path.getsize(PATH.PREFETCH + i) > 0:
+                    try:
+                        p = Prefetch(PATH.PREFETCH + i)
+                    except Exception as e:
+                        print("[ - ] {} could not be parsed".format(i))
+                    content = p.prettyPrint()
+                    pf_name = "{}-{}.pf".format(p.executableName, p.hash)
+                    items.append([
+                        p.volumesInformationArray[0]["Creation Date"],
+                        pf_name,
+                        "Create",
+                        p.fileSize,
+                        p.executableName,
+                        content
                     ])
+                    for timestamp in p.timestamps:
+                        items.append([
+                            timestamp,
+                            pf_name,
+                            "Execute",
+                            p.fileSize,
+                            p.executableName,
+                            content
+                        ])
+                else:
+                    print("[ - ] {}: Zero-byte Prefetch File".format(i))
             else:
-                print("[ - ] {}: Zero-byte Prefetch File".format(i))
-        else:
-            continue
-    return prototype
+                continue
+    return items
 
 def getJumplistItems(fileName):
     ''' 점프리스트 목록 조회
@@ -119,3 +229,65 @@ def getJumplistItems(fileName):
         "LinkFiles": LinkFiles,
         "DestList": DestList
     }
+
+def getWebArtifactItems(env, type=None):
+    items = {}
+    dirname = PATH.IE_ARTIFACT_PATH[env]["History"]
+    filenames = os.listdir(dirname)
+    if os.system('tasklist | find /i "taskhost" > .\\repo\\target.txt') == 0:
+        flag = 0
+        with open(".\\repo\\target.txt", "r") as f:
+            for line in f.readlines():
+                if line == "\n":
+                    continue
+                t = line.split()[0]
+                if os.system('taskkill /f /im "%s"'.format(t)) != 0:
+                    flag += 1
+                    print("[Error] Dirty Shutdown: " + t)
+        if flag > 0:
+            return items
+
+    for fname in filenames:
+        if fname.startwith("WebCacheV") and fname.endswith(".dat"):
+            fullname = os.path.join(dirname, fname)
+            items["history"] = WebArtifact.getHistory(fullname)
+            items["content"] = WebArtifact.getContent(fullname)
+            # items = WebArtifact.getCookies(fullname)
+            # items = WebArtifact.getDom(fullname)
+            # items = WebArtifact.getDownloads(fullname)
+
+    return items
+'''
+    items = {
+        "history": [ 
+                    [ Accesed Time, { ... } ],
+                    [ Accesed Time, { ... } ],
+                    [ Accesed Time, { ... } ],
+                ]
+        "content": [ 
+                    [ Accesed Time, { ... } ],
+                    [ Accesed Time, { ... } ],
+                    [ Accesed Time, { ... } ],
+                ]
+    } 
+'''
+
+def getNTFSItems(type):
+    items = []
+    if type == 0:
+        print("ALL NTFS Log")
+    elif type == 1:
+        print("Usnjrnl")
+    elif type == 2:
+        print("MFT")
+    elif type == 3:
+        print("LogFile")
+
+    return items
+
+def getSessionRestoreItems():
+    print("세션저장")
+
+def getbcf():
+    print()
+    # RecentFileCache.bcf ( only Windows 7 )

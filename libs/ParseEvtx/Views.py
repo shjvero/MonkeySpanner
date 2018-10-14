@@ -174,8 +174,7 @@ def render_root_node_with_subs(root_node, subs):
     acc = []
     for c in root_node.template().children():
         rec(c, acc)
-    return "".join(acc)
-
+    return "".join(acc).replace("<Data>&lt;string&gt;", "\n<Data>").replace("&lt;/string&gt;\n<", "<").replace("&lt;string&gt;", "<Data>").replace("&lt;/string&gt;", "</Data>")
 
 def render_root_node(root_node):
     subs = []
