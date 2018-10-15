@@ -2,6 +2,7 @@ import pyesedb
 import datetime
 import os, sys
 
+EXE_EXTENSION = [ "exe", "doc", "docx", "hta", "xls", "ppts", "pptx", "pdf", "msu", "msi" ]
 #Get file time
 def getFiletime(dt):
     if dt == 0:
@@ -24,7 +25,7 @@ def fixRespData(txtin):
         return ""
 
 #Get history
-def getHistory(filepath):
+def getHistory(filepath, timeline=None):
     esedb_file = pyesedb.file()
     esedb_file.open(filepath)
     containers = esedb_file.get_table_by_name("Containers")
@@ -40,14 +41,21 @@ def getHistory(filepath):
             histDirDict["Container_%s" % cRecords.get_value_data_as_integer(0)] = cRecords.get_value_data_as_string(10)
 
     items = []
+    head = ["History", 3]
     #Get history from each container
     for hcl in histContList:
         histCont = esedb_file.get_table_by_name(hcl)
         for hRecords in histCont.records:
             _url = hRecords.get_value_data_as_string(17)
             if _url.count("@") > 0:
+                accessedTime = getFiletime(hRecords.get_value_data_as_integer(13))
+                if datetime.datetime.strptime(accessedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                    continue
+                if _url[-3] in EXE_EXTENSION:
+                    head[1] = 5
                 items.append([
-                    getFiletime(hRecords.get_value_data_as_integer(13)),    # Accessed Time
+                    head,
+                    accessedTime,    # Accessed Time
                     _url.split("@")[1],  # URL
                     getFiletime(hRecords.get_value_data_as_integer(12)),    # Modified Time
                     # str(getFiletime(hRecords.get_value_data_as_integer(10))),  # Created Time
@@ -80,7 +88,7 @@ def getHistory(filepath):
     return items
 
 #Get content
-def getContent(filepath):
+def getContent(filepath, timeline=None):
     esedb_file = pyesedb.file()
     esedb_file.open(filepath)
     containers = esedb_file.get_table_by_name("Containers")
@@ -96,18 +104,31 @@ def getContent(filepath):
             histDirDict["Container_%s" % cRecords.get_value_data_as_integer(0)] = cRecords.get_value_data_as_string(10)
 
     items = []
+    exeList = []
+    head = ["Cache", 4]
     #Get content from each container
     for hcl in histContList:
         histCont = esedb_file.get_table_by_name(hcl)
         for hRecords in histCont.records:
+            accessedTime = getFiletime(hRecords.get_value_data_as_integer(13))
+            if datetime.datetime.strptime(accessedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                continue
+            fileName = hRecords.get_value_data_as_string(18)
+            if fileName.count("."):
+                extension = fileName.split(".")[1]
+                if extension in EXE_EXTENSION:
+                    head[1] = 6
+                    if extension == EXE_EXTENSION[0]:
+                        exeList.append(fileName.upper())
             items.append([
-                getFiletime(hRecords.get_value_data_as_integer(13)),  # Accessed Time
+                head,
+                accessedTime,  # Accessed Time
                 hRecords.get_value_data_as_string(17),  # URL
-                hRecords.get_value_data_as_string(18),  # File Name
+                fileName,  # File Name
                 str(hRecords.get_value_data_as_integer(5)),  # File Size
                 str(getFiletime(hRecords.get_value_data_as_integer(10))),  # Created Time
+                fixRespData(hRecords.get_value_data(21)),  # Response Headers
                 # hRecords.get_value_data_as_integer(8),  # Access Count
-                # fixRespData(hRecords.get_value_data(21)),  # Response Headers
                 # "{}.{}".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0)),   # ID
                 # histNameDict[hcl],  # Container Name
                 # getFiletime(hRecords.get_value_data_as_integer(12)),    # Modified Time
@@ -132,7 +153,10 @@ def getContent(filepath):
             print("Response Headers: {}".format(fixRespData(hRecords.get_value_data(21))))
             print("Directory: {}".format(histDirDict[hcl]))
             '''
-    return items
+    return {
+        'caches': items,
+        'exeList': exeList
+    }
 
 #Get cookies
 def getCookies(filepath):

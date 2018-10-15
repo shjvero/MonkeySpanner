@@ -1,4 +1,6 @@
 import os, sys
+from datetime import datetime
+
 from libs.ParsePrefetch.prefetch import *
 from libs.ParseJumpList.JumpListParser import *
 import libs.ParseEvtx.Evtx as evtx
@@ -26,44 +28,57 @@ sw = {
 '''
 def getEventLogItemsForWin7(evtxList, timeline=None):
     items = []
+    head = ["EventLog", 0]
     for fileName, category in evtxList.items():
         fullPath = PATH.EVENTLOG + fileName
         eid = category['eid']
         providerName = category['providerName']
         with evtx.Evtx(fullPath) as log:
             if fileName == "Application.evtx" or fileName == "Microsoft-Windows-WER-Diag%4Operational.evtx":       # Application.evtx
+                head[1] = 1 if fileName.startswith("App") else 2
                 for event in log.records():
                     systemTag = event.lxml()[0]
                     if systemTag[1].text in eid and systemTag[0].get("Name") in providerName:
+                        loggedTime = systemTag[5].get("SystemTime")
+                        if timeline:
+                            if datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                                continue
                         level = ''
                         if systemTag[2].text == '2':
                             level = '오류'
                         elif systemTag[2].text == '4':
                             level = '정보'
                         items.append([
-                            systemTag[5].get("SystemTime"),     # Timeline
+                            head,
+                            loggedTime,                         # Timeline
                             level,                              # Level
                             systemTag[1].text,                  # Event ID
                             systemTag[0].get("Name"),           # Provider Name
-                            systemTag[3].text,                  # Task
+                            # systemTag[3].text,                  # Task
                             systemTag[7].text,                  # Channel
                             event.xml()                         # detail
                         ])
             elif fileName == "System.evtx" or fileName == "Microsoft-Windows-Fault-Tolerant-Heap%4Operational.evtx":
+                head[1] = 1 if fileName.startswith("System") else 2
                 for event in log.records():
                     systemTag = event.lxml()[0]
                     if systemTag[1].text in eid and systemTag[0].get("Name") in providerName:
+                        loggedTime = systemTag[5].get("SystemTime")
+                        if timeline:
+                            if datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                                continue
                         level = ''
                         if systemTag[3].text == '2':
                             level = '오류'
                         elif systemTag[3].text == '4':
                             level = '정보'
                         items.append([
-                            systemTag[7].get("SystemTime"),     # Timeline
+                            head,
+                            loggedTime,                         # Timeline
                             level,                              # Level
                             systemTag[1].text,                  # EventID
                             systemTag[0].get("Name"),           # Provider Name
-                            systemTag[4].text,                  # Task
+                            # systemTag[4].text,                  # Task
                             systemTag[11].text,                 # Channel
                             event.xml()                         # detail
                         ])
@@ -71,80 +86,112 @@ def getEventLogItemsForWin7(evtxList, timeline=None):
 
 def getEventLogItemsForWin10(evtxList, timeline=None):
     items = []
+    head = ["EventLog", 0]
     for fileName, category in evtxList.items():
         fullPath = PATH.EVENTLOG + fileName
         eid = category['eid']
         providerName = category['providerName']
         with evtx.Evtx(fullPath) as log:
             if fileName == "Application.evtx":
+                head[1] = 1 if fileName.startswith("App") else 2
                 for event in log.records():
                     systemTag = event.lxml()[0]
                     if systemTag[1].text in eid and systemTag[0].get("Name") in providerName:
+                        loggedTime = systemTag[5].get("SystemTime")
+                        if timeline:
+                            if datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                                continue
                         level = ''
                         if systemTag[3].text == '2':
                             level = '오류'
                         elif systemTag[3].text == '4':
                             level = '정보'
                         items.append([
-                            systemTag[5].get("SystemTime"),     # Timeline
+                            head,
+                            loggedTime,                         # Timeline
                             level,                              # Level
                             systemTag[1].text,                  # EventID
                             systemTag[0].get("Name"),           # Provider Name
-                            systemTag[4].text,                  # Task
+                            # systemTag[4].text,                  # Task
                             systemTag[11].text,                 # Channel
                             event.xml()                         # detail
                         ])
             elif fileName == "System.evtx":
+                head[1] = 1 if fileName.startswith("System") else 2
                 for event in log.records():
                     systemTag = event.lxml()[0]
                     if systemTag[1].text in eid and systemTag[0].get("Name") in providerName:
+                        loggedTime = systemTag[5].get("SystemTime")
+                        if timeline:
+                            if datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                                continue
                         level = ''
                         if systemTag[2].text == '2':
                             level = '오류'
                         elif systemTag[2].text == '4':
                             level = '정보'
                         items.append([
-                            systemTag[5].get("SystemTime"),     # Timeline
+                            head,
+                            loggedTime,                         # Timeline
                             level,                              # Level
                             systemTag[1].text,                  # Event ID
                             systemTag[0].get("Name"),           # Provider Name
-                            systemTag[3].text,                  # Task
+                            # systemTag[3].text,                  # Task
                             systemTag[7].text,                  # Channel
                             event.xml()
                         ])
     return items
 
-def getPrefetchItems(exeNameList):
+def getPrefetchItems(included, timeline=None):
     items = []
     for i in os.listdir(PATH.PREFETCH):
-        for sw in exeNameList:
-            if i.startswith(sw) and i.endswith(".pf"):
-                if os.path.getsize(PATH.PREFETCH + i) > 0:
-                    try:
-                        p = Prefetch(PATH.PREFETCH + i)
-                    except Exception as e:
-                        print("[ - ] {} could not be parsed".format(i))
-                    content = p.prettyPrint()
-                    pf_name = "{}-{}.pf".format(p.executableName, p.hash)
-                    items.append([
-                        p.volumesInformationArray[0]["Creation Date"],
-                        pf_name,
-                        p.executableName,
-                        "Create",
-                        content
-                    ])
-                    for timestamp in p.timestamps:
-                        items.append([
-                            timestamp,
-                            pf_name,
-                            p.executableName,
-                            "Execute",
-                            content
-                        ])
-                else:
-                    print("[ - ] {}: Zero-byte Prefetch File".format(i))
-            else:
+        if i.endswith(".pf"):
+            if os.path.getsize(PATH.PREFETCH + i) == 0:
+                print("[ - ] {}: Zero-byte Prefetch File".format(i))
                 continue
+            head = ["Prefetch", 1]
+            try:
+                p = Prefetch(PATH.PREFETCH + i)
+            except Exception as e:
+                print("[ - ] {} could not be parsed".format(i))
+            pf_name = "{}-{}.pf".format(p.executableName, p.hash)
+            createdTime = p.volumesInformationArray[0]["Creation Date"]
+            createdTimeObj = datetime.datetime.strptime(createdTime, "%Y-%m-%d %H:%M:%S.%f")
+            limitedTime = timeline[0] if timeline[0] else timeline[1]
+
+            if i.startswith(included[0]): # 특정 SW
+                if limitedTime:
+                    if createdTimeObj < limitedTime:
+                        head[1] = 0
+
+                content = p.prettyPrint()
+                items.append([head, createdTime, pf_name, p.executableName, "Create", content])
+                for timestamp in p.timestamps:
+                    if timeline[1]:
+                        head[1] = 1 if datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") <= timeline[1] else 2
+                    items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
+                continue
+            elif i.startswith(included[1]): # WERFAULT
+                head[1] = 2
+            elif timeline[2]:
+                if p.executableName in included[2:]: # more behavior
+                    head[1] = 7
+                elif createdTimeObj < timeline[2]:
+                    head[1] = 0
+                else:
+                    continue
+            elif not limitedTime:
+                # 기타 실행에 대해, 타임라인을 정해야함,
+                if p.executableName not in included:
+                    continue
+            else:
+                print("Exeception in getPrefetchItems")
+                continue
+            content = p.prettyPrint()
+            items.append([head, createdTime, pf_name, p.executableName, "Create", content])
+            for timestamp in p.timestamps:
+                items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
+
     return items
 
 def getJumplistItems(fileName):
@@ -228,7 +275,7 @@ def getJumplistItems(fileName):
         "DestList": DestList
     }
 
-def getWebArtifactItems(env, type=None):
+def getWebArtifactItems(env, timeline=None):
     import glob
     fileList = glob.glob(".\\repo\\WebCacheV*.dat")
     fullpath = ''
@@ -257,11 +304,17 @@ def getWebArtifactItems(env, type=None):
                     return items
     else:
         fullpath = fileList[0]
-    items["History"] = WebArtifact.getHistory(fullpath)
-    items["Cache"] = WebArtifact.getContent(fullpath)
-    # items = WebArtifact.getCookies(fullname)
-    # items = WebArtifact.getDom(fullname)
-    # items = WebArtifact.getDownloads(fullname)
+
+    # cookiesList = WebArtifact.getCookies(fullname)
+    # domList = WebArtifact.getDom(fullname)
+    # downloadList = WebArtifact.getDownloads(fullname)
+    historyList = WebArtifact.getHistory(fullpath, timeline)
+    items = WebArtifact.getContent(fullpath, timeline)
+    return [
+        historyList + items["caches"],
+        items["exeList"]
+    ]
+
 
     return items
 '''

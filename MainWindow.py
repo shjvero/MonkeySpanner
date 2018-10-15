@@ -111,10 +111,10 @@ class Main(QMainWindow):
         self.statusBar().showMessage(msg + " is checked")
 
     def textChanged(self):
-        print("Text Changed: " + self.search.text())
+        self.table.search(self.search.text())
 
     def enterPressed(self):
-        print("Entered: " + self.search.text())
+        self.table.search(self.search.text())
 
 if __name__ == "__main__":
     import ctypes

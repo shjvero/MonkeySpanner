@@ -37,7 +37,7 @@ class Exam(QWidget):
                 item = QTableWidgetItem()
                 item.setData(Qt.EditRole, "{}{}".format(random.randint(1, 100),random.randint(1, 100)))
                 self.table.setItem(r, c, item)
-        self.table.setModel(SortFilterProxyModel())
+
         self.table.setHorizontalHeaderLabels(["A", "B", "C", "D"])
         # self.table.hide()
         # label = QLabel(self)

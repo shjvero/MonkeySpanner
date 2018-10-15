@@ -8,12 +8,17 @@ class PrototypeTable(QTableWidget):
         self.sw = sw
         self.env = env
         self.prototype = []
-        self.colors = {
-            "Prefetch": QColor(255, 0, 0, 30),
-            "EventLog": QColor(0, 255, 0, 30),
-            "History": QColor(0, 0, 255, 30),
-            "Cache": QColor(125, 125, 125, 30)
-        }
+        self.COLOR = [
+            QColor(125, 125, 125, 30),
+            QColor(255, 0, 0, 30),
+            QColor(255, 125, 0, 30),
+            QColor(255, 225, 0, 30),
+            QColor(0, 255, 0, 30),
+            QColor(0, 125, 255, 30),
+            QColor(0, 0, 155, 30),
+            QColor(155, 0, 225, 30),
+        ]
+
         self.load(sw)
 
     def load(self, sw=None, timeline=None):
@@ -22,7 +27,7 @@ class PrototypeTable(QTableWidget):
         elif sw == 2:
             print("HWP")
         elif sw == 3:
-            self.prototype, self.row = InternetExplorerPrototype.getPrototype(self.env)
+            self.prototype = InternetExplorerPrototype.getPrototype(self.env)
             self.customHeaders = InternetExplorerPrototype.getColumnHeader()
         elif sw == 4:
             print("Office")
@@ -38,34 +43,34 @@ class PrototypeTable(QTableWidget):
     def initUI(self):
         print("initUI")
         self.setColumnCount(5)
-        self.setRowCount(self.row)
+        self.setRowCount(len(self.prototype))
         self.setHorizontalHeaderLabels(["", "", "", "", "", ""])
         row = 0
-        for header, list in self.prototype.items():
-            for prototypeItem in list:
-                self.setVerticalHeaderItem(row, QTableWidgetItem(header))
-                self.setItem(row, 0, QTableWidgetItem(prototypeItem[0]))
-                self.setItem(row, 1, QTableWidgetItem(prototypeItem[1]))
-                self.setItem(row, 2, QTableWidgetItem(prototypeItem[2]))
-                if header == "History":
-                    # print(prototypeItem)
-                    self.item(row, 2).setTextAlignment(Qt.AlignCenter)
-                    self.setItem(row, 3, QTableWidgetItem(""))
-                    self.setItem(row, 4, QTableWidgetItem(""))
-                elif header == "Prefetch":
-                    self.setItem(row, 3, QTableWidgetItem(prototypeItem[3]))
-                    self.item(row, 3).setTextAlignment(Qt.AlignCenter)
-                    self.setItem(row, 4, QTableWidgetItem(""))
-                else:
-                    self.setItem(row, 3, QTableWidgetItem(prototypeItem[3]))
-                    self.item(row, 3).setTextAlignment(Qt.AlignRight)
-                    self.setItem(row, 4, QTableWidgetItem(prototypeItem[4]))
-                    self.item(row, 4).setTextAlignment(Qt.AlignCenter)
-                for c in range(self.columnCount()):                     # Adjust Color of Row
-                    self.item(row, c).setBackground(self.colors[header])
-                self.item(row, 0).setTextAlignment(Qt.AlignCenter)      # `Timeline` Text Alignment
-                self.verticalHeaderItem(row).setTextAlignment(Qt.AlignRight)
-                row += 1
+        for list in self.prototype:
+            print(list)
+            self.setVerticalHeaderItem(row, QTableWidgetItem(list[0][0]))
+            self.setItem(row, 0, QTableWidgetItem(list[1]))
+            self.setItem(row, 1, QTableWidgetItem(list[2]))
+            self.setItem(row, 2, QTableWidgetItem(list[3]))
+            if list[0][0] == "History":
+                self.item(row, 2).setTextAlignment(Qt.AlignCenter)
+                self.setItem(row, 3, QTableWidgetItem(""))
+                self.setItem(row, 4, QTableWidgetItem(""))
+            elif list[0][0] == "Prefetch":
+                self.setItem(row, 3, QTableWidgetItem(list[4]))
+                self.item(row, 3).setTextAlignment(Qt.AlignCenter)
+                self.setItem(row, 4, QTableWidgetItem(""))
+            else:
+                self.setItem(row, 3, QTableWidgetItem(list[4]))
+                self.item(row, 3).setTextAlignment(Qt.AlignRight)
+                self.setItem(row, 4, QTableWidgetItem(list[5]))
+                self.item(row, 4).setTextAlignment(Qt.AlignCenter)
+
+            self.item(row, 0).setTextAlignment(Qt.AlignCenter)      # `Timeline` Text Alignment
+            self.verticalHeaderItem(row).setTextAlignment(Qt.AlignRight)
+            for c in range(self.columnCount()):  # Adjust COLOR of Row
+                self.item(row, c).setBackground(self.COLOR[list[0][1]])
+            row += 1
 
         # Align Column header
         for c in range(self.columnCount()):
@@ -80,18 +85,27 @@ class PrototypeTable(QTableWidget):
         header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
         header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
         header.setStretchLastSection(True)
-
         # Adjust row height
         self.verticalHeader().setDefaultSectionSize(24)
         self.verticalHeader().setMaximumSectionSize(24)
-
         # Handle event
         self.clicked.connect(self.changeColumnHeader)  # One-Click
         self.doubleClicked.connect(self.showDetail)  # Double-Click
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
     def search(self, keyword):
-        print("search: " + keyword)
+        if keyword:
+            for i in range(len(self.prototype)):
+                self.showRow(i)
+        items = self.findItems(keyword, Qt.MatchContains)
+        includedRow = list(set([ self.row(item) for item in items ]))
+        print(includedRow)
+        for i in range(len(self.prototype)):
+            if i not in includedRow:
+                self.hideRow(i)
+            elif self.isRowHidden(i):
+                self.showRow(i)
+
 
     @pyqtSlot()
     def changeColumnHeader(self):
