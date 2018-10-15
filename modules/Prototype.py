@@ -129,18 +129,16 @@ def getPrefetchItems(exeNameList):
                     items.append([
                         p.volumesInformationArray[0]["Creation Date"],
                         pf_name,
-                        "Create",
-                        p.fileSize,
                         p.executableName,
+                        "Create",
                         content
                     ])
                     for timestamp in p.timestamps:
                         items.append([
                             timestamp,
                             pf_name,
-                            "Execute",
-                            p.fileSize,
                             p.executableName,
+                            "Execute",
                             content
                         ])
                 else:
@@ -231,30 +229,39 @@ def getJumplistItems(fileName):
     }
 
 def getWebArtifactItems(env, type=None):
+    import glob
+    fileList = glob.glob(".\\repo\\WebCacheV*.dat")
+    fullpath = ''
     items = {}
-    dirname = PATH.IE_ARTIFACT_PATH[env]["History"]
-    filenames = os.listdir(dirname)
-    if os.system('tasklist | find /i "taskhost" > .\\repo\\target.txt') == 0:
-        flag = 0
-        with open(".\\repo\\target.txt", "r") as f:
-            for line in f.readlines():
-                if line == "\n" or line.startswith("backgroundTaskHost"):
-                    continue
-                t = line.split()[0]
-                if os.system('taskkill /f /im "%s"'.format(t)) != 0:
-                    flag += 1
-                    print("[Error] Dirty Shutdown: " + t)
-        if flag > 0:
-            return items
-
-    for fname in filenames:
-        if fname.startswith("WebCacheV") and fname.endswith(".dat"):
-            fullname = os.path.join(dirname, fname)
-            items["History"] = WebArtifact.getHistory(fullname)
-            items["Cache"] = WebArtifact.getContent(fullname)
-            # items = WebArtifact.getCookies(fullname)
-            # items = WebArtifact.getDom(fullname)
-            # items = WebArtifact.getDownloads(fullname)
+    if not fileList:
+        dirname = PATH.IE_ARTIFACT_PATH[env]["History"]
+        fullpath = glob.glob(dirname + "WebCacheV*.dat")[0]
+        if os.path.exists(fullpath):
+            if os.system('tasklist | find /i "taskhost" > .\\repo\\target.txt') == 0:
+                flag = 0
+                with open(".\\repo\\target.txt", "r") as f:
+                    for line in f.readlines():
+                        if line == "\n":
+                            continue
+                        t = line.split()[0]
+                        if os.system('taskkill /f /im "%s"'.format(t)) == 0:
+                            print("[Kill] " + t)
+                            if os.system('xcopy / s / h / i / y "{}" ".\\repo\\"'.format(fullpath)):
+                                print("Failed copy..")
+                            else:
+                                fullpath = glob.glob(".\\repo\\WebCacheV*.dat")[0]
+                        else:
+                            flag += 1
+                            print("[Error] Dirty Shutdown: " + t)
+                if flag > 0:
+                    return items
+    else:
+        fullpath = fileList[0]
+    items["History"] = WebArtifact.getHistory(fullpath)
+    items["Cache"] = WebArtifact.getContent(fullpath)
+    # items = WebArtifact.getCookies(fullname)
+    # items = WebArtifact.getDom(fullname)
+    # items = WebArtifact.getDownloads(fullname)
 
     return items
 '''

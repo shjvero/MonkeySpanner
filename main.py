@@ -1,8 +1,12 @@
 import os, sys
 
-from PyQt5.QtGui import QColor
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMessageBox, QTableWidget, QTableWidgetItem
-from PyQt5.QtCore import QCoreApplication
+from PyQt5 import QtCore
+from PyQt5.QtGui import QColor, QPixmap, QMovie
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QMessageBox, QTableWidget, QTableWidgetItem, \
+    QVBoxLayout, QLabel, QSizePolicy
+from PyQt5.QtCore import QCoreApplication, Qt, QByteArray, QSortFilterProxyModel
+from PyQt5.uic.properties import QtGui
+
 
 class Exam(QWidget):
     def __init__(self):
@@ -27,10 +31,22 @@ class Exam(QWidget):
         self.table.resize(400, 300)
         self.table.setColumnCount(4)
         self.table.setRowCount(5)
-        for i in range(4):
-            self.table.setItem(2, i, QTableWidgetItem("TEST"))
-            self.table.item(2, i).setBackground(QColor(255, 0, 0))
-        self.table.setHorizontalHeaderLabels([])
+        for r in range(self.table.rowCount()):
+            for c in range(self.table.columnCount()):
+                import random
+                item = QTableWidgetItem()
+                item.setData(Qt.EditRole, "{}{}".format(random.randint(1, 100),random.randint(1, 100)))
+                self.table.setItem(r, c, item)
+        self.table.setModel(SortFilterProxyModel())
+        self.table.setHorizontalHeaderLabels(["A", "B", "C", "D"])
+        # self.table.hide()
+        # label = QLabel(self)
+        # loadingGif = QMovie("img/loading1.gif")
+        # label.setMovie(loadingGif)
+        # label.move(10, 10)
+        # label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        # label.setAlignment(Qt.AlignCenter)
+        # loadingGif.start()
         self.show()
 
     ''' from PyQt5.QtCore import pyqtSlot
@@ -51,6 +67,16 @@ class Exam(QWidget):
             QCloseEvent.accept() # 이벤트 발생 승인
         elif ans == QMessageBox.No:
             QCloseEvent.ignore() # 이벤트 발생 무시
+
+class SortFilterProxyModel(QSortFilterProxyModel):
+
+    def lessThan(self, left_index, right_index):
+        left_var = left_index.data(Qt.EditRole)
+        print("left_var: {}".format(left_var))
+        right_var = right_index.data(Qt.EditRole)
+        print("right_var: {}".format(right_var))
+
+        return left_var < right_var
 
 app = QApplication(sys.argv)
 w = Exam()

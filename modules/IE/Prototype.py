@@ -3,15 +3,17 @@ from modules.Prototype import *
 
 def getColumnHeader():
 	return {
-		"Prefetch": ["Timeline", "File Name", "Action", "File Size", "Executable Name", ""],		# 5 columns
-		"EventLog": ["Logged Time", "Level", "Event ID", "Provider Name", "Task", "Channel", ""],	# 5 columns
-		"History": ["Accessed Time", "URL", "Access Count", "File Name", "Created Time", ""],		# 5 columns
-		"Cache": ["Accessed Time", "File Name", "File Size", "URL", "Access Count", "Created Time"],	# 6 columns
+		"Prefetch": ["Timeline", "File Name", "Executable Name", "Action", ""],					# 4 columns
+		# └ Detail exists
+		"EventLog": ["Logged Time", "Provider Name", "Event ID", "Level", "Task", "Channel"],	# 5 columns
+		# └ Detail exists (XML)
+		"History": ["Accessed Time", "URL", "Modified Time", "", ""],							# 3 columns
+		# └ Detail exists (not response header)
+		"Cache": ["Accessed Time", "URL", "File Name", "Size", "Created Time"],			# 5 columns
 		# └ Response Header exists.
 	}
 
 def getPrototype(env, timeline=None):
-	# 추가적인 프리패치 (시스템 프로세스 등)
 	prefetchList= ["IEXPLORER.EXE", "WERFAULT.EXE", "CMD.EXE", "POWERSHELL.EXE"]
 	evtxLogFor7 = {
 		"Application.evtx": {

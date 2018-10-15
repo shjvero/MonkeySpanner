@@ -44,21 +44,23 @@ def getHistory(filepath):
     for hcl in histContList:
         histCont = esedb_file.get_table_by_name(hcl)
         for hRecords in histCont.records:
-            items.append([
-                getFiletime(hRecords.get_value_data_as_integer(13)),    # Accessed Time
-                hRecords.get_value_data_as_string(17),  # URL
-                hRecords.get_value_data_as_integer(8),  # Access Count
-                hRecords.get_value_data_as_string(18),  # File Name
-                getFiletime(hRecords.get_value_data_as_integer(10)),  # Created Time
-                # "{}.{}".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0)),   # ID
-                # histNameDict[hcl],  # Container Name,
-                # getFiletime(hRecords.get_value_data_as_integer(12)),    # Modified Time
-                # getFiletime(hRecords.get_value_data_as_integer(11)),    # Expires
-                # getFiletime(hRecords.get_value_data_as_integer(9)),     # Synced
-                # hRecords.get_value_data_as_integer(15),                 # Sync Count
-                # hRecords.get_value_data_as_integer(5),                  # File Size
-                # histDirDict[hcl]  # Directory
-            ])
+            _url = hRecords.get_value_data_as_string(17)
+            if _url.count("@") > 0:
+                items.append([
+                    getFiletime(hRecords.get_value_data_as_integer(13)),    # Accessed Time
+                    _url.split("@")[1],  # URL
+                    getFiletime(hRecords.get_value_data_as_integer(12)),    # Modified Time
+                    # str(getFiletime(hRecords.get_value_data_as_integer(10))),  # Created Time
+                    # str(hRecords.get_value_data_as_integer(8)),  # Access Count
+                    # hRecords.get_value_data_as_string(18),  # File Name
+                    # "{}.{}".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0)),   # ID
+                    # histNameDict[hcl],  # Container Name,
+                    # getFiletime(hRecords.get_value_data_as_integer(11)),    # Expires
+                    # getFiletime(hRecords.get_value_data_as_integer(9)),     # Synced
+                    # hRecords.get_value_data_as_integer(15),                 # Sync Count
+                    # hRecords.get_value_data_as_integer(5),                  # File Size
+                    # histDirDict[hcl]  # Directory
+                ])
             '''
             print("ID: {}.{}".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0)))
             print("Container Name: {}".format(histNameDict[hcl]))
@@ -100,11 +102,11 @@ def getContent(filepath):
         for hRecords in histCont.records:
             items.append([
                 getFiletime(hRecords.get_value_data_as_integer(13)),  # Accessed Time
-                hRecords.get_value_data_as_string(18),  # File Name
-                hRecords.get_value_data_as_integer(5),  # File Size
                 hRecords.get_value_data_as_string(17),  # URL
-                hRecords.get_value_data_as_integer(8),  # Access Count
-                getFiletime(hRecords.get_value_data_as_integer(10)),  # Created Time
+                hRecords.get_value_data_as_string(18),  # File Name
+                str(hRecords.get_value_data_as_integer(5)),  # File Size
+                str(getFiletime(hRecords.get_value_data_as_integer(10))),  # Created Time
+                # hRecords.get_value_data_as_integer(8),  # Access Count
                 # fixRespData(hRecords.get_value_data(21)),  # Response Headers
                 # "{}.{}".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0)),   # ID
                 # histNameDict[hcl],  # Container Name

@@ -1,4 +1,4 @@
-import sys
+import os, sys
 from PyQt5.Qt import *
 import modules.IE.Prototype as InternetExplorerPrototype
 
@@ -9,24 +9,14 @@ class PrototypeTable(QTableWidget):
         self.env = env
         self.prototype = []
         self.colors = {
-            "Prefetch": QColor(255, 0, 0),
-            "EventLog": QColor(0, 255, 0),
-            "History": QColor(0, 0, 255),
-            "Cache": QColor(125, 125, 125)
+            "Prefetch": QColor(255, 0, 0, 30),
+            "EventLog": QColor(0, 255, 0, 30),
+            "History": QColor(0, 0, 255, 30),
+            "Cache": QColor(125, 125, 125, 30)
         }
-        # 사이즈, 기타 기능 준비
         self.load(sw)
-        '''
-            1. load() : 프로로타입 로드
-            2. initUI() : 테이블 UI 로드
-            3. copy() : 셀 우클릭 시 복사
-            4. changeColumnHeader() : 항목 클릭 시 컬럼헤더 변화 (*)
-            5. showDetail() : 항목 더블클릭 시 뷰어 켜기 (*)
-            6. search() : 검색, 스크롤 바 이동까지 포함
-        '''
 
     def load(self, sw=None, timeline=None):
-        print("ready")
         if sw == 1:
             print("Adobe Flash Player")
         elif sw == 2:
@@ -40,8 +30,6 @@ class PrototypeTable(QTableWidget):
             print("PDF")
         else:
             print("기존 SW: {}".format(self.sw))
-        # sw에 따라서 프로토타입 가져오기 -- 배열 or 객체
-        # self.initUI(prototype)
         if timeline:
             print("타임라인 설정 O")
         else:
@@ -49,49 +37,81 @@ class PrototypeTable(QTableWidget):
 
     def initUI(self):
         print("initUI")
-        self.setColumnCount(6)
+        self.setColumnCount(5)
         self.setRowCount(self.row)
-        # self.prototype 에 저장된 데이터들 모두 테이블에 로드
         self.setHorizontalHeaderLabels(["", "", "", "", "", ""])
         row = 0
-        # print(self.prototype)
         for header, list in self.prototype.items():
             for prototypeItem in list:
                 self.setVerticalHeaderItem(row, QTableWidgetItem(header))
-                print(prototypeItem)
                 self.setItem(row, 0, QTableWidgetItem(prototypeItem[0]))
                 self.setItem(row, 1, QTableWidgetItem(prototypeItem[1]))
                 self.setItem(row, 2, QTableWidgetItem(prototypeItem[2]))
-                self.setItem(row, 3, QTableWidgetItem(prototypeItem[3]))
-                self.setItem(row, 4, QTableWidgetItem(prototypeItem[4]))
-                self.setItem(row, 5, QTableWidgetItem(""))
-                # self.item(row, 0).setBackground(self.colors[header])
-                # self.item(row, 1).setBackground(self.colors[header])
-                # self.item(row, 2).setBackground(self.colors[header])
-                # self.item(row, 3).setBackground(self.colors[header])
-                # self.item(row, 4).setBackground(self.colors[header])
-                # self.item(row, 5).setBackground(self.colors[header])
+                if header == "History":
+                    # print(prototypeItem)
+                    self.item(row, 2).setTextAlignment(Qt.AlignCenter)
+                    self.setItem(row, 3, QTableWidgetItem(""))
+                    self.setItem(row, 4, QTableWidgetItem(""))
+                elif header == "Prefetch":
+                    self.setItem(row, 3, QTableWidgetItem(prototypeItem[3]))
+                    self.item(row, 3).setTextAlignment(Qt.AlignCenter)
+                    self.setItem(row, 4, QTableWidgetItem(""))
+                else:
+                    self.setItem(row, 3, QTableWidgetItem(prototypeItem[3]))
+                    self.item(row, 3).setTextAlignment(Qt.AlignRight)
+                    self.setItem(row, 4, QTableWidgetItem(prototypeItem[4]))
+                    self.item(row, 4).setTextAlignment(Qt.AlignCenter)
+                for c in range(self.columnCount()):                     # Adjust Color of Row
+                    self.item(row, c).setBackground(self.colors[header])
+                self.item(row, 0).setTextAlignment(Qt.AlignCenter)      # `Timeline` Text Alignment
+                self.verticalHeaderItem(row).setTextAlignment(Qt.AlignRight)
                 row += 1
 
-        self.clicked.connect(self.changeColumnHeader)  # 원클릭
-        self.doubleClicked.connect(self.showDetail)  # 더블 클릭
-        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self.resizeColumnsToContents()
-        self.resizeRowsToContents()
+        # Align Column header
+        for c in range(self.columnCount()):
+            self.horizontalHeaderItem(c).setTextAlignment(Qt.AlignCenter)
 
+        # Adjust column width
+        self.resizeColumnsToContents()
+        header = self.horizontalHeader()
+        self.setColumnWidth(0, 180)
+        self.setColumnWidth(1, 600)
+        self.setColumnWidth(2, 180)
+        header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
+        header.setStretchLastSection(True)
+
+        # Adjust row height
+        self.verticalHeader().setDefaultSectionSize(24)
+        self.verticalHeader().setMaximumSectionSize(24)
+
+        # Handle event
+        self.clicked.connect(self.changeColumnHeader)  # One-Click
+        self.doubleClicked.connect(self.showDetail)  # Double-Click
+        self.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
     def search(self, keyword):
         print("search: " + keyword)
 
     @pyqtSlot()
     def changeColumnHeader(self):
-        print("changeColumnHeader\n")
-        # header = ''
-        # for currentQTableWidgetItem in self.selectedItems():
-        #     header = self.item(currentQTableWidgetItem.row, 0).text()
-        #     print(currentQTableWidgetItem.row(), currentQTableWidgetItem.column(), currentQTableWidgetItem.text())
-        # self.table.setHorizontalHeaderLabels(self.customHeaders[header])
+        for currentQTableWidgetItem in self.selectedItems():
+            self.parentWidget().statusBar().showMessage(currentQTableWidgetItem.text())
+            _header = self.verticalHeaderItem(currentQTableWidgetItem.row()).text()
+            self.setHorizontalHeaderLabels(self.customHeaders[_header])
 
     @pyqtSlot()
     def showDetail(self):
         print("showDetail")
+
+    def contextMenuEvent(self, event):
+        menu = QMenu(self)
+        copyAction = menu.addAction("Copy")
+        quitAction = menu.addAction("Quit")
+        action = menu.exec_(self.mapToGlobal(event.pos()))
+        if action == quitAction:
+            qApp.quit()
+        elif action == copyAction:
+            copiedStr = " ".join(currentQTableWidgetItem.text() for currentQTableWidgetItem in self.selectedItems())
+            os.system("echo {} | clip".format(copiedStr))
+            print(copiedStr)        # Not copy multiple row
