@@ -1,7 +1,6 @@
 import sys
 import qdarkstyle
 
-from threading import Thread
 from PyQt5.QtGui import QIcon, QPixmap, QMovie
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import pyqtSlot, Qt
@@ -24,12 +23,12 @@ class Main(QMainWindow):
             msg.exec_()
         self.w = self.width()
         self.h = self.height()
+        self.setWindowTitle("Monkey Spanner")
+        self.setWindowIcon(QIcon("img/favicon2.jpg"))
         self.initUI()
 
     def initUI(self):
         # Set up default UI
-        self.setWindowTitle("Monkey Spanner")
-        self.setWindowIcon(QIcon("img/favicon2.jpg"))
         self.setMinimumSize(self.width(), self.height()*2)
         self.setMenuBar(MenuBar())
         self.setStatusBar(StatusBar())

@@ -80,17 +80,19 @@ def getPrototype(env, timeline=None):
         others = getEventLogItemsForWin7(evtxLogFor7[2], limitedTime[0])
         prototype = prototype + others if others else prototype
     elif env == "Windows10":
-        prototype = getWebArtifactItems(env)
-        others = getEventLogItemsForWin10(evtxLogFor10[0])
-        prototype = prototype + others if others else prototype
-        if prototype:
-            limitedTime[0] = datetime.datetime.strptime(prototype[0][1], "%Y-%m-%d %H:%M:%S.%f")
-        elif others:
-            limitedTime[0] = datetime.datetime.strptime(others[0][1], "%Y-%m-%d %H:%M:%S.%f")
-        others = getEventLogItemsForWin10(evtxLogFor10[1], "IEXPLORE.EXE", limitedTime[0])
-        prototype = prototype + others if others else prototype
-        others = getEventLogItemsForWin10(evtxLogFor10[2], limitedTime[0])
-        prototype = prototype + others if others else prototype
+        # prototype = getWebArtifactItems(env)
+        # others = getEventLogItemsForWin10(evtxLogFor10[0])
+        # prototype = prototype + others if others else prototype
+        # if prototype:
+        #     limitedTime[0] = datetime.datetime.strptime(prototype[0][1], "%Y-%m-%d %H:%M:%S.%f")
+        # elif others:
+        #     limitedTime[0] = datetime.datetime.strptime(others[0][1], "%Y-%m-%d %H:%M:%S.%f")
+        # others = getEventLogItemsForWin10(evtxLogFor10[1], "IEXPLORE.EXE", limitedTime[0])
+        # prototype = prototype + others if others else prototype
+        # others = getEventLogItemsForWin10(evtxLogFor10[2], limitedTime[0])
+        # prototype = prototype + others if others else prototype
+        prototype = getEventLogItemsForWin10(evtxLogFor10[2])
+        limitedTime[0] = datetime.datetime.strptime(prototype[0][1], "%Y-%m-%d %H:%M:%S.%f")
     others = getReportWER("AppCrash_IEXPLORE.EXE")
     prototype = prototype + others if others else prototype
     prefetchList = prefetchList + ["CMD.EXE", "POWERSHELL.EXE", "RUNDLL32.EXE"]

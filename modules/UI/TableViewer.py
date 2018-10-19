@@ -3,7 +3,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import pyqtSlot
 
-class SubWindow(QWidget):
+class TableViewer(QWidget):
     def __init__(self, _path):
         super().__init__()
         self.path = _path

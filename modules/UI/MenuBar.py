@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMenuBar, QMenu, QAction, qApp, QFileDialog
-from modules.UI.SubWindow import SubWindow
+from modules.UI.TableViewer import TableViewer
 
 class MenuBar(QMenuBar):
     def __init__(self):
@@ -55,11 +55,11 @@ class MenuBar(QMenuBar):
                                                   "All Files (*)", options=options)
         fileType = type.text()
         if fileType == "$usnjrnl":
-            SubWindow(fileName).showUsnjrnl()
+            TableViewer(fileName).showUsnjrnl()
         elif fileType == "$MFT":
-            SubWindow(fileName).showMFT()
+            TableViewer(fileName).showMFT()
         elif fileType == "$LogFile":
-            SubWindow(fileName).showLogFile()
+            TableViewer(fileName).showLogFile()
 
     def showUserEnvironment(self):
         print("showUserEnvironment")

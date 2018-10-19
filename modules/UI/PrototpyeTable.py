@@ -116,7 +116,26 @@ class PrototypeTable(QTableWidget):
 
     @pyqtSlot()
     def showDetail(self):
-        print("showDetail")
+        selected = self.selectedItems()
+        if len(selected) > 1: return
+        row = 0
+        for currentQTableWidgetItem in self.selectedItems():
+            row = currentQTableWidgetItem.row()
+        self.viewerTitle = self.verticalHeaderItem(row).text()
+        self.viewerContent = self.prototype[row][-1]
+
+        from modules.UI.TextViewer import TextViewer
+        viewer = TextViewer(self)
+        viewer.exec_()
+        # viewer = QDialog()
+        # label = QLabel(viewerContent, viewer)
+        # label.move(10, 10)
+        # # label.setSelection()
+        # # viewer.setFont()
+        # viewer.resize(500, 500)
+        # viewer.setWindowTitle(viewerTitle)
+        # viewer.setWindowModality(Qt.ApplicationModal)
+        # viewer.exec_()
 
     def contextMenuEvent(self, event):
         menu = QMenu(self)

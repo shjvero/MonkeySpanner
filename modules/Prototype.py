@@ -186,7 +186,7 @@ def getPrefetchItems(included, timeline=None):
             createdTime = p.volumesInformationArray[0]["Creation Date"]
             createdTimeObj = datetime.datetime.strptime(createdTime, "%Y-%m-%d %H:%M:%S.%f")
             # limitedTime = timeline[0] if timeline[0] else timeline[1]
-            limitedTime = timeline[0]
+            limitedTime = timeline[0] if timeline[0] else None
             if p.executableName == included[0]: # 특정 SW
                 # if limitedTime:
                 #     if createdTimeObj < limitedTime:
