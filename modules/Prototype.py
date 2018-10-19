@@ -1,31 +1,10 @@
-import os, sys
-
 from libs.ParsePrefetch.prefetch import *
 from libs.ParseJumpList.JumpListParser import *
 import libs.ParseEvtx.Evtx as evtx
-import libs.ParseEvtx.Views as e_views
 import libs.IE.WebArtifact as WebArtifact
 import modules.constant as PATH
 import datetime
 
-'''
-sw = {
-    Win7 : {
-        Application.evtx: {
-            eid: [ ... ],
-            providerName: [ ... ],
-        },
-        System.evtx: {
-            eid: [ ... ],
-            providerName: [ ... ],
-        },
-        Microsoft-Windows-WER-Diag%4Operational.evtx: 이하 동일
-    },
-    Win10 : {
-        ...
-    }
-}
-'''
 def getEventLogItemsForWin7(evtxList, appName=None, timeline=None):
     items = []
     headStr = "EventLog"
@@ -69,16 +48,22 @@ def getEventLogItemsForWin7(evtxList, appName=None, timeline=None):
                         if not loggedTime: continue
                         providerName = systemTag[0].get("Name")
                         eventID = systemTag[1].text
+                        head = []
                         if eventID in checkedEID and providerName in checkedProviders:
                             etc = ''
                             if fileName.startswith("System"):
                                 eventDataTag = event.lxml()[1]
                                 etc = eventDataTag[0].text
+                                if not etc.startswith("Windows Error Reporting"):
+                                    continue
+                                head = orangeHead
                             elif fileName.endswith("Fault-Tolerant-Heap%4Operational.evtx"):
                                 etc = '내결함성 있는 힙'
+                                head = greenHead
                             elif fileName.endswith("WER-Diag%4Operational.evtx"):
                                 eventDataTag = event.lxml()[1]
                                 etc = eventDataTag.get("Name")
+                                head = yellowHead
 
                             if timeline:
                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
@@ -86,7 +71,7 @@ def getEventLogItemsForWin7(evtxList, appName=None, timeline=None):
                             level = '오류' if systemTag[3].text == '2' else '정보'
                             # channel = systemTag[11].text
 
-                            items.append([greenHead, loggedTime, providerName, eventID, level, etc, event.xml()])
+                            items.append([head, loggedTime, providerName, eventID, level, etc, event.xml()])
                     except Exception as e:
                         print("Error: {}".format(e))
 
@@ -149,19 +134,17 @@ def getEventLogItemsForWin10(evtxList, appName=None, timeline=None):
 
     return items
 
-def getReportWER(_dirname, timeline=None):
+def getReportWER(env, _dirname, timeline=None):
     import time
     items = []
     yellowHead = ["Report.wer", 3]
-    for dirname in os.listdir(PATH.WER):
+    for dirname in os.listdir(PATH.WER[env]):
         if dirname.startswith(_dirname):
-            fullpath = PATH.WER + _dirname
-            filename = [f for f in os.listdir(fullpath)]
-            fullpath = fullpath + filename
-            content = open(fullpath, "r").read()
+            fullpath = PATH.WER[env] + dirname + "\\Report.wer"
+            content = open(fullpath, "rb").read().decode("unicode-escape")
             createdTime = time.ctime(os.path.getctime(fullpath))
             modifiedTime = time.ctime(os.path.getmtime(fullpath))
-            items.append([yellowHead, modifiedTime, fullpath, createdTime, content])
+            items.append([yellowHead, modifiedTime, fullpath, createdTime, "", "", content])
     return items
 
 

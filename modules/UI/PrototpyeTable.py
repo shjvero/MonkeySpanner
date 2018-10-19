@@ -86,8 +86,8 @@ class PrototypeTable(QTableWidget):
         header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
         header.setStretchLastSection(True)
         # Adjust row height
-        self.verticalHeader().setDefaultSectionSize(24)
-        self.verticalHeader().setMaximumSectionSize(24)
+        self.verticalHeader().setDefaultSectionSize(28)
+        self.verticalHeader().setMaximumSectionSize(28)
         # Handle event
         self.clicked.connect(self.changeColumnHeader)  # One-Click
         self.doubleClicked.connect(self.showDetail)  # Double-Click

@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMenuBar, QMenu, QAction, qApp, QFileDialog, QMainWindow
+from PyQt5.QtWidgets import QMenuBar, QMenu, QAction, qApp, QFileDialog, QMainWindow, QMessageBox
 from modules.UI.TableViewer import TableViewer
 
 class MenuBar(QMenuBar):
@@ -84,8 +84,12 @@ class MenuBar(QMenuBar):
         #     print("PDF Checked")
 
         jumplistHash = "28c8b86deab549a1"
+        content = getJumplistItems(jumplistHash)
+        if not content:
+            # QMessageBox.Warning(self, "")
+            print("Not exists.")
         self.ui = TableViewer()
-        self.ui.showJumpList(getJumplistItems(jumplistHash))
+        self.ui.showJumpList()
 
     def showUserEnvironment(self):
         print("showUserEnvironment")

@@ -15,7 +15,10 @@ REGISTRY = {
     'SOFTWARE': SYSTEMROOT + "\\System32\\config\\SOFTWARE",
 }
 PREFETCH = SYSTEMROOT + '\\Prefetch\\'
-WER = 'C:\\ProgramData\\Microsoft\\Windows\\WER\\ReportArchive\\'
+WER = {
+    'Windows7': LOCALAPPDATA + "\\Microsoft\\Windows\\WER\\ReportArchive\\",
+    'Windows10': 'C:\\ProgramData\\Microsoft\\Windows\\WER\\ReportArchive\\'
+}
 EVENTLOG = SYSTEMROOT + '\\System32\\Winevt\\logs\\'
 JUMPLIST = [
     APPDATA + '\\Microsoft\\Windows\\Recent\\AutomaticDestinations\\',      # AutomaticDestinations
