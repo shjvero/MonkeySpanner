@@ -39,6 +39,7 @@ class PrototypeTable(QTableWidget):
             print("타임라인 설정 O")
         else:
             print("타임라인 설정 X")
+        self.initUI()
 
     def initUI(self):
         print("initUI")
@@ -47,7 +48,6 @@ class PrototypeTable(QTableWidget):
         self.setHorizontalHeaderLabels(["", "", "", "", "", ""])
         row = 0
         for list in self.prototype:
-            print(list)
             self.setVerticalHeaderItem(row, QTableWidgetItem(list[0][0]))
             self.setItem(row, 0, QTableWidgetItem(list[1]))
             self.setItem(row, 1, QTableWidgetItem(list[2]))
@@ -62,11 +62,11 @@ class PrototypeTable(QTableWidget):
                 self.setItem(row, 4, QTableWidgetItem(""))
             else:
                 self.setItem(row, 3, QTableWidgetItem(list[4]))
-                self.item(row, 3).setTextAlignment(Qt.AlignRight)
+                self.item(row, 3).setTextAlignment(Qt.AlignCenter | Qt.AlignRight)
                 self.setItem(row, 4, QTableWidgetItem(list[5]))
-                self.item(row, 4).setTextAlignment(Qt.AlignCenter)
 
-            self.item(row, 0).setTextAlignment(Qt.AlignCenter)      # `Timeline` Text Alignment
+            self.item(row, 0).setTextAlignment(Qt.AlignCenter)
+            self.item(row, 4).setTextAlignment(Qt.AlignCenter)
             self.verticalHeaderItem(row).setTextAlignment(Qt.AlignRight)
             for c in range(self.columnCount()):  # Adjust COLOR of Row
                 self.item(row, c).setBackground(self.COLOR[list[0][1]])
@@ -126,6 +126,10 @@ class PrototypeTable(QTableWidget):
         if action == quitAction:
             qApp.quit()
         elif action == copyAction:
-            copiedStr = " ".join(currentQTableWidgetItem.text() for currentQTableWidgetItem in self.selectedItems())
+            selected = self.selectedItems()
+            if len(selected) == 1:
+                copiedStr = selected[0].text()
+            else:
+                copiedStr = " ".join(currentQTableWidgetItem.text() for currentQTableWidgetItem in selected)
             os.system("echo {} | clip".format(copiedStr))
-            print(copiedStr)        # Not copy multiple row
+            print(copiedStr)

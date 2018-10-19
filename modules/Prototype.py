@@ -1,5 +1,4 @@
 import os, sys
-from datetime import datetime
 
 from libs.ParsePrefetch.prefetch import *
 from libs.ParseJumpList.JumpListParser import *
@@ -7,6 +6,7 @@ import libs.ParseEvtx.Evtx as evtx
 import libs.ParseEvtx.Views as e_views
 import libs.IE.WebArtifact as WebArtifact
 import modules.constant as PATH
+import datetime
 
 '''
 sw = {
@@ -26,172 +26,200 @@ sw = {
     }
 }
 '''
-def getEventLogItemsForWin7(evtxList, timeline=None):
+def getEventLogItemsForWin7(evtxList, appName=None, timeline=None):
     items = []
-    head = ["EventLog", 0]
+    headStr = "EventLog"
+    orangeHead = [headStr, 2]
+    yellowHead = [headStr, 3]
+    greenHead = [headStr, 4]
     for fileName, category in evtxList.items():
         fullPath = PATH.EVENTLOG + fileName
-        eid = category['eid']
-        providerName = category['providerName']
+        checkedEID = category['eid']
+        checkedProviders = category['providerName']
         with evtx.Evtx(fullPath) as log:
-            if fileName == "Application.evtx" or fileName == "Microsoft-Windows-WER-Diag%4Operational.evtx":       # Application.evtx
-                head[1] = 1 if fileName.startswith("App") else 2
+            if fileName.startswith("App"):
                 for event in log.records():
-                    systemTag = event.lxml()[0]
-                    if systemTag[1].text in eid and systemTag[0].get("Name") in providerName:
+                    try:
+                        systemTag = event.lxml()[0]
                         loggedTime = systemTag[5].get("SystemTime")
-                        if timeline:
-                            if datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-                                continue
-                        level = ''
-                        if systemTag[2].text == '2':
-                            level = '오류'
-                        elif systemTag[2].text == '4':
-                            level = '정보'
-                        items.append([
-                            head,
-                            loggedTime,                         # Timeline
-                            level,                              # Level
-                            systemTag[1].text,                  # Event ID
-                            systemTag[0].get("Name"),           # Provider Name
-                            # systemTag[3].text,                  # Task
-                            systemTag[7].text,                  # Channel
-                            event.xml()                         # detail
-                        ])
-            elif fileName == "System.evtx" or fileName == "Microsoft-Windows-Fault-Tolerant-Heap%4Operational.evtx":
-                head[1] = 1 if fileName.startswith("System") else 2
+                        if not loggedTime: continue
+                        providerName = systemTag[0].get("Name")
+                        eventID = systemTag[1].text
+
+                        if eventID in checkedEID and providerName in checkedProviders:
+                            eventDataTag = event.lxml()[1]
+                            if eventDataTag[0].text != appName: continue
+                            etc = eventDataTag[0].text
+                            if timeline:
+                                if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                                    continue
+                            level = '오류' if systemTag[2].text == '2' else '정보'  # 정보는 4
+                            # channel = systemTag[7].text
+
+                            items.append([orangeHead, loggedTime, providerName, eventID, level, etc, event.xml()])
+
+                    except Exception as e:
+                        print("Error: {}".format(e))
+                        continue
+            elif fileName.startswith("System") or fileName.endswith("Fault-Tolerant-Heap%4Operational.evtx") or fileName.endswith("WER-Diag%4Operational.evtx"):
                 for event in log.records():
-                    systemTag = event.lxml()[0]
-                    if systemTag[1].text in eid and systemTag[0].get("Name") in providerName:
-                        loggedTime = systemTag[5].get("SystemTime")
-                        if timeline:
-                            if datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-                                continue
-                        level = ''
-                        if systemTag[3].text == '2':
-                            level = '오류'
-                        elif systemTag[3].text == '4':
-                            level = '정보'
-                        items.append([
-                            head,
-                            loggedTime,                         # Timeline
-                            level,                              # Level
-                            systemTag[1].text,                  # EventID
-                            systemTag[0].get("Name"),           # Provider Name
-                            # systemTag[4].text,                  # Task
-                            systemTag[11].text,                 # Channel
-                            event.xml()                         # detail
-                        ])
+                    try:
+                        systemTag = event.lxml()[0]
+                        loggedTime = systemTag[7].get("SystemTime")
+                        if not loggedTime: continue
+                        providerName = systemTag[0].get("Name")
+                        eventID = systemTag[1].text
+                        if eventID in checkedEID and providerName in checkedProviders:
+                            etc = ''
+                            if fileName.startswith("System"):
+                                eventDataTag = event.lxml()[1]
+                                etc = eventDataTag[0].text
+                            elif fileName.endswith("Fault-Tolerant-Heap%4Operational.evtx"):
+                                etc = '내결함성 있는 힙'
+                            elif fileName.endswith("WER-Diag%4Operational.evtx"):
+                                eventDataTag = event.lxml()[1]
+                                etc = eventDataTag.get("Name")
+
+                            if timeline:
+                                if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                                    continue
+                            level = '오류' if systemTag[3].text == '2' else '정보'
+                            # channel = systemTag[11].text
+
+                            items.append([greenHead, loggedTime, providerName, eventID, level, etc, event.xml()])
+                    except Exception as e:
+                        print("Error: {}".format(e))
+
     return items
 
-def getEventLogItemsForWin10(evtxList, timeline=None):
+def getEventLogItemsForWin10(evtxList, appName=None, timeline=None):
     items = []
-    head = ["EventLog", 0]
+    orangeHead = ["EventLog", 2]
+    greenHead = ["EventLog", 4]
+
     for fileName, category in evtxList.items():
         fullPath = PATH.EVENTLOG + fileName
-        eid = category['eid']
-        providerName = category['providerName']
+        checkedEID = category['eid']
+        checkedProviders = category['providerName']
         with evtx.Evtx(fullPath) as log:
-            if fileName == "Application.evtx":
-                head[1] = 1 if fileName.startswith("App") else 2
+            if fileName.startswith("App") or fileName.startswith("System"):
                 for event in log.records():
-                    systemTag = event.lxml()[0]
-                    if systemTag[1].text in eid and systemTag[0].get("Name") in providerName:
+                    try:
+                        systemTag = event.lxml()[0]
                         loggedTime = systemTag[5].get("SystemTime")
-                        if timeline:
-                            if datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-                                continue
-                        level = ''
-                        if systemTag[3].text == '2':
-                            level = '오류'
-                        elif systemTag[3].text == '4':
-                            level = '정보'
-                        items.append([
-                            head,
-                            loggedTime,                         # Timeline
-                            level,                              # Level
-                            systemTag[1].text,                  # EventID
-                            systemTag[0].get("Name"),           # Provider Name
-                            # systemTag[4].text,                  # Task
-                            systemTag[11].text,                 # Channel
-                            event.xml()                         # detail
-                        ])
-            elif fileName == "System.evtx":
-                head[1] = 1 if fileName.startswith("System") else 2
+                        if not loggedTime: continue
+                        providerName = systemTag[0].get("Name")
+                        eventID = systemTag[1].text
+
+                        if eventID in checkedEID and providerName in checkedProviders:
+                            etc = ''
+                            if fileName.startswith("App"):
+                                eventDataTag = event.lxml()[1]
+                                if eventDataTag[0].text != appName: continue
+                                etc = eventDataTag[0].text
+                            elif timeline:
+                                if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                                    continue
+                            level = '오류' if systemTag[2].text == '2' else '정보'  # 정보는 4
+                            # channel = systemTag[7].text
+
+                            items.append([orangeHead, loggedTime, providerName, eventID, level, etc, event.xml()])
+
+                    except Exception as e:
+                        print("Error: {}".format(e))
+                        continue
+            elif fileName.endswith("Fault-Tolerant-Heap%4Operational.evtx"):
                 for event in log.records():
-                    systemTag = event.lxml()[0]
-                    if systemTag[1].text in eid and systemTag[0].get("Name") in providerName:
-                        loggedTime = systemTag[5].get("SystemTime")
-                        if timeline:
-                            if datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-                                continue
-                        level = ''
-                        if systemTag[2].text == '2':
-                            level = '오류'
-                        elif systemTag[2].text == '4':
-                            level = '정보'
-                        items.append([
-                            head,
-                            loggedTime,                         # Timeline
-                            level,                              # Level
-                            systemTag[1].text,                  # Event ID
-                            systemTag[0].get("Name"),           # Provider Name
-                            # systemTag[3].text,                  # Task
-                            systemTag[7].text,                  # Channel
-                            event.xml()
-                        ])
+                    try:
+                        systemTag = event.lxml()[0]
+                        loggedTime = systemTag[7].get("SystemTime")
+                        if not loggedTime: continue
+                        providerName = systemTag[0].get("Name")
+                        eventID = systemTag[1].text
+                        if eventID in checkedEID and providerName in checkedProviders:
+                            if timeline:
+                                if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                                    continue
+                            level = '오류' if systemTag[3].text == '2' else '정보'
+                            # channel = systemTag[11].text
+                            etc = '내결함성 있는 힙'
+                            items.append([greenHead, loggedTime, providerName, eventID, level, etc, event.xml()])
+                    except Exception as e:
+                        print("Error: {}".format(e))
+
     return items
+
+def getReportWER(_dirname, timeline=None):
+    import time
+    items = []
+    yellowHead = ["Report.wer", 3]
+    for dirname in os.listdir(PATH.WER):
+        if dirname.startswith(_dirname):
+            fullpath = PATH.WER + _dirname
+            filename = [f for f in os.listdir(fullpath)]
+            fullpath = fullpath + filename
+            content = open(fullpath, "r").read()
+            createdTime = time.ctime(os.path.getctime(fullpath))
+            modifiedTime = time.ctime(os.path.getmtime(fullpath))
+            items.append([yellowHead, modifiedTime, fullpath, createdTime, content])
+    return items
+
 
 def getPrefetchItems(included, timeline=None):
     items = []
+    headStr = "Prefetch"
+    redHead = [headStr, 1]
+    yellowHead = [headStr, 3]
+    blueHead = [headStr, 5]
+    purpleHead = [headStr, 7]
     for i in os.listdir(PATH.PREFETCH):
         if i.endswith(".pf"):
             if os.path.getsize(PATH.PREFETCH + i) == 0:
                 print("[ - ] {}: Zero-byte Prefetch File".format(i))
                 continue
-            head = ["Prefetch", 1]
             try:
                 p = Prefetch(PATH.PREFETCH + i)
             except Exception as e:
                 print("[ - ] {} could not be parsed".format(i))
+
             pf_name = "{}-{}.pf".format(p.executableName, p.hash)
             createdTime = p.volumesInformationArray[0]["Creation Date"]
             createdTimeObj = datetime.datetime.strptime(createdTime, "%Y-%m-%d %H:%M:%S.%f")
-            limitedTime = timeline[0] if timeline[0] else timeline[1]
-
-            if i.startswith(included[0]): # 특정 SW
-                if limitedTime:
-                    if createdTimeObj < limitedTime:
-                        head[1] = 0
-
+            # limitedTime = timeline[0] if timeline[0] else timeline[1]
+            limitedTime = timeline[0]
+            if p.executableName == included[0]: # 특정 SW
+                # if limitedTime:
+                #     if createdTimeObj < limitedTime:
+                #         head[1] = 0
                 content = p.prettyPrint()
-                items.append([head, createdTime, pf_name, p.executableName, "Create", content])
+                items.append([redHead, createdTime, pf_name, p.executableName, "Create", content])
                 for timestamp in p.timestamps:
-                    if timeline[1]:
-                        head[1] = 1 if datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") <= timeline[1] else 2
+                    if timeline[0]:
+                        head = redHead if datetime.datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") <= timeline[0] else blueHead
+                    else:
+                        head = blueHead
                     items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
                 continue
-            elif i.startswith(included[1]): # WERFAULT
-                head[1] = 2
-            elif timeline[2]:
-                if p.executableName in included[2:]: # more behavior
-                    head[1] = 7
-                elif createdTimeObj < timeline[2]:
-                    head[1] = 0
-                else:
-                    continue
-            elif not limitedTime:
-                # 기타 실행에 대해, 타임라인을 정해야함,
-                if p.executableName not in included:
-                    continue
+            elif p.executableName == included[1]: #WERFAULT
+                head = yellowHead
+            elif not limitedTime and p.executableName not in included:
+                continue
+            elif p.executableName in included[2:]:
+                content = p.prettyPrint()
+                head = purpleHead
+                if createdTimeObj > limitedTime:
+                    items.append([head, createdTime, pf_name, p.executableName, "Create", content])
+                for timestamp in p.timestamps:
+                    if datetime.datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") < limitedTime:
+                        continue
+                    items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
+                continue
             else:
-                print("Exeception in getPrefetchItems")
                 continue
             content = p.prettyPrint()
             items.append([head, createdTime, pf_name, p.executableName, "Create", content])
             for timestamp in p.timestamps:
                 items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
-
     return items
 
 def getJumplistItems(fileName):
@@ -291,15 +319,15 @@ def getWebArtifactItems(env, timeline=None):
                         if line == "\n":
                             continue
                         t = line.split()[0]
-                        if os.system('taskkill /f /im "%s"'.format(t)) == 0:
+                        if os.system('taskkill /f /im "{}"'.format(t)) == 0:
                             print("[Kill] " + t)
-                            if os.system('xcopy / s / h / i / y "{}" ".\\repo\\"'.format(fullpath)):
-                                print("Failed copy..")
-                            else:
-                                fullpath = glob.glob(".\\repo\\WebCacheV*.dat")[0]
+                            # if os.system('xcopy / s / h / i / y "{}" ".\\repo\\"'.format(fullpath)):
+                            #     print("Failed copy..")
+                            # else:
+                            #     fullpath = glob.glob(".\\repo\\WebCacheV*.dat")[0]
                         else:
                             flag += 1
-                            print("[Error] Dirty Shutdown: " + t)
+                            print("[Error] Dirty Shutdown: '{}'".format(t))
                 if flag > 0:
                     return items
     else:
@@ -308,15 +336,10 @@ def getWebArtifactItems(env, timeline=None):
     # cookiesList = WebArtifact.getCookies(fullname)
     # domList = WebArtifact.getDom(fullname)
     # downloadList = WebArtifact.getDownloads(fullname)
-    historyList = WebArtifact.getHistory(fullpath, timeline)
-    items = WebArtifact.getContent(fullpath, timeline)
-    return [
-        historyList + items["caches"],
-        items["exeList"]
-    ]
-
-
-    return items
+    print("path: " + fullpath)
+    history = WebArtifact.getHistory(fullpath, timeline)
+    caches = WebArtifact.getContent(fullpath, timeline)
+    return history + caches
 '''
     items = {
         "history": [ 

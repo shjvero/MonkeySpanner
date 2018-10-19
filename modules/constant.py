@@ -8,6 +8,12 @@ SYSTEMROOT = os.environ["SYSTEMROOT"]       # C:\\Windows
 
 
 # Common Path
+REGISTRY = {
+    'SAM': SYSTEMROOT + "\\System32\\config\\SAM",
+    'SYSTEM': SYSTEMROOT + "\\System32\\config\\SYSTEM",
+    'SECURITY': SYSTEMROOT + "\\System32\\config\\SECURITY",
+    'SOFTWARE': SYSTEMROOT + "\\System32\\config\\SOFTWARE",
+}
 PREFETCH = SYSTEMROOT + '\\Prefetch\\'
 WER = 'C:\\ProgramData\\Microsoft\\Windows\\WER\\ReportArchive\\'
 EVENTLOG = SYSTEMROOT + '\\System32\\Winevt\\logs\\'

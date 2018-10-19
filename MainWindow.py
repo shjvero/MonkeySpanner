@@ -29,7 +29,7 @@ class Main(QMainWindow):
     def initUI(self):
         # Set up default UI
         self.setWindowTitle("Monkey Spanner")
-        self.setWindowIcon(QIcon("img/logo.png"))
+        self.setWindowIcon(QIcon("img/favicon2.jpg"))
         self.setMinimumSize(self.width(), self.height()*2)
         self.setMenuBar(MenuBar())
         self.setStatusBar(StatusBar())
@@ -74,7 +74,6 @@ class Main(QMainWindow):
         self.table = PrototypeTable(3, self.env)
         self.table.setParent(self)
         # self.table.hide()
-        self.table.initUI()
         self.table.move(0, 110 + self.search.height())
         self.table.resize(self.search.width() + 20, self.h + 100)
 
@@ -111,7 +110,8 @@ class Main(QMainWindow):
         self.statusBar().showMessage(msg + " is checked")
 
     def textChanged(self):
-        self.table.search(self.search.text())
+        print()
+        # self.table.search(self.search.text())
 
     def enterPressed(self):
         self.table.search(self.search.text())

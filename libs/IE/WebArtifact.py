@@ -2,7 +2,8 @@ import pyesedb
 import datetime
 import os, sys
 
-EXE_EXTENSION = [ "exe", "doc", "docx", "hta", "xls", "ppts", "pptx", "pdf", "msu", "msi" ]
+EXE_EXTENSION = [ "dll", "rtf", "doc", "docx", "hta", "xls", "ppts", "pptx", "pdf", "woff", "hwp"]
+
 #Get file time
 def getFiletime(dt):
     if dt == 0:
@@ -41,50 +42,38 @@ def getHistory(filepath, timeline=None):
             histDirDict["Container_%s" % cRecords.get_value_data_as_integer(0)] = cRecords.get_value_data_as_string(10)
 
     items = []
-    head = ["History", 3]
+    redHead = ["History", 1]
+    navyHead = ["History", 6]
     #Get history from each container
     for hcl in histContList:
         histCont = esedb_file.get_table_by_name(hcl)
         for hRecords in histCont.records:
             _url = hRecords.get_value_data_as_string(17)
             if _url.count("@") > 0:
-                accessedTime = getFiletime(hRecords.get_value_data_as_integer(13))
-                if datetime.datetime.strptime(accessedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                URL = _url.split("@")[1]
+                if not URL.startswith("http"):
                     continue
-                if _url[-3] in EXE_EXTENSION:
-                    head[1] = 5
-                items.append([
-                    head,
-                    accessedTime,    # Accessed Time
-                    _url.split("@")[1],  # URL
-                    getFiletime(hRecords.get_value_data_as_integer(12)),    # Modified Time
-                    # str(getFiletime(hRecords.get_value_data_as_integer(10))),  # Created Time
-                    # str(hRecords.get_value_data_as_integer(8)),  # Access Count
-                    # hRecords.get_value_data_as_string(18),  # File Name
-                    # "{}.{}".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0)),   # ID
-                    # histNameDict[hcl],  # Container Name,
-                    # getFiletime(hRecords.get_value_data_as_integer(11)),    # Expires
-                    # getFiletime(hRecords.get_value_data_as_integer(9)),     # Synced
-                    # hRecords.get_value_data_as_integer(15),                 # Sync Count
-                    # hRecords.get_value_data_as_integer(5),                  # File Size
-                    # histDirDict[hcl]  # Directory
-                ])
-            '''
-            print("ID: {}.{}".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0)))
-            print("Container Name: {}".format(histNameDict[hcl]))
-            print("Created: {}".format(getFiletime(hRecords.get_value_data_as_integer(10))))
-            print("Accessed: {}".format(getFiletime(hRecords.get_value_data_as_integer(13))))
-            print("Modified: {}".format(getFiletime(hRecords.get_value_data_as_integer(12))))
-            print("Expires: {}".format(getFiletime(hRecords.get_value_data_as_integer(11))))
-            print("Synced: {}".format(getFiletime(hRecords.get_value_data_as_integer(9))))
-            print("Sync Count: {}".format(hRecords.get_value_data_as_integer(15)))
-            print("Access Count: {}".format(hRecords.get_value_data_as_integer(8)))
-            print("URL: {}".format(hRecords.get_value_data_as_string(17)))
-            print("File Name: {}".format(hRecords.get_value_data_as_string(18)))
-            print("File Size: {}".format(hRecords.get_value_data_as_integer(5)))
-            print("Response Headers: -".format())
-            print("Directory: {}".format(histDirDict[hcl]))
-            '''
+                accessedTime = getFiletime(hRecords.get_value_data_as_integer(13))
+                modifiedTime = getFiletime(hRecords.get_value_data_as_integer(12))
+                # if datetime.datetime.strptime(accessedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                #     continue
+                head = navyHead if _url[-3] in EXE_EXTENSION else redHead
+                content = "ID: {}.{}\n".format(hRecords.get_value_data_as_integer(1),
+                                               hRecords.get_value_data_as_integer(0))
+                content += "Container Name: {}\n".format(histNameDict[hcl])
+                content += "Created Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(10)))
+                content += "Accessed Time: {}\n".format(accessedTime)
+                content += "Modified Time: {}\n".format(modifiedTime)
+                content += "Expires Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(11)))
+                content += "Synced Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(9)))
+                content += "Sync Count: {}\n".format(hRecords.get_value_data_as_integer(15))
+                content += "Access Count: {}\n".format(hRecords.get_value_data_as_integer(8))
+                content += "URL: {}\n".format(_url)
+                content += "File Name: {}\n".format(hRecords.get_value_data_as_string(18))
+                content += "File Size: {}\n".format(hRecords.get_value_data_as_integer(5))
+                content += "Directory: {}\n".format(histDirDict[hcl])
+                items.append([head, accessedTime, URL, modifiedTime, content])
+
     return items
 
 #Get content
@@ -104,59 +93,47 @@ def getContent(filepath, timeline=None):
             histDirDict["Container_%s" % cRecords.get_value_data_as_integer(0)] = cRecords.get_value_data_as_string(10)
 
     items = []
-    exeList = []
-    head = ["Cache", 4]
+    redHead = ["Cache", 1]
+    navyHead = ["Cache", 6]
+    head = []
     #Get content from each container
     for hcl in histContList:
         histCont = esedb_file.get_table_by_name(hcl)
         for hRecords in histCont.records:
             accessedTime = getFiletime(hRecords.get_value_data_as_integer(13))
-            if datetime.datetime.strptime(accessedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-                continue
+            # if datetime.datetime.strptime(accessedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+            #     continue
+            url = hRecords.get_value_data_as_string(17)
             fileName = hRecords.get_value_data_as_string(18)
+            fileSize = str(hRecords.get_value_data_as_integer(5))
+            createdTime = str(getFiletime(hRecords.get_value_data_as_integer(10)))
             if fileName.count("."):
                 extension = fileName.split(".")[1]
-                if extension in EXE_EXTENSION:
-                    head[1] = 6
-                    if extension == EXE_EXTENSION[0]:
-                        exeList.append(fileName.upper())
-            items.append([
-                head,
-                accessedTime,  # Accessed Time
-                hRecords.get_value_data_as_string(17),  # URL
-                fileName,  # File Name
-                str(hRecords.get_value_data_as_integer(5)),  # File Size
-                str(getFiletime(hRecords.get_value_data_as_integer(10))),  # Created Time
-                fixRespData(hRecords.get_value_data(21)),  # Response Headers
-                # hRecords.get_value_data_as_integer(8),  # Access Count
-                # "{}.{}".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0)),   # ID
-                # histNameDict[hcl],  # Container Name
-                # getFiletime(hRecords.get_value_data_as_integer(12)),    # Modified Time
-                # getFiletime(hRecords.get_value_data_as_integer(11)),    # Expires
-                # getFiletime(hRecords.get_value_data_as_integer(9)),     # Synced
-                # hRecords.get_value_data_as_integer(15),                 # Sync Count
-                # histDirDict[hcl],                                       # Directory
-            ])
-            '''
-            print("ID: {}.{}".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0)))
-            print("Container Name: {}".format(histNameDict[hcl]))
-            print("Created: {}".format(getFiletime(hRecords.get_value_data_as_integer(10))))
-            print("Accessed: {}".format(getFiletime(hRecords.get_value_data_as_integer(13))))
-            print("Modified: {}".format(getFiletime(hRecords.get_value_data_as_integer(12))))
-            print("Expires: {}".format(getFiletime(hRecords.get_value_data_as_integer(11))))
-            print("Synced: {}".format(getFiletime(hRecords.get_value_data_as_integer(9))))
-            print("Sync Count: {}".format(hRecords.get_value_data_as_integer(15)))
-            print("Access Count: {}".format(hRecords.get_value_data_as_integer(8)))
-            print("URL: {}".format(hRecords.get_value_data_as_string(17)))
-            print("File Name: {}".format(hRecords.get_value_data_as_string(18)))
-            print("File Size: {}".format(hRecords.get_value_data_as_integer(5)))
-            print("Response Headers: {}".format(fixRespData(hRecords.get_value_data(21))))
-            print("Directory: {}".format(histDirDict[hcl]))
-            '''
-    return {
-        'caches': items,
-        'exeList': exeList
-    }
+                if extension in ["htm", "html", "js", "php", "jsp", "asp", "aspx"]:
+                    head = redHead
+                elif extension in EXE_EXTENSION:
+                    head = navyHead
+                else:
+                    continue
+            else:
+                continue
+            content = "ID: {}.{}\n".format(hRecords.get_value_data_as_integer(1),
+                                           hRecords.get_value_data_as_integer(0))
+            content += "Container Name: {}\n".format(histNameDict[hcl])
+            content += "Created Time: {}\n".format(createdTime)
+            content += "Accessed Time: {}\n".format(accessedTime)
+            content += "Modified Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(12)))
+            content += "Expires Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(11)))
+            content += "Synced Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(9)))
+            content += "Sync Count: {}\n".format(hRecords.get_value_data_as_integer(15))
+            content += "Access Count: {}\n".format(hRecords.get_value_data_as_integer(8))
+            content += "URL: {}\n".format(url)
+            content += "File Name: {}\n".format(fileName)
+            content += "File Size: {}\n".format(fileSize)
+            content += "Response Headers: {}\n".format(fixRespData(hRecords.get_value_data(21)))
+            content += "Directory: {}\n".format(histDirDict[hcl])
+            items.append([head, accessedTime, url, fileName, fileSize, createdTime, content])
+    return items
 
 #Get cookies
 def getCookies(filepath):
