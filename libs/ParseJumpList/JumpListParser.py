@@ -14,7 +14,8 @@ def FromFiletime(filetime):
     timestamp = filetime / 10
 
     date_time = datetime.datetime(1601, 1, 1) + datetime.timedelta(microseconds=timestamp)
-    return date_time.strftime("%d %b %Y %I:%M:%S %p")
+    # return date_time.strftime("%d %b %Y %I:%M:%S %p")
+    return date_time.strftime("%Y-%m-%d %H:%M:%S.%f")
 
 def lnk_flags(flags_to_parse):
     flags = {0: "HasLinkTargetIDList",
@@ -439,20 +440,20 @@ def destlist_data(destlist_file_data):
                               'Birth (MAC)': birth_mac, 'Data': Data})
     '''
     destlist = []
-    destlist.append({
-        'E_NO': destlist_entryidnumber[0],
-        'NetBIOS_Name': destlist_netbiosname,
-        'Last_Recorded_Access': destlist_access_time,
-        'Access_Count': destlist_entry_access_count[0],
-        'New_Timestamp': destlist_object_timestamp,
-        'New_MAC': new_mac,
-        'Seq_No': destlist_object_sequence[0],
-        'Birth_Timestamp': birth_destlist_object_timestamp,
-        'Birth_MAC': birth_mac,
-        'Data': Data,
-    })
-    print(
-        "E.No. | NetBIOS Name | Last Recorded Access | Access Count | New_Timestamp | New _MAC | Seq No. | Birth_Timestamp | Birth_MAC | Data ")
+    destlist.append([
+        destlist_access_time,
+        Data,
+        str(destlist_entryidnumber[0]),
+        str(destlist_entry_access_count[0]),
+        destlist_netbiosname,
+        destlist_object_timestamp,
+        new_mac,
+        str(destlist_object_sequence[0]),
+        birth_destlist_object_timestamp,
+        birth_mac,
+    ])
+    # print(
+    #     "E.No. | NetBIOS Name | Last Recorded Access | Access Count | New_Timestamp | New _MAC | Seq No. | Birth_Timestamp | Birth_MAC | Data ")
 
     for entry in range(destlist_totalentries[0] - 1):
 
@@ -519,19 +520,18 @@ def destlist_data(destlist_file_data):
                                       'Birth(Timestamp)': birth_destlist_entry_object_timestamp,
                                       'Birth (MAC)': birth_destlist_entry_object_mac, 'Data': Data})
             '''
-
-            destlist.append({
-                'E_NO': destlist_entryidnumber[0],
-                'NetBIOSName': destlist_netbiosname,
-                'LastRecordedAccess': destlist_access_time,
-                'AccessCount': destlist_entry_access_count[0],
-                'New_Timestamp': destlist_entry_object_timestamp,
-                'New_MAC': destlist_entry_object_mac,
-                'SeqNo': destlist_entry_object_sequence[0],
-                'Birth_Timestamp': birth_destlist_entry_object_timestamp,
-                'Birth_MAC': birth_destlist_entry_object_mac,
-                'Data': Data,
-            })
+            destlist.append([
+                destlist_access_time,
+                Data,
+                str(destlist_entryidnumber[0]),
+                str(destlist_entry_access_count[0]),
+                destlist_netbiosname.decode(),
+                destlist_entry_object_timestamp,
+                destlist_entry_object_mac,
+                str(destlist_entry_object_sequence[0]),
+                birth_destlist_entry_object_timestamp,
+                birth_destlist_entry_object_mac
+            ])
             offset = offset1 + 4
 
     return destlist

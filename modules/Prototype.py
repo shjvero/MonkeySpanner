@@ -222,7 +222,7 @@ def getPrefetchItems(included, timeline=None):
                 items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
     return items
 
-def getJumplistItems(fileName):
+def getJumplistItems(fnameHash):
     ''' 점프리스트 목록 조회
     filenames = os.listdir(PATH.JUMPLIST[0])    # AutomaticDestinations
     for fname in filenames:
@@ -231,7 +231,7 @@ def getJumplistItems(fileName):
     '''
     LinkFiles = []
     DestList = []
-    _path = PATH.JUMPLIST[0] + fileName
+    _path = PATH.JUMPLIST[0] + fnameHash + ".automaticDestinations-ms"
     if not os.path.exists(_path):
         return
     assert olefile.isOleFile(_path)
@@ -275,17 +275,17 @@ def getJumplistItems(fileName):
                                      'File Size': lnk_header[3], 'LocalBasePath': lnk_after_header[3]})
                 '''
 
-                LinkFiles.append({
-                    'E_NO': item[0] + "(" + str(int(item[0], 16)) + ")",
-                    'Modified': lnk_header[0],
-                    'Accessed': lnk_header[1],
-                    'Created': lnk_header[2],
-                    'FileSize': lnk_header[3],
-                    'DriveType': lnk_after_header[0],
-                    'VolumeName': lnk_after_header[1],
-                    'SerialNo': lnk_after_header[2],
-                    'LocalBasePath': lnk_after_header[3],
-                })
+                LinkFiles.append([
+                    lnk_header[0],
+                    lnk_header[1],
+                    lnk_header[2],
+                    lnk_after_header[3],
+                    lnk_header[3],
+                    item[0] + "(" + str(int(item[0], 16)) + ")",
+                    lnk_after_header[0],
+                    lnk_after_header[1],
+                    lnk_after_header[2],
+                ])
 
                 lnk_tracker_value = file_data[ole.get_size(item) - 100:ole.get_size(item) - 96]
                 # print(lnk_tracker_value[0])

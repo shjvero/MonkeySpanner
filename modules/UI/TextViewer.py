@@ -1,16 +1,18 @@
 import sys
 
-from PyQt5.QtCore import *
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 
-class TextViewer(QDialog):
-    _buttons = 0
+class TextViewer(QWidget):
 
-    def __init__(self, parent=None):
-        super(TextViewer, self).__init__(parent)
-        self.content = parent.viewerContent
-        self.setWindowTitle(parent.viewerTitle)
-        self.resize(800, 500)
+    def __init__(self):
+        super(TextViewer, self).__init__()
+
+    def initUI(self, viewerTitle, viewerContent):
+        self.content = viewerContent
+        self.setWindowTitle(viewerTitle)
+        self.setWindowIcon(QIcon("../../img/logo.png"))
+        self.resize(600, 500)
         self.label = QLabel()
         self.label.setText(self.content)
         self.label.setMargin(10)
@@ -21,6 +23,7 @@ class TextViewer(QDialog):
         self.scrollArea.setWidget(self.label)
         self.verticalLayout = QVBoxLayout(self)
         self.verticalLayout.addWidget(self.scrollArea)
+        self.show()
 
     def contextMenuEvent(self, event):
         menu = QMenu(self)

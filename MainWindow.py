@@ -30,7 +30,7 @@ class Main(QMainWindow):
     def initUI(self):
         # Set up default UI
         self.setMinimumSize(self.width(), self.height()*2)
-        self.setMenuBar(MenuBar())
+        self.setMenuBar(MenuBar(self))
         self.setStatusBar(StatusBar())
 
         # Set up radio button (Select Software)
@@ -67,9 +67,6 @@ class Main(QMainWindow):
         self.search.textChanged.connect(self.textChanged)
         self.layout.addWidget(self.search)
 
-        # self.t = Thread(target=self.loading)
-        # self.t.start()
-        # Set up table
         self.table = PrototypeTable(3, self.env)
         self.table.setParent(self)
         # self.table.hide()
@@ -98,14 +95,19 @@ class Main(QMainWindow):
         msg = b.text()
         if self.btnFlash.isChecked():
             print(msg + " is checked")
+            self.btnNumber = 1
         elif self.btnHWP.isChecked():
             print(msg + " is checked")
+            self.btnNumber = 2
         elif self.btnIE.isChecked():
             print(msg + " is checked")
+            self.btnNumber = 3
         elif self.btnOffice.isChecked():
             print(msg + " is checked")
+            self.btnNumber = 4
         elif self.btnPDF.isChecked():
             print(msg + " is checked")
+            self.btnNumber = 5
         self.statusBar().showMessage(msg + " is checked")
 
     def textChanged(self):

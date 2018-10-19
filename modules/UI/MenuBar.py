@@ -1,9 +1,9 @@
-from PyQt5.QtWidgets import QMenuBar, QMenu, QAction, qApp, QFileDialog
+from PyQt5.QtWidgets import QMenuBar, QMenu, QAction, qApp, QFileDialog, QMainWindow
 from modules.UI.TableViewer import TableViewer
 
 class MenuBar(QMenuBar):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super(MenuBar, self).__init__(parent)
         # 메뉴 생성
         fileMenu = self.addMenu("File")  # 메뉴그룹 생성
         fileMenu.triggered[QAction].connect(self.openFileDialog)
@@ -11,14 +11,19 @@ class MenuBar(QMenuBar):
         # viewMenu.triggered[QAction].connect(self.openFileDialog)
         helpMenu = self.addMenu("Help")
 
-        subMenu = QMenu("Import", self)  # 서브메뉴 생성
+        NTFSMenu = QMenu("Import FileSystem", self)  # 서브메뉴 생성
         importUsnjrnl = QAction("$usnjrnl", self)
         importMFT = QAction("$mft", self)
         importLogFile = QAction("$LogFile", self)
-        subMenu.addAction(importUsnjrnl)
-        subMenu.addAction(importMFT)
-        subMenu.addAction(importLogFile)
-        fileMenu.addMenu(subMenu)
+
+        NTFSMenu.addAction(importUsnjrnl)
+        NTFSMenu.addAction(importMFT)
+        NTFSMenu.addAction(importLogFile)
+        fileMenu.addMenu(NTFSMenu)
+
+        jumplistMenu = QAction("Import JumpList", self)
+        jumplistMenu.triggered.connect(self.showJumpList)
+        fileMenu.addAction(jumplistMenu)
 
         exit_menu = QAction("Exit", self)  # 메뉴 객체 생성
         exit_menu.setShortcut("Ctrl+Q")  # 단축키 생성
@@ -60,6 +65,27 @@ class MenuBar(QMenuBar):
             TableViewer(fileName).showMFT()
         elif fileType == "$LogFile":
             TableViewer(fileName).showLogFile()
+
+    def showJumpList(self):
+        from modules.Prototype import getJumplistItems
+        # self.checkedBtnNumber = self.parent().btnNumber
+        # print(self.checkedBtnNumber)
+        # jumplistHash = ''
+        # if self.checkedBtnNumber == 1:
+        #     print("Adobe Checked")
+        # elif self.checkedBtnNumber == 2:
+        #     print("HWP Checked")
+        # elif self.checkedBtnNumber == 3:
+        #     print("IE Checked")
+        #     jumplistHash = "28c8b86deab549a1"
+        # elif self.checkedBtnNumber == 4:
+        #     print("Office Checked")
+        # elif self.checkedBtnNumber == 5:
+        #     print("PDF Checked")
+
+        jumplistHash = "28c8b86deab549a1"
+        self.ui = TableViewer()
+        self.ui.showJumpList(getJumplistItems(jumplistHash))
 
     def showUserEnvironment(self):
         print("showUserEnvironment")

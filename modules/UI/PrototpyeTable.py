@@ -121,21 +121,12 @@ class PrototypeTable(QTableWidget):
         row = 0
         for currentQTableWidgetItem in self.selectedItems():
             row = currentQTableWidgetItem.row()
-        self.viewerTitle = self.verticalHeaderItem(row).text()
-        self.viewerContent = self.prototype[row][-1]
+        viewerTitle = self.verticalHeaderItem(row).text()
+        viewerContent = self.prototype[row][-1]
 
         from modules.UI.TextViewer import TextViewer
-        viewer = TextViewer(self)
-        viewer.exec_()
-        # viewer = QDialog()
-        # label = QLabel(viewerContent, viewer)
-        # label.move(10, 10)
-        # # label.setSelection()
-        # # viewer.setFont()
-        # viewer.resize(500, 500)
-        # viewer.setWindowTitle(viewerTitle)
-        # viewer.setWindowModality(Qt.ApplicationModal)
-        # viewer.exec_()
+        self.viewer = TextViewer()
+        self.viewer.initUI(viewerTitle, viewerContent)
 
     def contextMenuEvent(self, event):
         menu = QMenu(self)
