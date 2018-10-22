@@ -1,5 +1,5 @@
 __all__ = [
-    'IE',
+    'ParseWebArtifact',
     'ParseEvtx',
     'ParseJumpList',
     'ParseNTFS',

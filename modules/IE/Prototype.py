@@ -67,6 +67,7 @@ def getPrototype(env, timeline=None):
     prototype = []
     if env == "Windows7":
         prototype = getWebArtifactItems(env)
+        print("Web Artifact: {}".format(len(prototype)))
         others = getEventLogItemsForWin7(evtxLogFor7[0])
         prototype = prototype + others if others else prototype
         if prototype:
@@ -81,6 +82,7 @@ def getPrototype(env, timeline=None):
         prototype = prototype + others if others else prototype
     elif env == "Windows10":
         prototype = getWebArtifactItems(env)
+        print("Web Artifact: {}".format(len(prototype)))
         others = getEventLogItemsForWin10(evtxLogFor10[0])
         prototype = prototype + others if others else prototype
         if prototype:
@@ -91,8 +93,6 @@ def getPrototype(env, timeline=None):
         prototype = prototype + others if others else prototype
         others = getEventLogItemsForWin10(evtxLogFor10[2], limitedTime[0])
         prototype = prototype + others if others else prototype
-        prototype = getEventLogItemsForWin10(evtxLogFor10[2])
-        limitedTime[0] = datetime.datetime.strptime(prototype[0][1], "%Y-%m-%d %H:%M:%S.%f")
     others = getReportWER(env, "AppCrash_IEXPLORE.EXE")
     prototype = prototype + others if others else prototype
     prefetchList = prefetchList + ["CMD.EXE", "POWERSHELL.EXE", "RUNDLL32.EXE"]

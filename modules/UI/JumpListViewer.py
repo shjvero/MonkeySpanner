@@ -25,7 +25,7 @@ class TableViewer(QWidget):
 
     def initUI(self, type):
         self.setWindowTitle("JumpList")
-        self.setWindowIcon(QIcon("../../img/logo.png"))
+        # self.setWindowIcon(QIcon("../../img/logo.png"))
         self.setMinimumSize(800, self.height()+200)
         if type == 2:
             self.loadJumpList()
@@ -61,7 +61,7 @@ class TableViewer(QWidget):
 
         self.label1 = QLabel("Link Files:", self)
         self.label1.move(10, 15)
-        # self.label.resize(self.label1.sizeHint())
+        # self.label1.resize(self.label1.sizeHint())
         self.LinkFilesTable.move(10, 40)
         self.LinkFilesTable.setMinimumSize(800, 300)
         self.LinkFilesTable.resizeColumnsToContents()

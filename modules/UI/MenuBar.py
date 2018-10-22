@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMenuBar, QMenu, QAction, qApp, QFileDialog, QMainWindow, QMessageBox
-from modules.UI.TableViewer import TableViewer
+from modules.UI.JumpListViewer import TableViewer
 
 class MenuBar(QMenuBar):
     def __init__(self, parent=None):
@@ -89,7 +89,7 @@ class MenuBar(QMenuBar):
             # QMessageBox.Warning(self, "")
             print("Not exists.")
         self.ui = TableViewer()
-        self.ui.showJumpList()
+        self.ui.showJumpList(content)
 
     def showUserEnvironment(self):
         print("showUserEnvironment")

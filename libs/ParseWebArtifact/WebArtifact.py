@@ -2,7 +2,7 @@ import pyesedb
 import datetime
 import os, sys
 
-EXE_EXTENSION = [ "dll", "rtf", "doc", "docx", "hta", "xls", "ppts", "pptx", "pdf", "woff", "hwp"]
+EXE_EXTENSION = ["dll", "rtf", "doc", "docx", "hta", "xls", "ppts", "pptx", "pdf", "woff", "hwp", "bat"]
 
 #Get file time
 def getFiletime(dt):

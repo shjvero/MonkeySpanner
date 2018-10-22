@@ -1,7 +1,7 @@
 from libs.ParsePrefetch.prefetch import *
 from libs.ParseJumpList.JumpListParser import *
 import libs.ParseEvtx.Evtx as evtx
-import libs.IE.WebArtifact as WebArtifact
+import libs.ParseWebArtifact.WebArtifact as WebArtifact
 import modules.constant as PATH
 import datetime
 
@@ -216,6 +216,7 @@ def getJumplistItems(fnameHash):
     DestList = []
     _path = PATH.JUMPLIST[0] + fnameHash + ".automaticDestinations-ms"
     if not os.path.exists(_path):
+        print("[JumpLIst] Not Exists")
         return
     assert olefile.isOleFile(_path)
     base = os.path.basename(_path)  # Get the JumpList file name
@@ -323,20 +324,6 @@ def getWebArtifactItems(env, timeline=None):
     history = WebArtifact.getHistory(fullpath, timeline)
     caches = WebArtifact.getContent(fullpath, timeline)
     return history + caches
-'''
-    items = {
-        "history": [ 
-                    [ Accesed Time, { ... } ],
-                    [ Accesed Time, { ... } ],
-                    [ Accesed Time, { ... } ],
-                ]
-        "content": [ 
-                    [ Accesed Time, { ... } ],
-                    [ Accesed Time, { ... } ],
-                    [ Accesed Time, { ... } ],
-                ]
-    } 
-'''
 
 def getNTFSItems(type):
     items = []
