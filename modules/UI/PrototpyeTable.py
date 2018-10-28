@@ -1,11 +1,10 @@
 import os, sys
 from PyQt5.Qt import *
-import modules.IE.Prototype as InternetExplorerPrototype
+import modules.IE.Prototype as PrototypeForIE
 
 class PrototypeTable(QTableWidget):
-    def __init__(self, sw, env):
+    def __init__(self, env):
         super().__init__()
-        self.sw = sw
         self.env = env
         self.prototype = []
         self.COLOR = [
@@ -19,20 +18,24 @@ class PrototypeTable(QTableWidget):
             QColor(155, 0, 225, 30),
         ]
 
-        self.load(sw)
-
-    def load(self, sw=None, timeline=None):
+    def load(self, sw, timeline=None):
         if sw == 1:
-            print("Adobe Flash Player")
+            print("Adobe Reader")
         elif sw == 2:
-            print("HWP")
+            print("Adobe Flash Player")
         elif sw == 3:
-            self.prototype = InternetExplorerPrototype.getPrototype(self.env)
-            self.customHeaders = InternetExplorerPrototype.getColumnHeader()
+            print("Chrome")
         elif sw == 4:
-            print("Office")
+            print("Edge")
         elif sw == 5:
-            print("PDF")
+            print("HWP")
+        elif sw == 6:
+            self.prototype = PrototypeForIE.getPrototype(self.env)
+            self.customHeaders = PrototypeForIE.getColumnHeader()
+        elif sw == 7:
+            print("Office")
+        elif sw == 8:
+            print("Local Privilege Escalation")
         else:
             print("기존 SW: {}".format(self.sw))
         if timeline:
@@ -44,8 +47,8 @@ class PrototypeTable(QTableWidget):
     def initUI(self):
         print("initUI")
         self.setColumnCount(5)
-        self.setRowCount(len(self.prototype))
         self.setHorizontalHeaderLabels(["", "", "", "", "", ""])
+        self.setRowCount(len(self.prototype))
         row = 0
         for list in self.prototype:
             self.setVerticalHeaderItem(row, QTableWidgetItem(list[0][0]))
@@ -105,7 +108,6 @@ class PrototypeTable(QTableWidget):
                 self.hideRow(i)
             elif self.isRowHidden(i):
                 self.showRow(i)
-
 
     @pyqtSlot()
     def changeColumnHeader(self):

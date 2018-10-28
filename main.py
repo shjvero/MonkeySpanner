@@ -1,70 +1,49 @@
 import os, sys
 
-from PyQt5.QtGui import QColor, QPixmap, QMovie
+from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import QCoreApplication, Qt
+from PyQt5.QtCore import QCoreApplication, Qt, QRect
 
 
 class Exam(QMainWindow):
+    FROM, SUBJECT, DATE = range(3)
     def __init__(self):
         super().__init__()
-        self.centralwidget = QWidget(self)
-        self.setCentralWidget(self.centralwidget)
-        self.centralwidget.setLayout(QVBoxLayout(self.centralwidget))
-
-        self.mdiArea = QMdiArea(self.centralwidget)
-        self.centralwidget.layout().addWidget(self.mdiArea)
-
-        subWindow = QMdiSubWindow(self)
-
-        widget = QWidget()
-        widget.setLayout(QVBoxLayout())
-        btn = QPushButton("close", widget)
-        widget.layout().addWidget(btn)
-
-        btn.clicked.connect(subWindow.close)
-
-        subWindow.setWidget(widget)
-        subWindow.setObjectName("New_Window")
-        subWindow.setWindowTitle("New SubWindow")
-        self.mdiArea.addSubWindow(subWindow)
-        # self.initUI()
+        self.title = 'PyQt5 Example'
+        self.initUI()
 
     def initUI(self):
-        btn = QPushButton('Push me!', self)
-        btn.resize(btn.sizeHint()) # 글씨 기준으로 크기 조절
-        btn.setToolTip('this is <strong>tooltip</strong>')
-        btn.move(20, 30) # 버튼 움직이기.
+        self.setWindowTitle(self.title)
+        self.resize(self.width(), self.height())
 
-        # 눌렀을 때, 시그널을 보내면, 받고 꺼지도록,
-        # connect 인자에는 함수명만 들어감
-        # ...connect(self.on_click)
-        btn.clicked.connect(QCoreApplication.instance().quit)
+        from threading import Thread
+        msg = "Thread"
+        self.t = [
+            Thread(target=func1, args=("Thread A",)),
+            Thread(target=func2, args=("Thread B",)),
+            Thread(target=func3, args=("Thread C",)),
+            Thread(target=func4, args=("Thread D",)),
+            Thread(target=func5, args=("Thread E",)),
+        ]
+        for i in range(5):
+            self.t[i].start()
 
-        #self.setGeometry(300, 300, 400, 500) # 창크기 조절
-        self.resize(500, 500) # 바탕화면 정중앙 배치.
-        self.setWindowTitle("TEST Title")
-        self.table = QTableWidget(self)
-        self.table.resize(400, 300)
-        self.table.setColumnCount(4)
-        self.table.setRowCount(5)
-        for r in range(self.table.rowCount()):
-            for c in range(self.table.columnCount()):
-                import random
-                item = QTableWidgetItem()
-                item.setData(Qt.EditRole, "{}{}".format(random.randint(1, 100),random.randint(1, 100)))
-                self.table.setItem(r, c, item)
-
-        self.table.setHorizontalHeaderLabels(["A", "B", "C", "D"])
-        self.table.hide()
-        label = QLabel(self)
-        loadingGif = QMovie("img/loading1.gif")
-        label.setMovie(loadingGif)
-        label.move(10, 10)
-        label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        label.setAlignment(Qt.AlignCenter)
-        loadingGif.start()
         self.show()
+
+def func1(msg):
+    print("Func1", msg)
+
+def func2(msg):
+    print("Func2", msg)
+
+def func3(msg):
+    print("Func3", msg)
+
+def func4(msg):
+    print("Func4", msg)
+
+def func5(msg):
+    print("Func5", msg)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

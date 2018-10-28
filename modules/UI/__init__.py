@@ -1,7 +1,7 @@
 __all__ = [
     'JumpListViewer',
     'MenuBar',
-    'MsgViewer',
+    'MsgDialog.py',
     'NTFSViewer',
     'PrototpyeTable',
     'SelectionViewer',

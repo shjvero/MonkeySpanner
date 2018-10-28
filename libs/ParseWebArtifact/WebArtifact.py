@@ -55,8 +55,6 @@ def getHistory(filepath, timeline=None):
                     continue
                 accessedTime = getFiletime(hRecords.get_value_data_as_integer(13))
                 modifiedTime = getFiletime(hRecords.get_value_data_as_integer(12))
-                # if datetime.datetime.strptime(accessedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-                #     continue
                 head = navyHead if _url[-3] in EXE_EXTENSION else redHead
                 content = "ID: {}.{}\n".format(hRecords.get_value_data_as_integer(1),
                                                hRecords.get_value_data_as_integer(0))
@@ -95,18 +93,16 @@ def getContent(filepath, timeline=None):
     items = []
     redHead = ["Cache", 1]
     navyHead = ["Cache", 6]
-    head = []
     #Get content from each container
     for hcl in histContList:
         histCont = esedb_file.get_table_by_name(hcl)
         for hRecords in histCont.records:
             accessedTime = getFiletime(hRecords.get_value_data_as_integer(13))
-            # if datetime.datetime.strptime(accessedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-            #     continue
             url = hRecords.get_value_data_as_string(17)
             fileName = hRecords.get_value_data_as_string(18)
             fileSize = str(hRecords.get_value_data_as_integer(5))
             createdTime = str(getFiletime(hRecords.get_value_data_as_integer(10)))
+            head = []
             if fileName.count("."):
                 extension = fileName.split(".")[1]
                 if extension in ["htm", "html", "js", "php", "jsp", "asp", "aspx"]:
@@ -133,6 +129,55 @@ def getContent(filepath, timeline=None):
             content += "Response Headers: {}\n".format(fixRespData(hRecords.get_value_data(21)))
             content += "Directory: {}\n".format(histDirDict[hcl])
             items.append([head, accessedTime, url, fileName, fileSize, createdTime, content])
+    return items
+
+#Get downloads
+def getDownloads(filepath, timeline=None):
+    esedb_file = pyesedb.file()
+    esedb_file.open(filepath)
+    containers = esedb_file.get_table_by_name("Containers")
+
+    #Get list of containers that contain IE downloads
+    histContList = []
+    histNameDict = dict()
+    histDirDict = dict()
+    for cRecords in containers.records:
+        if "download" in cRecords.get_value_data_as_string(8):
+            histContList.append("Container_%s" % cRecords.get_value_data_as_integer(0))
+            histNameDict["Container_%s" % cRecords.get_value_data_as_integer(0)] = cRecords.get_value_data_as_string(8)
+            histDirDict["Container_%s" % cRecords.get_value_data_as_integer(0)] = cRecords.get_value_data_as_string(10)
+
+    items = []
+    purpleHead = ["Download", 7]
+    #Get downloads from each container
+    for hcl in histContList:
+        histCont = esedb_file.get_table_by_name(hcl)
+        for hRecords in histCont.records:
+            accessedTime = getFiletime(hRecords.get_value_data_as_integer(13))
+            if timeline:
+                if datetime.datetime.strptime(accessedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                    continue
+            url = hRecords.get_value_data_as_string(17)
+            fileName = hRecords.get_value_data_as_string(18)
+            fileSize = hRecords.get_value_data_as_integer(5)
+            downloadPath = fixRespData(hRecords.get_value_data(21)) # 파싱필요
+            content = "ID: {}.{}\n".format(hRecords.get_value_data_as_integer(1),
+                                           hRecords.get_value_data_as_integer(0))
+            content += "Container Name: {}\n".format(histNameDict[hcl])
+            content += "Created Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(10)))
+            content += "Accessed Time: {}\n".format(accessedTime)
+            content += "Modified Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(12)))
+            content += "Expires Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(11)))
+            content += "Synced Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(9)))
+            content += "Sync Count: {}\n".format(hRecords.get_value_data_as_integer(15))
+            content += "Access Count: {}\n".format(hRecords.get_value_data_as_integer(8))
+            content += "URL: {}\n".format(url)
+            content += "File Name: {}\n".format(fileName)
+            content += "File Size: {}\n".format(fileSize)
+            content += "Response Headers: {}\n".format(downloadPath)
+            content += "Directory: {}\n".format(histDirDict[hcl])
+            items.append([purpleHead, accessedTime, url, fileName, fileSize, "", content])
+
     return items
 
 #Get cookies
@@ -214,45 +259,4 @@ def getDom(filepath):
                     'Directory': histDirDict[hcl],
                 }
             ])
-    return items
-
-#Get downloads
-def getDownloads(filepath):
-    esedb_file = pyesedb.file()
-    esedb_file.open(filepath)
-    containers = esedb_file.get_table_by_name("Containers")
-
-    #Get list of containers that contain IE downloads
-    histContList = []
-    histNameDict = dict()
-    histDirDict = dict()
-    for cRecords in containers.records:
-        if "download" in cRecords.get_value_data_as_string(8):
-            histContList.append("Container_%s" % cRecords.get_value_data_as_integer(0))
-            histNameDict["Container_%s" % cRecords.get_value_data_as_integer(0)] = cRecords.get_value_data_as_string(8)
-            histDirDict["Container_%s" % cRecords.get_value_data_as_integer(0)] = cRecords.get_value_data_as_string(10)
-
-    items = []
-    #Get downloads from each container
-    for hcl in histContList:
-        histCont = esedb_file.get_table_by_name(hcl)
-        for hRecords in histCont.records:
-            items.append([
-                getFiletime(hRecords.get_value_data_as_integer(13)),  # Accessed Time
-                {
-                    'ID': "{}.{}".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0)),
-                    'ContainerName': histNameDict[hcl],
-                    'Created': getFiletime(hRecords.get_value_data_as_integer(10)),
-                    'Modified': getFiletime(hRecords.get_value_data_as_integer(12)),
-                    'Expires': getFiletime(hRecords.get_value_data_as_integer(11)),
-                    'Synced': getFiletime(hRecords.get_value_data_as_integer(9)),
-                    'SyncCount': hRecords.get_value_data_as_integer(15),
-                    'AccessCount': hRecords.get_value_data_as_integer(8),
-                    'URL': hRecords.get_value_data_as_string(17),
-                    'FileName': hRecords.get_value_data_as_string(18),
-                    'FileSize': hRecords.get_value_data_as_integer(5),
-                    'Directory': histDirDict[hcl],
-                }
-            ])
-
     return items

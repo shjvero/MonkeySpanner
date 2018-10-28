@@ -1,5 +1,6 @@
 from libs.ParsePrefetch.prefetch import *
 from libs.ParseJumpList.JumpListParser import *
+from libs.ParseRegistry.ShimCacheParser import get_local_data
 import libs.ParseEvtx.Evtx as evtx
 import libs.ParseWebArtifact.WebArtifact as WebArtifact
 import modules.constant as PATH
@@ -303,7 +304,7 @@ def getWebArtifactItems(env, timeline=None):
                         if line == "\n":
                             continue
                         t = line.split()[0]
-                        if os.system('taskkill /f /im "{}"'.format(t)) == 0:
+                        if os.system('taskkill /f /im "{}" > .\\repo\\log.txt'.format(t)) == 0:
                             print("[Kill] " + t)
                             # if os.system('xcopy / s / h / i / y "{}" ".\\repo\\"'.format(fullpath)):
                             #     print("Failed copy..")
@@ -319,11 +320,11 @@ def getWebArtifactItems(env, timeline=None):
 
     # cookiesList = WebArtifact.getCookies(fullname)
     # domList = WebArtifact.getDom(fullname)
-    # downloadList = WebArtifact.getDownloads(fullname)
     print("path: " + fullpath)
     history = WebArtifact.getHistory(fullpath, timeline)
     caches = WebArtifact.getContent(fullpath, timeline)
-    return history + caches
+    download = WebArtifact.getDownloads(fullpath, history[0][1])
+    return history + caches + download
 
 def getNTFSItems(type):
     items = []
@@ -338,9 +339,7 @@ def getNTFSItems(type):
 
     return items
 
-def getSessionRestoreItems():
-    print("세션저장")
+def getAppCompatCache(timeline):
+    return get_local_data(timeline)
 
-def getbcf():
-    print()
-    # RecentFileCache.bcf ( only Windows 7 )
+

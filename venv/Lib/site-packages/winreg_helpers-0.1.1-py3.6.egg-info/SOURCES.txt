@@ -1,0 +1,13 @@
+MANIFEST.in
+README.md
+setup.cfg
+setup.py
+versioneer.py
+src/winreg_helpers/__init__.py
+src/winreg_helpers/_version.py
+src/winreg_helpers/refresh_icons.py
+src/winreg_helpers.egg-info/PKG-INFO
+src/winreg_helpers.egg-info/SOURCES.txt
+src/winreg_helpers.egg-info/dependency_links.txt
+src/winreg_helpers.egg-info/requires.txt
+src/winreg_helpers.egg-info/top_level.txt

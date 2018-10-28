@@ -25,6 +25,10 @@ class MenuBar(QMenuBar):
         jumplistMenu.triggered.connect(self.showJumpList)
         fileMenu.addAction(jumplistMenu)
 
+        registryMenu = QAction("Import Registry", self)
+        jumplistMenu.triggered.connect(self.importRegistry)
+        fileMenu.addAction(registryMenu)
+
         exit_menu = QAction("Exit", self)  # 메뉴 객체 생성
         exit_menu.setShortcut("Ctrl+Q")  # 단축키 생성
         exit_menu.setStatusTip("종료")
@@ -90,6 +94,9 @@ class MenuBar(QMenuBar):
             print("Not exists.")
         self.ui = TableViewer()
         self.ui.showJumpList(content)
+
+    def importRegistry(self):
+        print("Import Registry")
 
     def showUserEnvironment(self):
         print("showUserEnvironment")

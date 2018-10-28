@@ -11,7 +11,12 @@ def getColumnHeader():
         # └ Detail exists (not response header)
         "Cache": ["Accessed Time", "URL", "File Name", "Size", "Created Time"],			# 5 columns
         # └ Response Header exists.
+        "Download": ["Accessed Time", "URL", "File Name", "Size", "Download Path"],      # 5 columns
+        # └ Response Header exists.(??)
         "Report.wer": ["Modified Time", "Path", "Created Time", "", ""],                # 3 columns
+        # └ Detail exists (wer)
+        "Registry": ["Modified Time", "Execution Path", "Size", "Exec Flag", ""]       # 4 columns
+        # └ Detail exists (path)
     }
 
 def getPrototype(env, timeline=None):
@@ -44,12 +49,12 @@ def getPrototype(env, timeline=None):
         }
     ]
     evtxLogFor10 = [
-        {
-            "System.evtx": {
-                'eid': ['7036'],
-                'providerName': ['Service Control Manager']
-            },
-        },
+        # {
+        #     "System.evtx": {
+        #         'eid': ['7036'],
+        #         'providerName': ['Service Control Manager']
+        #     },
+        # },
         {
             "Application.evtx": {
                 'eid': ['1000'],
@@ -69,32 +74,33 @@ def getPrototype(env, timeline=None):
         prototype = getWebArtifactItems(env)
         print("Web Artifact: {}".format(len(prototype)))
         others = getEventLogItemsForWin7(evtxLogFor7[0])
-        prototype = prototype + others if others else prototype
+        prototype = prototype + others
         if prototype:
             limitedTime[0] = datetime.datetime.strptime(prototype[0][1], "%Y-%m-%d %H:%M:%S.%f")
         elif others:
             limitedTime[0] = datetime.datetime.strptime(others[0][1], "%Y-%m-%d %H:%M:%S.%f")
         others = getEventLogItemsForWin7(evtxLogFor7[1], "IEXPLORE.EXE", limitedTime[0])
-        prototype = prototype + others if others else prototype
+        prototype = prototype + others
         others = getEventLogItemsForWin7(evtxLogFor7[2], limitedTime[0])
-        prototype = prototype + others if others else prototype
+        prototype = prototype + others
         others = getEventLogItemsForWin7(evtxLogFor7[3], limitedTime[0])
-        prototype = prototype + others if others else prototype
+        prototype = prototype + others
     elif env == "Windows10":
         prototype = getWebArtifactItems(env)
         print("Web Artifact: {}".format(len(prototype)))
-        others = getEventLogItemsForWin10(evtxLogFor10[0])
-        prototype = prototype + others if others else prototype
+        others = getEventLogItemsForWin10(evtxLogFor10[1], "IEXPLORE.EXE", limitedTime[0])
+        prototype = prototype + others
         if prototype:
             limitedTime[0] = datetime.datetime.strptime(prototype[0][1], "%Y-%m-%d %H:%M:%S.%f")
         elif others:
             limitedTime[0] = datetime.datetime.strptime(others[0][1], "%Y-%m-%d %H:%M:%S.%f")
-        others = getEventLogItemsForWin10(evtxLogFor10[1], "IEXPLORE.EXE", limitedTime[0])
-        prototype = prototype + others if others else prototype
+        prototype = prototype + others
         others = getEventLogItemsForWin10(evtxLogFor10[2], limitedTime[0])
-        prototype = prototype + others if others else prototype
+        prototype = prototype + others
     others = getReportWER(env, "AppCrash_IEXPLORE.EXE")
-    prototype = prototype + others if others else prototype
+    prototype = prototype + others
+    others = getAppCompatCache(limitedTime[0])
+    prototype = prototype + others
     prefetchList = prefetchList + ["CMD.EXE", "POWERSHELL.EXE", "RUNDLL32.EXE"]
     others = getPrefetchItems(prefetchList, limitedTime)
     prototype = prototype + others
@@ -115,7 +121,9 @@ def getPrototype(env, timeline=None):
     8. [노] Report.wer: IE것만
     9. [초] Fault...heap.evtx EID 1001
     10. [파] IE 프리패치: 실행만
-    11. [남] 웹 캐시/히스토리: 확장자 검사 (dll, doc, docx, hta, xls, woff, pdf)
-    12. [보] 레지스트리 검사 필요
-    13. [보] 이전과정에서 EXE 모두 추출 후 프리패치 파싱
+    11. [남] 웹 히스토리: dll, doc, docx, hta, xls, woff, pdf (확장자 검사)
+    12. [남] 웹 캐시: dll, doc, docx, hta, xls, woff, pdf (확장자 검사)
+    13. [보] 레지스트리 검사 필요
+    14. [보] 웹 다운로드
+    15. [보] 이전과정에서 EXE 모두 추출 후 프리패치 파싱
     '''
