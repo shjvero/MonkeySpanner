@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QMenuBar, QMenu, QAction, qApp, QFileDialog, QMainWindow, QMessageBox
-from modules.UI.JumpListViewer import TableViewer
+from PyQt5.QtWidgets import QMenuBar, QMenu, QAction, qApp, QFileDialog
+from modules.UI.JumpListViewer import JumpListViewer
 
 class MenuBar(QMenuBar):
     def __init__(self, parent=None):
@@ -64,36 +64,73 @@ class MenuBar(QMenuBar):
                                                   "All Files (*)", options=options)
         fileType = type.text()
         if fileType == "$usnjrnl":
-            TableViewer(fileName).showUsnjrnl()
+            print()
         elif fileType == "$MFT":
-            TableViewer(fileName).showMFT()
+            print()
         elif fileType == "$LogFile":
-            TableViewer(fileName).showLogFile()
+            print()
 
     def showJumpList(self):
         from modules.Prototype import getJumplistItems
-        # self.checkedBtnNumber = self.parent().btnNumber
-        # print(self.checkedBtnNumber)
-        # jumplistHash = ''
-        # if self.checkedBtnNumber == 1:
-        #     print("Adobe Checked")
-        # elif self.checkedBtnNumber == 2:
-        #     print("HWP Checked")
-        # elif self.checkedBtnNumber == 3:
-        #     print("IE Checked")
-        #     jumplistHash = "28c8b86deab549a1"
-        # elif self.checkedBtnNumber == 4:
-        #     print("Office Checked")
-        # elif self.checkedBtnNumber == 5:
-        #     print("PDF Checked")
-
-        jumplistHash = "28c8b86deab549a1"
-        content = getJumplistItems(jumplistHash)
+        import modules.constant as CONSTANT
+        self.selected = self.parent().presentSelected
+        print(self.selected)
+        hashList = []
+        if self.selected == CONSTANT.ADOBE_READER:
+            print("Adobe Reader")
+            hashList.append(CONSTANT.JUMPLIST_HASH[15])
+            hashList.append(CONSTANT.JUMPLIST_HASH[16])
+            hashList.append(CONSTANT.JUMPLIST_HASH[17])
+            hashList.append(CONSTANT.JUMPLIST_HASH[18])
+            hashList.append(CONSTANT.JUMPLIST_HASH[19])
+            hashList.append(CONSTANT.JUMPLIST_HASH[20])
+            hashList.append(CONSTANT.JUMPLIST_HASH[21])
+        elif self.selected == CONSTANT.ADOBE_FLASH_PLAYER:
+            print("Adobe Flash Player in JumpListViewer")
+            hashList.append(CONSTANT.JUMPLIST_HASH[14])
+        elif self.selected == CONSTANT.CHROME:
+            print("Chrome in JumpListViewer")
+            hashList.append(CONSTANT.JUMPLIST_HASH[22])
+        elif self.selected == CONSTANT.EDGE:
+            print("Edge in JumpListViewer")
+            hashList.append(CONSTANT.JUMPLIST_HASH[23])
+        elif self.selected == CONSTANT.HWP:
+            print("HWP in JumpListViewer [None]")
+        elif self.selected == CONSTANT.IE:
+            print("IE in JumpListViewer")
+            hashList.append(CONSTANT.JUMPLIST_HASH[12])
+            hashList.append(CONSTANT.JUMPLIST_HASH[13])
+        elif self.selected == CONSTANT.OFFICE:
+            print("Office in JumpListViewer")
+            hashList.append(CONSTANT.JUMPLIST_HASH[0])
+            hashList.append(CONSTANT.JUMPLIST_HASH[1])
+            hashList.append(CONSTANT.JUMPLIST_HASH[2])
+            hashList.append(CONSTANT.JUMPLIST_HASH[3])
+            hashList.append(CONSTANT.JUMPLIST_HASH[4])
+            hashList.append(CONSTANT.JUMPLIST_HASH[5])
+            hashList.append(CONSTANT.JUMPLIST_HASH[6])
+            hashList.append(CONSTANT.JUMPLIST_HASH[7])
+            hashList.append(CONSTANT.JUMPLIST_HASH[8])
+            hashList.append(CONSTANT.JUMPLIST_HASH[9])
+            hashList.append(CONSTANT.JUMPLIST_HASH[10])
+            hashList.append(CONSTANT.JUMPLIST_HASH[11])
+        elif self.selected == CONSTANT.LPE:
+            print("LPE in JumpListViewer [None]")
+        # 현재 상태: 점프리스트 1개만 받아서 반환, 배열인데 어떻게 처리할 것?
+        content = getJumplistItems(hashList[1])
         if not content:
-            # QMessageBox.Warning(self, "")
-            print("Not exists.")
-        self.ui = TableViewer()
-        self.ui.showJumpList(content)
+            import sys
+            from PyQt5.QtWidgets import QMessageBox
+            m = "JumpList Not exists. - hash: "+hashList[1]
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setWindowTitle("Warning")
+            msg.setText(m)
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.buttonClicked.connect(sys.exit)
+            msg.exec_()
+        self.ui = JumpListViewer(content)
+        self.ui.show()
 
     def importRegistry(self):
         print("Import Registry")

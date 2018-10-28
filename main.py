@@ -4,7 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QCoreApplication, Qt, QRect
 
-
+a = []
 class Exam(QMainWindow):
     FROM, SUBJECT, DATE = range(3)
     def __init__(self):
@@ -27,23 +27,31 @@ class Exam(QMainWindow):
         ]
         for i in range(5):
             self.t[i].start()
-
+        for i in range(5):
+            self.t[i].join()
+        for i in range(5):
+            print(a[i])
         self.show()
 
 def func1(msg):
     print("Func1", msg)
+    a.append(1)
 
 def func2(msg):
     print("Func2", msg)
+    a.append(2)
 
 def func3(msg):
     print("Func3", msg)
+    a.append(3)
 
 def func4(msg):
     print("Func4", msg)
+    a.append(4)
 
 def func5(msg):
     print("Func5", msg)
+    a.append(5)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

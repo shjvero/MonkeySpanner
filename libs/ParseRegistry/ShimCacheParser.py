@@ -35,6 +35,7 @@ DATE_ISO = "%Y-%m-%d %H:%M:%S.%f"
 g_timeformat = DATE_ISO
 
 g_timeline = None
+g_prefetchList = []
 head = ["Registry", 7]
 # Shim Cache format used by Windows 6.1 (Win7 through Server 2008 R2)
 class CacheEntryNt6(object):
@@ -200,6 +201,9 @@ def read_win10_entries(bin_data, ver_magic, creators_update=False):
 			path = 'None'
 		else:
 			path = entry_data.read(path_len).decode('utf-16le', 'replace')
+			global g_prefetchList
+			if path.endswith(".exe"):
+				g_prefetchList.append(path.rsplit("\\", 1)[-1].upper())
 
 		# Read the remaining entry data
 		low_datetime, high_datetime = struct.unpack('<LL', entry_data.read(8))
@@ -246,8 +250,10 @@ def read_nt6_entries(bin_data, entry):
 				print(e)
 				continue
 			path = (bin_data.decode("unicode-escape")[entry.Offset:entry.Offset +
-							 entry.wLength])[8:]
-			#path = path.replace("\ ? ? \ ", "")
+							 entry.wLength])[8:].replace("\x00", "")
+			global g_prefetchList
+			if path.endswith(".exe"):
+				g_prefetchList.append(path.rsplit("\\", 1)[-1].upper())
 			# Test to see if the file may have been executed.
 			if (entry.FileFlags & CSRSS_FLAG):
 				exec_flag = 'True'
@@ -348,11 +354,11 @@ def read_from_hive(hive):
 
 # Acquire the current system's Shim Cache data.
 def get_local_data(timeline=None):
-
 	tmp_list = []
 	out_list = []
 	global g_verbose
 	global g_timeline
+	global g_prefetchList
 	try:
 		import winreg as reg
 	except ImportError as e:
@@ -395,9 +401,9 @@ def get_local_data(timeline=None):
 	else:
 		if g_verbose:
 			#out_list.insert(0, output_header + ['Key Path'])
-			return out_list
+			return [out_list, g_prefetchList]
 		else:
 			out_list = unique_list(out_list)
 			#out_list.insert(0, output_header)
-			return out_list
+			return [out_list, g_prefetchList]
 	g_timeline = None

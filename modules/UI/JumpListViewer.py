@@ -3,39 +3,16 @@ import sys
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 
-class TableViewer(QWidget):
-    def __init__(self):
+class JumpListViewer(QWidget):
+    def __init__(self, content):
         super().__init__()
-
-    def showUsnjrnl(self):
-        print("Show $usnjrnl: " + self.path)
-        self.initUI()
-
-    def showMFT(self):
-        print("Show $MFT: " + self.path)
-        self.initUI()
-
-    def showLogFile(self):
-        print("Show $LogFile: " + self.path)
-        self.initUI(2)
-
-    def showJumpList(self, content):
         self.contents = content
-        self.initUI(2)
 
-    def initUI(self, type):
+    def show(self):
         self.setWindowTitle("JumpList")
-        # self.setWindowIcon(QIcon("../../img/logo.png"))
+        self.setWindowIcon("../../img/logo.png")
         self.setMinimumSize(800, self.height()+200)
-        if type == 2:
-            self.loadJumpList()
-        else:
-            self.table = QTableWidget(self)
-            print("FileSystem")
-        self.show()
-
-    def loadJumpList(self):
-        print("loadJumpList")
+        self.loadJumpList()
         LinkFiles = self.contents["LinkFiles"]
         DestList = self.contents["DestList"]
 
@@ -79,5 +56,6 @@ class TableViewer(QWidget):
         self.DestListTable.resizeColumnsToContents()
         self.DestListTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.DestListTable.verticalHeader().setVisible(False)
+        self.show()
 
 

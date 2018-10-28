@@ -15,6 +15,7 @@ class Main(QMainWindow):
         self.w = self.width()
         self.h = self.height()
         self.selected = 0
+        self.presentSelected = 0
         self.isLoaded = False
         self.timeline = None
         self.setWindowTitle("Monkey Spanner")
@@ -144,7 +145,7 @@ class Main(QMainWindow):
 
         for i in range(1, 51):
             self.loadingBar.setValue(i)
-        self.table.load(self.selected, self.timeline)
+        # self.table.load(self.selected, self.timeline)
         self.statusBar().showMessage("Ready!")
         for i in range(51, 101):
             self.loadingBar.setValue(i)
@@ -154,6 +155,7 @@ class Main(QMainWindow):
         self.loadingMovie.stop()
         self.table.setGraphicsEffect(None)
         self.isLoaded = False
+        self.presentSelected = self.selected
 
     def toggledChkBtn(self, b): # timeline set...?
         msg = b.text()

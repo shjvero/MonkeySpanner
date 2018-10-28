@@ -20,41 +20,49 @@ def getColumnHeader():
     }
 
 def getPrototype(env, timeline=None):
-    prefetchList= ["IEXPLORE.EXE", "WERFAULT.EXE"]
+    prefetchList= ["IEXPLORE.EXE", "WERFAULT.EXE", "CMD.EXE", "POWERSHELL.EXE", "RUNDLL32.EXE"]
     reportArchive = "AppCrash_IEXPLORE.EXE"
     evtxLogFor7 = [
         {
             "System.evtx": {
-                'eid': ['7036'],
-                'providerName': ['Service Control Manager']
+                'eid': ['206', '7036'], # eid : [ { EID:[rid1,rid2] }, { EID:[rid1, rid2] } ]
+                'providerName': ['Service Control Manager'],
+                'recordID': {
+                    '206': ['930'],
+                    '7036': ['929']
+                }
             },
         },
         {
             "Application.evtx": {
-                'eid': ['1000'],
-                'providerName': ['Appllication Error']
+                'eid': ['1000', '1001'],
+                'providerName': ['Appllication Error'],
+                'recordID': {
+                    '1000':['240'],
+                    '1001':['241', '238', '239']
+                }
             }
         },
         {
             "Microsoft-Windows-WER-Diag%4Operational.evtx": {
                 'eid': ['2'],
-                'providerName': ['Microsoft-Windows-WER-Diag']
+                'providerName': ['Microsoft-Windows-WER-Diag'],
+                'recordID': {
+                    '2':['2', '1'],
+                }
             }
         },
         {
             "Microsoft-Windows-Fault-Tolerant-Heap%4Operational.evtx": {
                 'eid': ['1001'],
-                'providerName': ['Microsoft-Windows-Fault-Tolerant-Heap']
+                'providerName': ['Microsoft-Windows-Fault-Tolerant-Heap'],
+                'recordID': {
+                    '1001': ['1']
+                }
             }
         }
     ]
     evtxLogFor10 = [
-        # {
-        #     "System.evtx": {
-        #         'eid': ['7036'],
-        #         'providerName': ['Service Control Manager']
-        #     },
-        # },
         {
             "Application.evtx": {
                 'eid': ['1000'],
@@ -68,43 +76,36 @@ def getPrototype(env, timeline=None):
             }
         },
     ]
-    limitedTime = [0, 0, 0]
-    prototype = []
+    t_list = []
+    from threading import Thread
+    limitedTime = None
+    prototype = getWebArtifactItems(env)
+    if prototype:
+        limitedTime = datetime.datetime.strptime(prototype[0][1], "%Y-%m-%d %H:%M:%S.%f")
+    print("Web Artifact: {}".format(len(prototype)))
     if env == "Windows7":
-        prototype = getWebArtifactItems(env)
-        print("Web Artifact: {}".format(len(prototype)))
-        others = getEventLogItemsForWin7(evtxLogFor7[0])
-        prototype = prototype + others
-        if prototype:
-            limitedTime[0] = datetime.datetime.strptime(prototype[0][1], "%Y-%m-%d %H:%M:%S.%f")
-        elif others:
-            limitedTime[0] = datetime.datetime.strptime(others[0][1], "%Y-%m-%d %H:%M:%S.%f")
-        others = getEventLogItemsForWin7(evtxLogFor7[1], "IEXPLORE.EXE", limitedTime[0])
-        prototype = prototype + others
-        others = getEventLogItemsForWin7(evtxLogFor7[2], limitedTime[0])
-        prototype = prototype + others
-        others = getEventLogItemsForWin7(evtxLogFor7[3], limitedTime[0])
-        prototype = prototype + others
+        t_list.append(Thread(target=getEventLogItemsForWin7, args=(evtxLogFor7[0], prototype, None, limitedTime, )))
+        t_list.append(Thread(target=getEventLogItemsForWin7, args=(evtxLogFor7[1], prototype, "IEXPLORE.EXE", limitedTime, )))
+        t_list.append(Thread(target=getEventLogItemsForWin7, args=(evtxLogFor7[2], prototype, None, limitedTime, )))
+        t_list.append(Thread(target=getEventLogItemsForWin7, args=(evtxLogFor7[3], prototype, None, limitedTime, )))
     elif env == "Windows10":
-        prototype = getWebArtifactItems(env)
-        print("Web Artifact: {}".format(len(prototype)))
-        others = getEventLogItemsForWin10(evtxLogFor10[1], "IEXPLORE.EXE", limitedTime[0])
-        prototype = prototype + others
-        if prototype:
-            limitedTime[0] = datetime.datetime.strptime(prototype[0][1], "%Y-%m-%d %H:%M:%S.%f")
-        elif others:
-            limitedTime[0] = datetime.datetime.strptime(others[0][1], "%Y-%m-%d %H:%M:%S.%f")
-        prototype = prototype + others
-        others = getEventLogItemsForWin10(evtxLogFor10[2], limitedTime[0])
-        prototype = prototype + others
-    others = getReportWER(env, "AppCrash_IEXPLORE.EXE")
-    prototype = prototype + others
-    others = getAppCompatCache(limitedTime[0])
-    prototype = prototype + others
-    prefetchList = prefetchList + ["CMD.EXE", "POWERSHELL.EXE", "RUNDLL32.EXE"]
-    others = getPrefetchItems(prefetchList, limitedTime)
-    prototype = prototype + others
-    print("총 개수: {}".format(len(prototype)))
+        t_list.append(Thread(target=getEventLogItemsForWin10, args=(evtxLogFor10[0], prototype, "IEXPLORE.EXE", limitedTime,)))
+        t_list.append(Thread(target=getEventLogItemsForWin10, args=(evtxLogFor10[1], prototype, None, limitedTime,)))
+    t_list.append(Thread(target=getReportWER, args=(env, prototype, reportArchive, limitedTime,)))
+    t_list.append(Thread(target=getAppCompatCache, args=(prototype, prefetchList, limitedTime,)))
+    t_list.append(Thread(target=getPrefetchItems, args=(prototype, prefetchList, limitedTime,)))
+    total = len(t_list)
+    print("Total Thread: {}".format(total))
+    for i in range(total-1):
+        t_list[i].start()
+    for i in range(total-1):
+        t_list[i].join()
+
+    print("Start Prefetch")
+    t_list[total-1].start()
+    t_list[total - 1].join()
+    print("Prefetch End")
+    print(len(prototype))
 
     from operator import itemgetter
     prototype.sort(key=itemgetter(1))

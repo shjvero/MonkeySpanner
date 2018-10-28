@@ -6,7 +6,7 @@ import libs.ParseWebArtifact.WebArtifact as WebArtifact
 import modules.constant as PATH
 import datetime
 
-def getEventLogItemsForWin7(evtxList, appName=None, timeline=None):
+def getEventLogItemsForWin7(evtxList, prototype, appName=None, timeline=None):
     items = []
     headStr = "EventLog"
     orangeHead = [headStr, 2]
@@ -76,9 +76,9 @@ def getEventLogItemsForWin7(evtxList, appName=None, timeline=None):
                     except Exception as e:
                         print("Error: {}".format(e))
 
-    return items
+    prototype += items
 
-def getEventLogItemsForWin10(evtxList, appName=None, timeline=None):
+def getEventLogItemsForWin10(evtxList, prototype, appName=None, timeline=None):
     items = []
     orangeHead = ["EventLog", 2]
     greenHead = ["EventLog", 4]
@@ -128,14 +128,14 @@ def getEventLogItemsForWin10(evtxList, appName=None, timeline=None):
                                     continue
                             level = '오류' if systemTag[3].text == '2' else '정보'
                             # channel = systemTag[11].text
-                            etc = '내결함성 있는 힙'
+                            etc = '힙 손상'
                             items.append([greenHead, loggedTime, providerName, eventID, level, etc, event.xml()])
                     except Exception as e:
                         print("Error: {}".format(e))
 
-    return items
+        prototype += items
 
-def getReportWER(env, _dirname, timeline=None):
+def getReportWER(env, prototype, _dirname, timeline=None):
     import time
     items = []
     yellowHead = ["Report.wer", 3]
@@ -144,12 +144,15 @@ def getReportWER(env, _dirname, timeline=None):
             fullpath = PATH.WER[env] + dirname + "\\Report.wer"
             content = open(fullpath, "rb").read().decode("unicode-escape")
             createdTime = time.ctime(os.path.getctime(fullpath))
+            if timeline:
+                if datetime.datetime.strptime(createdTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                    continue
             modifiedTime = time.ctime(os.path.getmtime(fullpath))
             items.append([yellowHead, modifiedTime, fullpath, createdTime, "", "", content])
-    return items
+    prototype += items
 
 
-def getPrefetchItems(included, timeline=None):
+def getPrefetchItems(prototype, included, timeline=None):
     items = []
     headStr = "Prefetch"
     redHead = [headStr, 1]
@@ -169,8 +172,6 @@ def getPrefetchItems(included, timeline=None):
             pf_name = "{}-{}.pf".format(p.executableName, p.hash)
             createdTime = p.volumesInformationArray[0]["Creation Date"]
             createdTimeObj = datetime.datetime.strptime(createdTime, "%Y-%m-%d %H:%M:%S.%f")
-            # limitedTime = timeline[0] if timeline[0] else timeline[1]
-            limitedTime = timeline[0] if timeline[0] else None
             if p.executableName == included[0]: # 특정 SW
                 # if limitedTime:
                 #     if createdTimeObj < limitedTime:
@@ -178,23 +179,23 @@ def getPrefetchItems(included, timeline=None):
                 content = p.prettyPrint()
                 items.append([redHead, createdTime, pf_name, p.executableName, "Create", content])
                 for timestamp in p.timestamps:
-                    if timeline[0]:
-                        head = redHead if datetime.datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") <= timeline[0] else blueHead
+                    if timeline:
+                        head = redHead if datetime.datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") <= timeline else blueHead
                     else:
                         head = blueHead
                     items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
                 continue
             elif p.executableName == included[1]: #WERFAULT
                 head = yellowHead
-            elif not limitedTime and p.executableName not in included:
+            elif not timeline and p.executableName not in included:
                 continue
             elif p.executableName in included[2:]:
                 content = p.prettyPrint()
                 head = purpleHead
-                if createdTimeObj > limitedTime:
+                if createdTimeObj > timeline:
                     items.append([head, createdTime, pf_name, p.executableName, "Create", content])
                 for timestamp in p.timestamps:
-                    if datetime.datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") < limitedTime:
+                    if datetime.datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") < timeline:
                         continue
                     items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
                 continue
@@ -204,7 +205,7 @@ def getPrefetchItems(included, timeline=None):
             items.append([head, createdTime, pf_name, p.executableName, "Create", content])
             for timestamp in p.timestamps:
                 items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
-    return items
+    prototype += items
 
 def getJumplistItems(fnameHash):
     ''' 점프리스트 목록 조회
@@ -217,7 +218,6 @@ def getJumplistItems(fnameHash):
     DestList = []
     _path = PATH.JUMPLIST[0] + fnameHash + ".automaticDestinations-ms"
     if not os.path.exists(_path):
-        print("[JumpLIst] Not Exists")
         return
     assert olefile.isOleFile(_path)
     base = os.path.basename(_path)  # Get the JumpList file name
@@ -339,7 +339,9 @@ def getNTFSItems(type):
 
     return items
 
-def getAppCompatCache(timeline):
-    return get_local_data(timeline)
+def getAppCompatCache(prototype, prefetchList, timeline):
+    res = get_local_data(timeline)
+    prototype += res[0]
+    prefetchList += res[1]
 
 
