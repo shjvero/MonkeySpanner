@@ -1,11 +1,6 @@
-import olefile
-import os
 import sys
-import uuid, struct, datetime, argparse, time
+import uuid, struct, datetime
 from bitstring import BitArray
-import base64
-import binascii
-import csv
 
 
 def FromFiletime(filetime):

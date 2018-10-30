@@ -35,30 +35,30 @@ JUMPLIST = [
     APPDATA + '\\Microsoft\\Windows\\Recent\\CustomDestinations\\'          # CustomDestinations
 ]
 JUMPLIST_HASH = [
-    '9839aec31243a928',     # [00] Excel 2010 x86
-    '6e855c85de07bc6a',     # [01] Excel 2010 x64
-    'f0275e8685d95486',     # [02] Excel 2013 x86
-    'b8ab77100df80ab2',     # [03] Excel 2013, 2016 x64
-    '9c7cc110ff56d1bd',     # [04] PowerPoint 2010 x86
-    '5f6e7bc0fb699772',     # [05] PowerPoint 2010 x64
-    'd00655d2aa12ff6d',     # [06] PowerPoint 2013, 2016 x64
-    'a7bd71699cd38d1c',     # [07] Word 2010 x86
-    '44a3621b32122d64',     # [08] Word 2010 x64
-    'a4a5324453625195',     # [09] Word 2013 x86
-    'fb3b0dbfee58fac8',     # [10] Word 365 x86
-    'a18df73203b0340e',     # [11] Word 2016
-    '28c8b86deab549a1',     # [12] Internet Explorer 8 / 9 / 10 (32-bit)
-    '5da8f997fd5f9428',     # [13] Internet Explorer x64
-    'e2a593822e01aed3',     # [14] Adobe Flash CS5 (32-bit)
-    '23646679aaccfae0',     # [15] Adobe Reader 9
-    '23646679aaccfae0',     # [16] Adobe Reader 9 x64
-    'f0468ce1ae57883d',     # [17] Adobe Reader 7.1.0
-    'c2d349a0e756411b',	    # [18] Adobe Reader 8.1.2
-    '23646679aaccfae0',	    # [19] Adobe Acrobat 9.4.0
-    'ee462c3b81abb6f6',     # [20] Adobe Reader X 10.1.0
-    'de48a32edcbe79e4',     # [21] Acrobat Reader 15.x
-    '5d696d521de238c3',     # [22] Chrome 9.0.597.84 / 12.0.742.100 / 13.0.785.215 / 26
-    '9d1f905ce5044aee',     # [23] Edge Browser
+    ['Excel 2010 (32-bit)', '9839aec31243a928'],            # [00]
+    ['Excel 2010 (64-bit)', '6e855c85de07bc6a'],            # [01]
+    ['Excel 2013 (32-bit)', 'f0275e8685d95486'],            # [02]
+    ['Excel 2013, 2016 (64-bit)', 'b8ab77100df80ab2'],      # [03]
+    ['PowerPoint 2010 (32-bit)', '9c7cc110ff56d1bd'],       # [04]
+    ['PowerPoint 2010 (64-bit)', '5f6e7bc0fb699772'],       # [05]
+    ['PowerPoint 2013, 2016 (64-bit)', 'd00655d2aa12ff6d'], # [06]
+    ['Word 2010 (32-bit)', 'a7bd71699cd38d1c'],             # [07]
+    ['Word 2010 (64-bit)', '44a3621b32122d64'],             # [08]
+    ['Word 2013 (32-bit)', 'a4a5324453625195'],             # [09]
+    ['Word 365 (32-bit)', 'fb3b0dbfee58fac8'],              # [10]
+    ['Word 2016 (64-bit)', 'a18df73203b0340e'],             # [11]
+    ['Internet Explorer 8/9/10 (32-bit)', '28c8b86deab549a1'],  # [12]
+    ['Internet Explorer 11 (64-bit)', '5da8f997fd5f9428'],      # [13]
+    ['Adobe Flash CS5 (32-bit)', 'e2a593822e01aed3'],       # [14]
+    ['HWP 2010', '20f18d57e149e379'],             # [15]
+    ['Adobe Acrobat 9.4.0', '23646679aaccfae0'],            # [16]
+    ['Adobe Reader 9', '23646679aaccfae0'],                 # [17]
+    ['Adobe Reader 7.1.0', 'f0468ce1ae57883d'],             # [18]
+    ['Adobe Reader 8.1.2', 'c2d349a0e756411b'],             # [19]
+    ['Adobe Reader X 10.1.0', 'ee462c3b81abb6f6'],          # [20]
+    ['Acrobat Reader 15.x', 'de48a32edcbe79e4'],            # [21]
+    ['Chrome 9.0.597.84 / 12.0.742.100 / 13.0.785.215 / 26', '5d696d521de238c3'],     # [22]
+    ['Edge', '9d1f905ce5044aee'],                           # [23]
 ]
 RECENT = APPDATA + '\\Microsoft\\Windows\\Recent\\'
 

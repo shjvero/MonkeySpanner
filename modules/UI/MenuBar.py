@@ -26,7 +26,7 @@ class MenuBar(QMenuBar):
         fileMenu.addAction(jumplistMenu)
 
         registryMenu = QAction("Import Registry", self)
-        jumplistMenu.triggered.connect(self.importRegistry)
+        registryMenu.triggered.connect(self.importRegistry)
         fileMenu.addAction(registryMenu)
 
         exit_menu = QAction("Exit", self)  # 메뉴 객체 생성
@@ -74,17 +74,12 @@ class MenuBar(QMenuBar):
         from modules.Prototype import getJumplistItems
         import modules.constant as CONSTANT
         self.selected = self.parent().presentSelected
-        print(self.selected)
         hashList = []
+        self.selected = CONSTANT.IE
         if self.selected == CONSTANT.ADOBE_READER:
             print("Adobe Reader")
-            hashList.append(CONSTANT.JUMPLIST_HASH[15])
-            hashList.append(CONSTANT.JUMPLIST_HASH[16])
-            hashList.append(CONSTANT.JUMPLIST_HASH[17])
-            hashList.append(CONSTANT.JUMPLIST_HASH[18])
-            hashList.append(CONSTANT.JUMPLIST_HASH[19])
-            hashList.append(CONSTANT.JUMPLIST_HASH[20])
-            hashList.append(CONSTANT.JUMPLIST_HASH[21])
+            for i in range(16, 22):
+                hashList.append(CONSTANT.JUMPLIST_HASH[i])
         elif self.selected == CONSTANT.ADOBE_FLASH_PLAYER:
             print("Adobe Flash Player in JumpListViewer")
             hashList.append(CONSTANT.JUMPLIST_HASH[14])
@@ -95,33 +90,21 @@ class MenuBar(QMenuBar):
             print("Edge in JumpListViewer")
             hashList.append(CONSTANT.JUMPLIST_HASH[23])
         elif self.selected == CONSTANT.HWP:
-            print("HWP in JumpListViewer [None]")
+            print("HWP in JumpListViewer")
+            hashList.append(CONSTANT.JUMPLIST_HASH[15])
         elif self.selected == CONSTANT.IE:
             print("IE in JumpListViewer")
             hashList.append(CONSTANT.JUMPLIST_HASH[12])
             hashList.append(CONSTANT.JUMPLIST_HASH[13])
         elif self.selected == CONSTANT.OFFICE:
             print("Office in JumpListViewer")
-            hashList.append(CONSTANT.JUMPLIST_HASH[0])
-            hashList.append(CONSTANT.JUMPLIST_HASH[1])
-            hashList.append(CONSTANT.JUMPLIST_HASH[2])
-            hashList.append(CONSTANT.JUMPLIST_HASH[3])
-            hashList.append(CONSTANT.JUMPLIST_HASH[4])
-            hashList.append(CONSTANT.JUMPLIST_HASH[5])
-            hashList.append(CONSTANT.JUMPLIST_HASH[6])
-            hashList.append(CONSTANT.JUMPLIST_HASH[7])
-            hashList.append(CONSTANT.JUMPLIST_HASH[8])
-            hashList.append(CONSTANT.JUMPLIST_HASH[9])
-            hashList.append(CONSTANT.JUMPLIST_HASH[10])
-            hashList.append(CONSTANT.JUMPLIST_HASH[11])
+            for i in range(12):
+                hashList.append(CONSTANT.JUMPLIST_HASH[i])
         elif self.selected == CONSTANT.LPE:
             print("LPE in JumpListViewer [None]")
         else:
             self.msgDialog("Please select software.")
-        # 현재 상태: 점프리스트 1개만 받아서 반환, 배열인데 어떻게 처리할 것?
-        content = getJumplistItems(hashList[1])
-        if not content:
-            self.msgDialog("JumpList Not exists. - hash: " + hashList[1])
+        content = getJumplistItems(hashList)
         self.ui = JumpListViewer(content)
         self.ui.show()
 
@@ -129,8 +112,8 @@ class MenuBar(QMenuBar):
         import sys
         from PyQt5.QtWidgets import QMessageBox
         msg = QMessageBox()
-        msg.setIcon(QMessageBox.Warning)
-        msg.setWindowTitle("Warning")
+        msg.setIcon(QMessageBox.Help)
+        msg.setWindowTitle("Help")
         msg.setText(m)
         msg.setStandardButtons(QMessageBox.Ok)
         msg.buttonClicked.connect(sys.exit)

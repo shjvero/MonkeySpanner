@@ -1,3 +1,5 @@
+import olefile
+
 from libs.ParsePrefetch.prefetch import *
 from libs.ParseJumpList.JumpListParser import *
 from libs.ParseRegistry.ShimCacheParser import get_local_data
@@ -207,86 +209,81 @@ def getPrefetchItems(prototype, included, timeline=None):
                 items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
     prototype += items
 
-def getJumplistItems(fnameHash):
-    ''' 점프리스트 목록 조회
-    filenames = os.listdir(PATH.JUMPLIST[0])    # AutomaticDestinations
-    for fname in filenames:
-        fullname = os.path.join(PATH.JUMPLIST[0], fname)
-        print(fullname)
-    '''
-    LinkFiles = []
-    DestList = []
-    _path = PATH.JUMPLIST[0] + fnameHash + ".automaticDestinations-ms"
-    if not os.path.exists(_path):
-        return
-    assert olefile.isOleFile(_path)
-    base = os.path.basename(_path)  # Get the JumpList file name
-    # print(os.path.splitext(base)[0]) # split file name from extension
-    ole = olefile.OleFileIO(_path)
-    '''
-    dirname = os.path.splitext(base)[0]
-    try:
-        os.makedirs(dirname)
-    except OSError:
-        if os.path.exists(dirname):
-            pass
-    newpath = os.path.join(os.getcwd(), dirname)
-    
-    newdirectory = os.chdir(newpath)
-    csvfilename = open('LinkFiles.csv', 'w')
-    field_names = ['E.No.', 'Modified', 'Accessed',
-                   'Created', 'Drive Type', 'Volume Name', 'Serial No.', 'File Size', 'LocalBasePath']
-    lnk_writer = csv.DictWriter(csvfilename, delimiter=',', lineterminator='\n', fieldnames=field_names)
-    lnk_writer.writeheader()
-    '''
-
-    # print("E.No. | Modified | Accessed | Created | Drive Type | Volume Name | Serial No. | File Size | LocalBasePath")
-    for item in ole.listdir():
-        file = ole.openstream(item)
-        file_data = file.read()
-        header_value = file_data[:4]  # first four bytes value should be 76 bytes
+def getJumplistItems(contents):
+    _list = contents
+    for content in contents:
+        fullpath = PATH.JUMPLIST[0] + content[1] + ".automaticDestinations-ms"
+        if not os.path.exists(fullpath):
+            _list.remove(content)
+            continue
+        LinkFiles = []
+        DestList = []
+        ole = olefile.OleFileIO(fullpath)
+        '''
+        dirname = os.path.splitext(base)[0]
         try:
-            if header_value[0] == 76:  # first four bytes value should be 76 bytes
-                lnk_header = lnk_file_header(file_data[:76])
-                lnk_after_header = lnk_file_after_header(file_data)  # after 76 bytes to last 100 bytes
+            os.makedirs(dirname)
+        except OSError:
+            if os.path.exists(dirname):
+                pass
+        newpath = os.path.join(os.getcwd(), dirname)
+        
+        newdirectory = os.chdir(newpath)
+        csvfilename = open('LinkFiles.csv', 'w')
+        field_names = ['E.No.', 'Modified', 'Accessed',
+                       'Created', 'Drive Type', 'Volume Name', 'Serial No.', 'File Size', 'LocalBasePath']
+        lnk_writer = csv.DictWriter(csvfilename, delimiter=',', lineterminator='\n', fieldnames=field_names)
+        lnk_writer.writeheader()
+        '''
 
-                '''
-                newdirectory = os.chdir(newpath)
-                csvfile = open('LinkFiles.csv', 'ab')
-                lnk_writer.writerow({'E.No.': item[0] + "(" + str(int(item[0], 16)) + ")",
-                                     'Modified': lnk_header[0], 'Accessed': lnk_header[1],
-                                     'Created': lnk_header[2], 'Drive Type': lnk_after_header[0],
-                                     'Volume Name': lnk_after_header[1], 'Serial No.': lnk_after_header[2],
-                                     'File Size': lnk_header[3], 'LocalBasePath': lnk_after_header[3]})
-                '''
+        # print("E.No. | Modified | Accessed | Created | Drive Type | Volume Name | Serial No. | File Size | LocalBasePath")
+        for item in ole.listdir():
+            file = ole.openstream(item)
+            file_data = file.read()
+            header_value = file_data[:4]  # first four bytes value should be 76 bytes
+            try:
+                if header_value[0] == 76:  # first four bytes value should be 76 bytes
+                    lnk_header = lnk_file_header(file_data[:76])
+                    lnk_after_header = lnk_file_after_header(file_data)  # after 76 bytes to last 100 bytes
 
-                LinkFiles.append([
-                    lnk_header[0],
-                    lnk_header[1],
-                    lnk_header[2],
-                    lnk_after_header[3],
-                    lnk_header[3],
-                    item[0] + "(" + str(int(item[0], 16)) + ")",
-                    lnk_after_header[0],
-                    lnk_after_header[1],
-                    lnk_after_header[2],
-                ])
+                    '''
+                    newdirectory = os.chdir(newpath)
+                    csvfile = open('LinkFiles.csv', 'ab')
+                    lnk_writer.writerow({'E.No.': item[0] + "(" + str(int(item[0], 16)) + ")",
+                                         'Modified': lnk_header[0], 'Accessed': lnk_header[1],
+                                         'Created': lnk_header[2], 'Drive Type': lnk_after_header[0],
+                                         'Volume Name': lnk_after_header[1], 'Serial No.': lnk_after_header[2],
+                                         'File Size': lnk_header[3], 'LocalBasePath': lnk_after_header[3]})
+                    '''
 
-                lnk_tracker_value = file_data[ole.get_size(item) - 100:ole.get_size(item) - 96]
-                # print(lnk_tracker_value[0])
-                if lnk_tracker_value[0] == 96:  # link tracker information 4 byte value = 96
-                    try:
-                        lnk_tracker = lnk_file_tracker_data(file_data[ole.get_size(item) - 100:])  # last 100 bytes
-                    except:
-                        pass
-            else:  # if first four byte value is not 76 then it is DestList stream
-                DestList = destlist_data(file_data[:ole.get_size(item)])
-        except:
-            pass
-    return {
-        "LinkFiles": LinkFiles,
-        "DestList": DestList
-    }
+                    LinkFiles.append([
+                        lnk_header[0],
+                        lnk_header[1],
+                        lnk_header[2],
+                        lnk_after_header[3],
+                        lnk_header[3],
+                        item[0] + "(" + str(int(item[0], 16)) + ")",
+                        lnk_after_header[0],
+                        lnk_after_header[1],
+                        lnk_after_header[2],
+                    ])
+                    lnk_tracker_value = file_data[ole.get_size(item) - 100:ole.get_size(item) - 96]
+                    # print(lnk_tracker_value[0])
+                    if lnk_tracker_value[0] == 96:  # link tracker information 4 byte value = 96
+                        try:
+                            lnk_tracker = lnk_file_tracker_data(file_data[ole.get_size(item) - 100:])  # last 100 bytes
+                        except:
+                            pass
+                else:  # if first four byte value is not 76 then it is DestList stream
+                    DestList = destlist_data(file_data[:ole.get_size(item)])
+            except:
+                pass
+        idx = _list.index(content)
+        _list[idx].append({
+            "LinkFiles": LinkFiles,
+            "DestList": DestList
+        })
+    return _list
 
 def getWebArtifactItems(env, timeline=None):
     import glob
