@@ -116,21 +116,25 @@ class MenuBar(QMenuBar):
             hashList.append(CONSTANT.JUMPLIST_HASH[11])
         elif self.selected == CONSTANT.LPE:
             print("LPE in JumpListViewer [None]")
+        else:
+            self.msgDialog("Please select software.")
         # 현재 상태: 점프리스트 1개만 받아서 반환, 배열인데 어떻게 처리할 것?
         content = getJumplistItems(hashList[1])
         if not content:
-            import sys
-            from PyQt5.QtWidgets import QMessageBox
-            m = "JumpList Not exists. - hash: "+hashList[1]
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Warning)
-            msg.setWindowTitle("Warning")
-            msg.setText(m)
-            msg.setStandardButtons(QMessageBox.Ok)
-            msg.buttonClicked.connect(sys.exit)
-            msg.exec_()
+            self.msgDialog("JumpList Not exists. - hash: " + hashList[1])
         self.ui = JumpListViewer(content)
         self.ui.show()
+
+    def msgDialog(self, m):
+        import sys
+        from PyQt5.QtWidgets import QMessageBox
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Warning)
+        msg.setWindowTitle("Warning")
+        msg.setText(m)
+        msg.setStandardButtons(QMessageBox.Ok)
+        msg.buttonClicked.connect(sys.exit)
+        msg.exec_()
 
     def importRegistry(self):
         print("Import Registry")

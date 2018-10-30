@@ -16,42 +16,64 @@ class Exam(QMainWindow):
         self.setWindowTitle(self.title)
         self.resize(self.width(), self.height())
 
+        self.btn = QPushButton("Push", self)
+        self.btn.move(10, 400)
+        self.btn.resize(200, 30)
+        self.btn.clicked.connect(self.btnClicked)
+
+        self.movie = QMovie("img/loading2.gif")
+        self.label = QLabel(self)
+        self.label.move(20, 20)
+        self.label.setMovie(self.movie)
+        self.label.setFixedSize(self.width(), self.height())
+        # self.label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.label.hide()
+        self.show()
         from threading import Thread
         msg = "Thread"
         self.t = [
-            Thread(target=func1, args=("Thread A",)),
-            Thread(target=func2, args=("Thread B",)),
-            Thread(target=func3, args=("Thread C",)),
-            Thread(target=func4, args=("Thread D",)),
-            Thread(target=func5, args=("Thread E",)),
+            Thread(target=self.func1, args=("Thread A",)),
+            Thread(target=self.func2, args=("Thread B",)),
+            # Thread(target=self.func3, args=("Thread C",)),
+            # Thread(target=self.func4, args=("Thread D",)),
+            # Thread(target=self.func5, args=("Thread E",)),
         ]
-        for i in range(5):
+        for i in range(len(self.t)):
             self.t[i].start()
-        for i in range(5):
-            self.t[i].join()
-        for i in range(5):
-            print(a[i])
-        self.show()
+        # import time
+        # time.sleep(5)
+        # for i in range(len(self.t)):
+        #     self.t[i].join()
+        # for i in range(len(self.t)):
+        #     print(a[i])
 
-def func1(msg):
-    print("Func1", msg)
-    a.append(1)
+    def btnClicked(self, b):
+        self.label.show()
 
-def func2(msg):
-    print("Func2", msg)
-    a.append(2)
+    def func1(self, msg):
+        print("Func1", msg)
+        from threading import Thread
+        t = Thread(target=self.func3, args=("Thread A - C",))
+        t.start()
+        self.label.hide()
+        a.append(1)
 
-def func3(msg):
-    print("Func3", msg)
-    a.append(3)
+    def func2(self, msg):
+        self.movie.start()
+        print("Func2", msg)
+        a.append(2)
 
-def func4(msg):
-    print("Func4", msg)
-    a.append(4)
+    def func3(self, msg):
+        print("Func3", msg)
+        a.append(3)
 
-def func5(msg):
-    print("Func5", msg)
-    a.append(5)
+    def func4(self, msg):
+        print("Func4", msg)
+        a.append(4)
+
+    def func5(self, msg):
+        print("Func5", msg)
+        a.append(5)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

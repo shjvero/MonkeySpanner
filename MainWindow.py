@@ -3,10 +3,10 @@ import qdarkstyle
 
 from PyQt5.QtGui import QIcon, QPixmap, QMovie, QFont
 from PyQt5.QtWidgets import *
-from PyQt5.QtCore import pyqtSlot, Qt
 from modules.UI.MenuBar import MenuBar
 from modules.UI.StatusBar import StatusBar
 from modules.UI.PrototpyeTable import PrototypeTable
+from modules.UI.LoadingScreen import LoadingWidget
 
 class Main(QMainWindow):
     def __init__(self):
@@ -20,7 +20,7 @@ class Main(QMainWindow):
         self.timeline = None
         self.setWindowTitle("Monkey Spanner")
         self.setWindowIcon(QIcon("img/favicon2.jpg"))
-        self.loadingImgPath = "img/loading2.gif"
+        # self.loadingImgPath = "img/loading.gif"
         self.initUI()
 
     def checkEnv(self):
@@ -81,10 +81,10 @@ class Main(QMainWindow):
         self.options = [
             QCheckBox('Filtering A', self),
             QCheckBox('Filtering B', self),
+            QCheckBox('Filtering C', self),
             QCheckBox('Filtering D', self),
             QCheckBox('Filtering E', self),
             QCheckBox('Filtering F', self),
-            QCheckBox('Filtering G', self),
         ]
         for option in self.options:
             option.stateChanged.connect(lambda: self.toggledChkBtn(option))
@@ -101,61 +101,36 @@ class Main(QMainWindow):
         self.layout.addWidget(self.search)
 
         # Set up Table
-        self.table = PrototypeTable(self.env)
-        self.table.setParent(self)
+        self.table = PrototypeTable(self, self.env)
+        # self.table.setParent(self)
         self.table.move(0, 110 + self.search.height())
         self.table.resize(self.search.width() + 20, self.h + 100)
         self.layout.addWidget(self.table)
 
         # Set up loading
-        self.loadingWidget = QWidget(self)
-        loadingLayout = QFormLayout()
-        self.loadingMovie = QMovie(self.loadingImgPath)
-        self.loadingImg = QLabel(self.loadingWidget)
-        self.loadingImg.setMovie(self.loadingMovie)
-        self.loadingImg.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.loadingImg.setAlignment(Qt.AlignCenter)
-        self.loadingWidget.show()
-        loadingLayout.addWidget(self.loadingImg)
-
-        self.loadingBar = QProgressBar(self.loadingWidget)
-        self.loadingBar.setFixedSize(self.w, 20)
-        self.loadingBar.setTextVisible(False)
-        loadingLayout.addWidget(self.loadingBar)
-
-        self.loadingWidget.setLayout(loadingLayout)
-        self.loadingWidget.move(self.w/2, 180 + self.search.height())
-        self.loadingWidget.setFixedSize(self.w, self.h/2)
-        self.loadingWidget.setStyleSheet("background-color: transparent;")
-        self.loadingWidget.hide()
+        self.loadingWidget = LoadingWidget(self)
 
         self.setLayout(self.layout)
         self.showMaximized()
 
     def selectSoftware(self, i):
-        if i == 0: return
         self.selected = i
 
     def completeSelection(self):
         if self.isLoaded: return
         self.isLoaded = True
-        self.table.setGraphicsEffect(QGraphicsBlurEffect())
-        self.loadingMovie.start()
-        self.loadingWidget.show()
+        self.loadingWidget.start()
+        from threading import Thread
+        t = Thread(target=self.loadData, args=())
+        t.start()
 
-        for i in range(1, 51):
-            self.loadingBar.setValue(i)
-        # self.table.load(self.selected, self.timeline)
-        self.statusBar().showMessage("Ready!")
-        for i in range(51, 101):
-            self.loadingBar.setValue(i)
-
-        self.timeline = None
-        self.loadingWidget.hide()
-        self.loadingMovie.stop()
-        self.table.setGraphicsEffect(None)
-        self.isLoaded = False
+    def loadData(self):
+        self.table.load(self.selected, self.timeline)
+        self.loadingWidget.resume()
         self.presentSelected = self.selected
+        self.timeline = None
+        self.isLoaded = False
+
 
     def toggledChkBtn(self, b): # timeline set...?
         msg = b.text()

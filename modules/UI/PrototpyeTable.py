@@ -3,8 +3,9 @@ from PyQt5.Qt import *
 import modules.IE.Prototype as PrototypeForIE
 
 class PrototypeTable(QTableWidget):
-    def __init__(self, env):
+    def __init__(self, parent, env):
         super().__init__()
+        self.setParent(parent)
         self.env = env
         self.prototype = []
         self.COLOR = [
