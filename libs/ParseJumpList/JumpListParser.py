@@ -350,14 +350,6 @@ def destlist_data(destlist_file_data):
     destlist_add_delete = destlist_file_data[
                           24:32]  # Number of add/delete actions – Increments as entries are added.  Also increments as individual entries are deleted.
 
-    '''
-    csvfile = open('DestList.csv', 'w')
-    fieldnames = ['E.No.', 'NetBIOS Name', 'Last Recorded Access', 'Access Count',
-                  'New(Timestamp)', 'New (MAC)', 'Seq. No.', 'Birth(Timestamp)', 'Birth (MAC)', 'Data']
-    destlist_writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=fieldnames)
-    destlist_writer.writeheader()
-    '''
-
     destlist_entry_volumeid = destlist_file_data[40:56]  # New volume ID
     destlist_volume_identifier = uuid.UUID(bytes_le=destlist_entry_volumeid)
 
@@ -425,15 +417,6 @@ def destlist_data(destlist_file_data):
 
     offset = 166 + 2 * destlist_lengthstringdata[0]
 
-    '''
-    destlist_writer.writerow({'E.No.': destlist_entryidnumber[0], 'NetBIOS Name': destlist_netbiosname,
-                              'Last Recorded Access': destlist_access_time,
-                              'Access Count': destlist_entry_access_count[0],
-                              'New(Timestamp)': destlist_object_timestamp,
-                              'New (MAC)': new_mac, 'Seq. No.': destlist_object_sequence[0],
-                              'Birth(Timestamp)': birth_destlist_object_timestamp,
-                              'Birth (MAC)': birth_mac, 'Data': Data})
-    '''
     destlist = []
     destlist.append([
         destlist_access_time,
@@ -447,8 +430,6 @@ def destlist_data(destlist_file_data):
         birth_destlist_object_timestamp,
         birth_mac,
     ])
-    # print(
-    #     "E.No. | NetBIOS Name | Last Recorded Access | Access Count | New_Timestamp | New _MAC | Seq No. | Birth_Timestamp | Birth_MAC | Data ")
 
     for entry in range(destlist_totalentries[0] - 1):
 
@@ -505,16 +486,7 @@ def destlist_data(destlist_file_data):
             destlist_stringdata = destlist_file_data[offset + 130:offset1]  # Unocode string data
             # print(destlist_stringdata)
             Data = destlist_stringdata.decode('utf-16')
-            '''
-            destlist_writer.writerow({'E.No.': destlist_entryidnumber[0], 'NetBIOS Name': destlist_entry_netbiosname,
-                                      'Last Recorded Access': destlist_access_time,
-                                      'Access Count': destlist_entry_access_count[0],
-                                      'New(Timestamp)': destlist_entry_object_timestamp,
-                                      'New (MAC)': destlist_entry_object_mac,
-                                      'Seq. No.': destlist_entry_object_sequence[0],
-                                      'Birth(Timestamp)': birth_destlist_entry_object_timestamp,
-                                      'Birth (MAC)': birth_destlist_entry_object_mac, 'Data': Data})
-            '''
+
             destlist.append([
                 destlist_access_time,
                 Data,

@@ -1,7 +1,8 @@
 import sys
 import qdarkstyle
+from PyQt5.QtCore import Qt
 
-from PyQt5.QtGui import QIcon, QPixmap, QMovie, QFont
+from PyQt5.QtGui import QIcon, QFont, QCursor
 from PyQt5.QtWidgets import *
 from modules.UI.MenuBar import MenuBar
 from modules.UI.StatusBar import StatusBar
@@ -14,13 +15,19 @@ class Main(QMainWindow):
         self.checkEnv()
         self.w = self.width()
         self.h = self.height()
+        self.selectionList = [
+            "---- Select Software ----",
+            "Adobe Reader", "Adobe Flash Player", "Chrome", "Edge", "HWP",
+            "Internet Explorer", "MS-Office", "Kernel(Local Privilege Escalation)"
+        ]
+        self.selectionWidth = 220
+        self.loadBtnWidth = 100
+        self.searchWidth = self.w * 2
         self.selected = 0
         self.presentSelected = 0
         self.isLoaded = False
         self.timeline = None
-        self.setWindowTitle("Monkey Spanner")
-        self.setWindowIcon(QIcon("img/favicon2.jpg"))
-        # self.loadingImgPath = "img/loading.gif"
+
         self.initUI()
 
     def checkEnv(self):
@@ -45,39 +52,40 @@ class Main(QMainWindow):
 
     def initUI(self):
         # Set up default UI
-        self.setMinimumSize(self.width(), self.height()*2)
+        self.setWindowTitle("Monkey Spanner")
+        self.setWindowIcon(QIcon("img/favicon2.jpg"))
         self.setMenuBar(MenuBar(self))
         self.setStatusBar(StatusBar())
-        self.layout = QVBoxLayout()
+
+        # Set up Layout
+        self.screenWidget = QWidget()
+        self.windowLayout = QBoxLayout(QBoxLayout.TopToBottom, self.screenWidget)
+        self.topLayout = QBoxLayout(QBoxLayout.LeftToRight)
+        self.bottomLayout = QBoxLayout(QBoxLayout.TopToBottom)
+        self.windowLayout.addLayout(self.topLayout)
+        self.windowLayout.addLayout(self.bottomLayout)
+        self.screenWidget.setLayout(self.windowLayout)
+        self.setCentralWidget(self.screenWidget)
 
         # Set up combo box (Software Selection)
         self.selection = QComboBox(self)
-        self.selection.move(10, 45)
-        self.selection.setFont(QFont("Times New Roman", 13))
-        self.selection.setFixedWidth(220)
-        self.selection.addItem("--- Select Software ---")
-        self.selection.addItem("Adobe Reader")
-        self.selection.addItem("Adobe Flash Player")
-        self.selection.addItem("Chrome")
-        self.selection.addItem("Edge")
-        self.selection.addItem("HWP")
-        self.selection.addItem("Internet Explorer")
-        self.selection.addItem("MS-Office")
-        self.selection.addItem("Local Privilege Escalation")
+        self.selection.setContentsMargins(10, 10, 10, 10)
+        self.selection.setFont(QFont("Times New Roman", 12))
+        self.selection.setFixedWidth(self.selectionWidth)
+        self.selection.addItems(self.selectionList)
         self.selection.currentIndexChanged.connect(self.selectSoftware)
 
         # Set up Table Load Button
         self.loadBtn = QPushButton("GO!", self)
-        self.loadBtn.move(self.selection.width() + 30, 45)
-        self.loadBtn.setFixedSize(100, self.selection.height())
+        self.loadBtn.setFixedSize(self.loadBtnWidth, self.selection.height())
+        self.loadBtn.setStyleSheet("background-color: darkslategray;")
         self.loadBtn.clicked.connect(self.completeSelection)
+        self.loadBtn.setCursor(QCursor(Qt.PointingHandCursor))
 
         # Set up check box (Filtering)
-        groupBox = QGroupBox("Filtering", self)
+        self.groupBox = QGroupBox(self)
         chkboxLayout = QHBoxLayout()
-        groupBox.setLayout(chkboxLayout)
-        groupBox.move(400, 20)
-        groupBox.resize(self.w + 220, 65)
+        self.groupBox.setLayout(chkboxLayout)
         self.options = [
             QCheckBox('Filtering A', self),
             QCheckBox('Filtering B', self),
@@ -89,28 +97,25 @@ class Main(QMainWindow):
         for option in self.options:
             option.stateChanged.connect(lambda: self.toggledChkBtn(option))
             chkboxLayout.addWidget(option)
-        self.layout.addWidget(groupBox)
 
         # Set up text box for Search
         self.search = QLineEdit(self)
-        self.search.move(10, 100)
-        self.search.setFixedWidth(self.width()*2)
+        self.search.showMaximized()
         self.search.setPlaceholderText("Filtering...")
         self.search.editingFinished.connect(self.enterPressed)
         self.search.textChanged.connect(self.textChanged)
-        self.layout.addWidget(self.search)
 
         # Set up Table
         self.table = PrototypeTable(self, self.env)
-        # self.table.setParent(self)
-        self.table.move(0, 110 + self.search.height())
-        self.table.resize(self.search.width() + 20, self.h + 100)
-        self.layout.addWidget(self.table)
 
         # Set up loading
         self.loadingWidget = LoadingWidget(self)
 
-        self.setLayout(self.layout)
+        self.topLayout.addWidget(self.selection)
+        self.topLayout.addWidget(self.loadBtn)
+        self.topLayout.addWidget(self.groupBox)
+        self.bottomLayout.addWidget(self.search)
+        self.bottomLayout.addWidget(self.table)
         self.showMaximized()
 
     def selectSoftware(self, i):

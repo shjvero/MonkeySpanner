@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMenuBar, QMenu, QAction, qApp, QFileDialog
+from PyQt5.QtWidgets import QMenuBar, QMenu, QAction, qApp, QFileDialog, QMessageBox
 from modules.UI.JumpListViewer import JumpListViewer
 
 class MenuBar(QMenuBar):
@@ -75,7 +75,6 @@ class MenuBar(QMenuBar):
         import modules.constant as CONSTANT
         self.selected = self.parent().presentSelected
         hashList = []
-        self.selected = CONSTANT.IE
         if self.selected == CONSTANT.ADOBE_READER:
             print("Adobe Reader")
             for i in range(16, 22):
@@ -103,21 +102,17 @@ class MenuBar(QMenuBar):
         elif self.selected == CONSTANT.LPE:
             print("LPE in JumpListViewer [None]")
         else:
-            self.msgDialog("Please select software.")
-        content = getJumplistItems(hashList)
+            QMessageBox.question(self, "Help", "Please select software.", QMessageBox.Ok)
+        content = getJumplistItems(hashList.copy())
+        if not content:
+            msg = "[Not Exists.]\n"
+            for h in hashList:
+                msg += " - ".join(h)
+                msg += "\n"
+            QMessageBox.question(self, "Help", msg, QMessageBox.Ok)
+            return
         self.ui = JumpListViewer(content)
         self.ui.show()
-
-    def msgDialog(self, m):
-        import sys
-        from PyQt5.QtWidgets import QMessageBox
-        msg = QMessageBox()
-        msg.setIcon(QMessageBox.Help)
-        msg.setWindowTitle("Help")
-        msg.setText(m)
-        msg.setStandardButtons(QMessageBox.Ok)
-        msg.buttonClicked.connect(sys.exit)
-        msg.exec_()
 
     def importRegistry(self):
         print("Import Registry")

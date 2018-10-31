@@ -1,7 +1,7 @@
 import sys
 
 from PyQt5.QtGui import QMovie
-from PyQt5.QtWidgets import QWidget, QProgressBar, QLabel, QGridLayout, QSizePolicy
+from PyQt5.QtWidgets import QWidget, QProgressBar, QLabel, QGridLayout, QSizePolicy, QBoxLayout
 from PyQt5.QtCore import Qt, QThread, QWaitCondition, QMutex, pyqtSignal, pyqtSlot
 
 class LoadingBarThread(QThread):

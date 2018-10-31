@@ -219,24 +219,7 @@ def getJumplistItems(contents):
         LinkFiles = []
         DestList = []
         ole = olefile.OleFileIO(fullpath)
-        '''
-        dirname = os.path.splitext(base)[0]
-        try:
-            os.makedirs(dirname)
-        except OSError:
-            if os.path.exists(dirname):
-                pass
-        newpath = os.path.join(os.getcwd(), dirname)
-        
-        newdirectory = os.chdir(newpath)
-        csvfilename = open('LinkFiles.csv', 'w')
-        field_names = ['E.No.', 'Modified', 'Accessed',
-                       'Created', 'Drive Type', 'Volume Name', 'Serial No.', 'File Size', 'LocalBasePath']
-        lnk_writer = csv.DictWriter(csvfilename, delimiter=',', lineterminator='\n', fieldnames=field_names)
-        lnk_writer.writeheader()
-        '''
 
-        # print("E.No. | Modified | Accessed | Created | Drive Type | Volume Name | Serial No. | File Size | LocalBasePath")
         for item in ole.listdir():
             file = ole.openstream(item)
             file_data = file.read()
@@ -245,27 +228,16 @@ def getJumplistItems(contents):
                 if header_value[0] == 76:  # first four bytes value should be 76 bytes
                     lnk_header = lnk_file_header(file_data[:76])
                     lnk_after_header = lnk_file_after_header(file_data)  # after 76 bytes to last 100 bytes
-
-                    '''
-                    newdirectory = os.chdir(newpath)
-                    csvfile = open('LinkFiles.csv', 'ab')
-                    lnk_writer.writerow({'E.No.': item[0] + "(" + str(int(item[0], 16)) + ")",
-                                         'Modified': lnk_header[0], 'Accessed': lnk_header[1],
-                                         'Created': lnk_header[2], 'Drive Type': lnk_after_header[0],
-                                         'Volume Name': lnk_after_header[1], 'Serial No.': lnk_after_header[2],
-                                         'File Size': lnk_header[3], 'LocalBasePath': lnk_after_header[3]})
-                    '''
-
                     LinkFiles.append([
                         lnk_header[0],
                         lnk_header[1],
                         lnk_header[2],
                         lnk_after_header[3],
-                        lnk_header[3],
+                        str(lnk_header[3]),
                         item[0] + "(" + str(int(item[0], 16)) + ")",
                         lnk_after_header[0],
                         lnk_after_header[1],
-                        lnk_after_header[2],
+                        str(lnk_after_header[2]),
                     ])
                     lnk_tracker_value = file_data[ole.get_size(item) - 100:ole.get_size(item) - 96]
                     # print(lnk_tracker_value[0])
