@@ -31,7 +31,17 @@ class PrototypeTable(QTableWidget):
         elif sw == 5:
             print("HWP")
         elif sw == 6:
-            self.prototype = PrototypeForIE.getPrototype(self.env)
+            result, stuff = PrototypeForIE.getPrototype(self.env)
+            if not result:
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setWindowTitle("Error")
+                msg.setText(stuff)
+                msg.setStandardButtons(QMessageBox.Ok)
+                msg.buttonClicked.connect(qApp.exit)
+                msg.exec_()
+                return
+            self.prototype = stuff
             self.customHeaders = PrototypeForIE.getColumnHeader()
         elif sw == 7:
             print("Office")
@@ -89,12 +99,14 @@ class PrototypeTable(QTableWidget):
         header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
         header.setSectionResizeMode(4, QHeaderView.ResizeToContents)
         header.setStretchLastSection(True)
+
         # Adjust row height
         self.verticalHeader().setDefaultSectionSize(28)
         self.verticalHeader().setMaximumSectionSize(28)
+
         # Handle event
-        self.clicked.connect(self.changeColumnHeader)  # One-Click
-        self.doubleClicked.connect(self.showDetail)  # Double-Click
+        self.cellClicked.connect(self.changeColumnHeader)  # One-Click
+        self.cellDoubleClicked.connect(self.showDetail)  # Double-Click
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
     def search(self, keyword):
@@ -110,22 +122,18 @@ class PrototypeTable(QTableWidget):
             elif self.isRowHidden(i):
                 self.showRow(i)
 
-    @pyqtSlot()
-    def changeColumnHeader(self):
-        for currentQTableWidgetItem in self.selectedItems():
-            self.parentWidget().statusBar().showMessage(currentQTableWidgetItem.text())
-            _header = self.verticalHeaderItem(currentQTableWidgetItem.row()).text()
-            self.setHorizontalHeaderLabels(self.customHeaders[_header])
+    # @pyqtSlot()
+    def changeColumnHeader(self, row, column):
+        _header = self.verticalHeaderItem(row).text()
+        self.setHorizontalHeaderLabels(self.customHeaders[_header])
 
-    @pyqtSlot()
-    def showDetail(self):
-        selected = self.selectedItems()
-        if len(selected) > 1: return
-        row = 0
-        for currentQTableWidgetItem in self.selectedItems():
-            row = currentQTableWidgetItem.row()
+    # @pyqtSlot()
+    def showDetail(self, row, column):
+        print(row, column)
         viewerTitle = self.verticalHeaderItem(row).text()
+        print(viewerTitle)
         viewerContent = self.prototype[row][-1]
+        print(viewerContent)
 
         from modules.UI.TextViewer import TextViewer
         self.viewer = TextViewer()

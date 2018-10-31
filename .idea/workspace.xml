@@ -5,13 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23378966-e248-43e1-9817-746140378983" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/MainWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/IE/Prototype.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/IE/Prototype.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/Prototype.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/Prototype.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/JumpListViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/JumpListViewer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/LoadingScreen.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/LoadingScreen.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/MenuBar.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/MenuBar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repo/WebCacheV01.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/repo/log.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/repo/target.txt" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -23,7 +27,7 @@
     <session id="-1788526241">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="45" />
+          <entry key="project.closed" value="47" />
           <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.14" value="1" />
@@ -32,11 +36,11 @@
           <entry key="project.open.time.30" value="1" />
           <entry key="project.open.time.40" value="1" />
           <entry key="project.open.time.5" value="1" />
-          <entry key="project.open.time.6" value="9" />
-          <entry key="project.open.time.7" value="14" />
+          <entry key="project.open.time.6" value="10" />
+          <entry key="project.open.time.7" value="15" />
           <entry key="project.open.time.8" value="10" />
           <entry key="project.open.time.9" value="6" />
-          <entry key="project.opened" value="47" />
+          <entry key="project.opened" value="49" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -44,28 +48,28 @@
           <entry key="gif" value="6" />
           <entry key="jpg" value="3" />
           <entry key="png" value="1" />
-          <entry key="py" value="199" />
-          <entry key="txt" value="8" />
+          <entry key="py" value="213" />
+          <entry key="txt" value="23" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Image" value="10" />
-          <entry key="PLAIN_TEXT" value="8" />
-          <entry key="Python" value="199" />
+          <entry key="PLAIN_TEXT" value="23" />
+          <entry key="Python" value="213" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="1330" />
+          <entry key="Python Console" value="2027" />
           <entry key="dummy" value="37" />
-          <entry key="py" value="89620" />
+          <entry key="py" value="96045" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="37" />
-          <entry key="Python" value="90950" />
+          <entry key="Python" value="98072" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -79,27 +83,42 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MainWindow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3">
-              <caret line="67" column="48" lean-forward="true" selection-start-line="67" selection-start-column="48" selection-end-line="67" selection-end-column="48" />
+            <state relative-caret-position="2087">
+              <caret line="144" column="50" lean-forward="true" selection-start-line="144" selection-start-column="50" selection-end-line="144" selection-end-column="50" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
-                <marker date="1540974897499" expanded="true" signature="991:1772" ph="..." />
-                <marker date="1540974897499" expanded="true" signature="4549:4555" ph="..." />
-                <marker date="1540974897499" expanded="true" signature="4551:4555" ph="..." />
-                <marker date="1540974897499" expanded="true" signature="4643:4644" ph="..." />
-                <marker date="1540974897499" expanded="true" signature="5098:5126" ph="..." />
+                <marker date="1541006155122" expanded="true" signature="991:1772" ph="..." />
+                <marker date="1541006155122" expanded="true" signature="4549:4555" ph="..." />
+                <marker date="1541006155122" expanded="true" signature="4551:4555" ph="..." />
+                <marker date="1541006155122" expanded="true" signature="4643:4644" ph="..." />
+                <marker date="1541006155122" expanded="true" signature="4978:4984" ph="..." />
+                <marker date="1541006155122" expanded="true" signature="5363:5391" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-102">
+              <caret line="136" lean-forward="true" selection-start-line="136" selection-end-line="136" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
+        <entry file="file://$PROJECT_DIR$/modules/Prototype.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="90" selection-start-line="90" selection-end-line="91" />
+            <state relative-caret-position="183">
+              <caret line="289" column="31" selection-start-line="289" selection-start-column="31" selection-end-line="289" selection-end-column="31" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
+                <marker date="1541011786908" expanded="true" signature="7726:7727" ph="..." />
+                <marker date="1541011786908" expanded="true" signature="14609:14614" ph="..." />
               </folding>
             </state>
           </provider>
@@ -108,24 +127,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/IE/Prototype.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1399">
-              <caret line="99" column="43" lean-forward="true" selection-start-line="99" selection-start-column="43" selection-end-line="99" selection-end-column="43" />
+            <state relative-caret-position="114">
+              <caret line="81" column="31" lean-forward="true" selection-start-line="81" selection-start-column="31" selection-end-line="81" selection-end-column="31" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/modules/Prototype.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="282">
-              <caret line="276" column="48" lean-forward="true" selection-start-line="276" selection-start-column="48" selection-end-line="276" selection-end-column="48" />
-              <folding>
-                <element signature="e#0#14#0" expanded="true" />
-                <marker date="1540970340180" expanded="true" signature="7726:7727" ph="..." />
-                <marker date="1540970340180" expanded="true" signature="14203:14208" ph="..." />
               </folding>
             </state>
           </provider>
@@ -142,13 +147,11 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>from PyQt5.Qt import *</find>
       <find>InternetExplorerPrototype</find>
       <find>importRegistry</find>
       <find>PrototypeForIE</find>
       <find>included</find>
       <find>t</find>
-      <find>path</find>
       <find>timeline</find>
       <find>getP</find>
       <find>timeline[0]</find>
@@ -172,6 +175,8 @@
       <find>listViewHeight</find>
       <find>label2</find>
       <find>DestFileLabel</find>
+      <find>getAppCompatCache</find>
+      <find>path</find>
     </findStrings>
     <replaceStrings>
       <replace>'</replace>
@@ -225,21 +230,21 @@
         <option value="$PROJECT_DIR$/modules/UI/SelectionViewer.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSViewer.py" />
         <option value="$PROJECT_DIR$/modules/UI/__init__.py" />
-        <option value="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" />
         <option value="$PROJECT_DIR$/repo/log.txt" />
         <option value="$PROJECT_DIR$/repo/target.txt" />
-        <option value="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" />
         <option value="$PROJECT_DIR$/modules/UI/MsgDialog.py" />
         <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" />
         <option value="$PROJECT_DIR$/modules/constant.py" />
-        <option value="$PROJECT_DIR$/modules/IE/Prototype.py" />
         <option value="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" />
-        <option value="$PROJECT_DIR$/modules/Prototype.py" />
-        <option value="$PROJECT_DIR$/modules/UI/LoadingScreen.py" />
-        <option value="$PROJECT_DIR$/MainWindow.py" />
         <option value="$PROJECT_DIR$/modules/UI/JumpListViewer.py" />
         <option value="$PROJECT_DIR$/modules/UI/MenuBar.py" />
+        <option value="$PROJECT_DIR$/MainWindow.py" />
+        <option value="$PROJECT_DIR$/modules/UI/LoadingScreen.py" />
+        <option value="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" />
+        <option value="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" />
+        <option value="$PROJECT_DIR$/modules/IE/Prototype.py" />
+        <option value="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" />
+        <option value="$PROJECT_DIR$/modules/Prototype.py" />
       </list>
     </option>
   </component>
@@ -261,28 +266,6 @@
             <path>
               <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
               <item name="Parser" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Parser" type="462c0819:PsiDirectoryNode" />
-              <item name="img" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Parser" type="462c0819:PsiDirectoryNode" />
-              <item name="libs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Parser" type="462c0819:PsiDirectoryNode" />
-              <item name="libs" type="462c0819:PsiDirectoryNode" />
-              <item name="ParseRegistry" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Parser" type="462c0819:PsiDirectoryNode" />
-              <item name="libs" type="462c0819:PsiDirectoryNode" />
-              <item name="ParseWebArtifact" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
@@ -482,7 +465,7 @@
     <frame x="54" y="-8" width="1320" height="784" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4983165" visible="true" weight="0.1984127" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4983165" visible="true" weight="0.20476191" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5016835" side_tool="true" weight="0.19689542" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.32973805" />
@@ -498,7 +481,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" x="376" y="402" width="546" height="343" id="Python Console" order="3" type="FLOATING" weight="0.3515873" />
+      <window_info anchor="right" x="194" y="67" width="881" height="482" id="Python Console" order="3" type="FLOATING" weight="0.3515873" />
     </layout>
     <layout-to-restore>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4983165" visible="true" weight="0.2484127" />
@@ -544,16 +527,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/libs/ParseEvtx/Nodes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="321" column="61" lean-forward="true" selection-start-line="321" selection-start-column="61" selection-end-line="321" selection-end-column="61" />
-          <folding>
-            <element signature="e#763#801#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/eventlog_parser01.py" />
     <entry file="file://$PROJECT_DIR$/loading.jpg" />
     <entry file="file://$PROJECT_DIR$/logo.jpg" />
@@ -639,25 +612,13 @@
     <entry file="file://$PROJECT_DIR$/modules/UI/TimelineSetDialog.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="356">
-          <caret line="178" column="80" selection-start-line="178" selection-start-column="80" selection-end-line="178" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/img/loading1.gif">
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$PROJECT_DIR$/img/loading2.gif">
       <provider selected="true" editor-type-id="images" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/repo/target.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/repo/log.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/repo/target.txt" />
     <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/1076628052/time.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="186">
@@ -708,16 +669,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParseEvtx/Views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
-          <folding>
-            <element signature="e#764#802#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/1076628052/PyQt5/QtWidgets/QTableWidget.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="212">
@@ -736,13 +687,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/constant.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1026">
-          <caret line="54" column="66" selection-start-line="54" selection-start-column="66" selection-end-line="54" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/StatusBar.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="57">
@@ -755,62 +699,13 @@
         <state relative-caret-position="-1425" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/IE/Prototype.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1399">
-          <caret line="99" column="43" lean-forward="true" selection-start-line="99" selection-start-column="43" selection-end-line="99" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="108" column="34" selection-start-line="108" selection-start-column="34" selection-end-line="108" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/img/logo.png">
       <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/LoadingScreen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="63" selection-start-line="63" selection-end-line="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="90" selection-start-line="90" selection-end-line="91" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
     </entry>
     <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/1076628052/PyQt5/QtGui/QFont.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="138">
           <caret line="299" column="8" selection-start-line="299" selection-start-column="8" selection-end-line="299" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MainWindow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3">
-          <caret line="67" column="48" lean-forward="true" selection-start-line="67" selection-start-column="48" selection-end-line="67" selection-end-column="48" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-            <marker date="1540974897499" expanded="true" signature="991:1772" ph="..." />
-            <marker date="1540974897499" expanded="true" signature="4549:4555" ph="..." />
-            <marker date="1540974897499" expanded="true" signature="4551:4555" ph="..." />
-            <marker date="1540974897499" expanded="true" signature="4643:4644" ph="..." />
-            <marker date="1540974897499" expanded="true" signature="5098:5126" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -825,21 +720,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="582">
           <caret line="122" selection-start-line="122" selection-end-line="123" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-            <marker date="1540976022009" expanded="true" signature="5484:5488" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2261">
-          <caret line="119" column="34" lean-forward="true" selection-start-line="119" selection-start-column="34" selection-end-line="119" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#84#0" expanded="true" />
-            <marker date="1540976564238" expanded="true" signature="4855:4859" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -847,20 +727,106 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="392">
           <caret line="487" column="55" lean-forward="true" selection-start-line="487" selection-start-column="55" selection-end-line="487" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseEvtx/Views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-131">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="e#764#802#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/repo/log.txt" />
+    <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1197">
+          <caret line="64" column="30" selection-start-line="64" selection-start-column="30" selection-end-line="64" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#84#0" expanded="true" />
+            <marker date="1540976564238" expanded="true" signature="4855:4859" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/constant.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-249">
+          <caret line="70" selection-start-line="70" selection-end-line="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="276" column="24" selection-start-line="276" selection-start-column="24" selection-end-line="276" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/LoadingScreen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-266">
+          <caret line="52" column="55" selection-start-line="52" selection-start-column="55" selection-end-line="52" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-570">
+          <caret line="56" column="28" lean-forward="true" selection-start-line="56" selection-start-column="28" selection-end-line="56" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MainWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2087">
+          <caret line="144" column="50" lean-forward="true" selection-start-line="144" selection-start-column="50" selection-end-line="144" selection-end-column="50" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
+            <marker date="1541006155122" expanded="true" signature="991:1772" ph="..." />
+            <marker date="1541006155122" expanded="true" signature="4549:4555" ph="..." />
+            <marker date="1541006155122" expanded="true" signature="4551:4555" ph="..." />
+            <marker date="1541006155122" expanded="true" signature="4643:4644" ph="..." />
+            <marker date="1541006155122" expanded="true" signature="4978:4984" ph="..." />
+            <marker date="1541006155122" expanded="true" signature="5363:5391" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/IE/Prototype.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="81" column="31" lean-forward="true" selection-start-line="81" selection-start-column="31" selection-end-line="81" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/Prototype.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="282">
-          <caret line="276" column="48" lean-forward="true" selection-start-line="276" selection-start-column="48" selection-end-line="276" selection-end-column="48" />
+        <state relative-caret-position="183">
+          <caret line="289" column="31" selection-start-line="289" selection-start-column="31" selection-end-line="289" selection-end-column="31" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
-            <marker date="1540970340180" expanded="true" signature="7726:7727" ph="..." />
-            <marker date="1540970340180" expanded="true" signature="14203:14208" ph="..." />
+            <marker date="1541011786908" expanded="true" signature="7726:7727" ph="..." />
+            <marker date="1541011786908" expanded="true" signature="14609:14614" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/temp.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-102">
+          <caret line="136" lean-forward="true" selection-start-line="136" selection-end-line="136" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>

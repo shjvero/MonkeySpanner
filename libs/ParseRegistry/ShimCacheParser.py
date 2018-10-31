@@ -36,7 +36,8 @@ g_timeformat = DATE_ISO
 
 g_timeline = None
 g_prefetchList = []
-head = ["Registry", 7]
+grayHead = ["Registry", 0]
+purpleHead = ["Registry", 7]
 # Shim Cache format used by Windows 6.1 (Win7 through Server 2008 R2)
 class CacheEntryNt6(object):
 
@@ -196,14 +197,25 @@ def read_win10_entries(bin_data, ver_magic, creators_update=False):
 		entry_data = BytesIO(data.read(entry_len))
 
 		# Read the path length
+		head = []
 		path_len = struct.unpack('<H', entry_data.read(2))[0]
 		if path_len == 0:
 			path = 'None'
 		else:
 			path = entry_data.read(path_len).decode('utf-16le', 'replace')
 			global g_prefetchList
-			if path.endswith(".exe"):
-				g_prefetchList.append(path.rsplit("\\", 1)[-1].upper())
+			if path[-3].lower() == "exe":
+				if path.rsplit("\\", 1)[-1].upper() in g_prefetchList:
+					head = purpleHead
+				elif path.startswith("C:\\Windows"):
+					head = grayHead
+				else:
+					continue
+			elif path.startswith("C:\\Windows"):
+				head = grayHead
+			else:
+				continue
+
 
 		# Read the remaining entry data
 		low_datetime, high_datetime = struct.unpack('<LL', entry_data.read(8))
@@ -252,8 +264,17 @@ def read_nt6_entries(bin_data, entry):
 			path = (bin_data.decode("unicode-escape")[entry.Offset:entry.Offset +
 							 entry.wLength])[8:].replace("\x00", "")
 			global g_prefetchList
-			if path.endswith(".exe"):
-				g_prefetchList.append(path.rsplit("\\", 1)[-1].upper())
+			if path[-3].lower() == "exe":
+				if path.rsplit("\\", 1)[-1].upper() in g_prefetchList:
+					head = purpleHead
+				elif path.startswith("C:\\Windows"):
+					head = grayHead
+				else:
+					continue
+			elif path.startswith("C:\\Windows"):
+				head = grayHead
+			else:
+				continue
 			# Test to see if the file may have been executed.
 			if (entry.FileFlags & CSRSS_FLAG):
 				exec_flag = 'True'
@@ -353,7 +374,7 @@ def read_from_hive(hive):
 			return out_list
 
 # Acquire the current system's Shim Cache data.
-def get_local_data(timeline=None):
+def get_local_data(prefetchList, timeline=None):
 	tmp_list = []
 	out_list = []
 	global g_verbose
@@ -365,6 +386,7 @@ def get_local_data(timeline=None):
 		print(e)
 		sys.exit(1)
 	g_timeline = timeline
+	g_prefetchList = prefetchList
 	hReg = reg.ConnectRegistry(None, reg.HKEY_LOCAL_MACHINE)
 	hSystem = reg.OpenKey(hReg, r'SYSTEM')
 	for i in range(1024):
@@ -401,9 +423,9 @@ def get_local_data(timeline=None):
 	else:
 		if g_verbose:
 			#out_list.insert(0, output_header + ['Key Path'])
-			return [out_list, g_prefetchList]
+			return out_list
 		else:
 			out_list = unique_list(out_list)
 			#out_list.insert(0, output_header)
-			return [out_list, g_prefetchList]
+			return out_list
 	g_timeline = None

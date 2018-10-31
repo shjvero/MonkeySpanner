@@ -105,11 +105,11 @@ class Main(QMainWindow):
         self.search.editingFinished.connect(self.enterPressed)
         self.search.textChanged.connect(self.textChanged)
 
-        # Set up Table
-        self.table = PrototypeTable(self, self.env)
-
         # Set up loading
         self.loadingWidget = LoadingWidget(self)
+
+        # Set up Table
+        self.table = PrototypeTable(self, self.env)
 
         self.topLayout.addWidget(self.selection)
         self.topLayout.addWidget(self.loadBtn)
@@ -124,6 +124,9 @@ class Main(QMainWindow):
     def completeSelection(self):
         if self.isLoaded: return
         self.isLoaded = True
+        self.bottomLayout.removeWidget(self.table)
+        self.bottomLayout.addWidget(self.loadingWidget)
+        self.table.hide()
         self.loadingWidget.start()
         from threading import Thread
         t = Thread(target=self.loadData, args=())
@@ -135,7 +138,9 @@ class Main(QMainWindow):
         self.presentSelected = self.selected
         self.timeline = None
         self.isLoaded = False
-
+        self.bottomLayout.removeWidget(self.loadingWidget)
+        self.bottomLayout.addWidget(self.table)
+        self.table.show()
 
     def toggledChkBtn(self, b): # timeline set...?
         msg = b.text()

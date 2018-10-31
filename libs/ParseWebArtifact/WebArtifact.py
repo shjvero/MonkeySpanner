@@ -26,7 +26,7 @@ def fixRespData(txtin):
         return ""
 
 #Get history
-def getHistory(filepath, timeline=None):
+def getHistory(filepath, prefetchList, timeline=None):
     esedb_file = pyesedb.file()
     esedb_file.open(filepath)
     containers = esedb_file.get_table_by_name("Containers")
@@ -42,8 +42,10 @@ def getHistory(filepath, timeline=None):
             histDirDict["Container_%s" % cRecords.get_value_data_as_integer(0)] = cRecords.get_value_data_as_string(10)
 
     items = []
-    redHead = ["History", 1]
-    navyHead = ["History", 6]
+    headStr = "History"
+    redHead = [headStr, 1]
+    navyHead = [headStr, 6]
+    purpleHead = [headStr, 7]
     #Get history from each container
     for hcl in histContList:
         histCont = esedb_file.get_table_by_name(hcl)
@@ -55,7 +57,16 @@ def getHistory(filepath, timeline=None):
                     continue
                 accessedTime = getFiletime(hRecords.get_value_data_as_integer(13))
                 modifiedTime = getFiletime(hRecords.get_value_data_as_integer(12))
-                head = navyHead if _url[-3] in EXE_EXTENSION else redHead
+                if URL[-3:] in EXE_EXTENSION:
+                    head = navyHead
+                elif URL[-3:] == "exe":
+                    try:
+                        prefetchList += URL.rsplit('/', 1)[-1].upper()
+                    except Exception as e:
+                        print(e)
+                    head = purpleHead
+                else:
+                    head = redHead
                 content = "ID: {}.{}\n".format(hRecords.get_value_data_as_integer(1),
                                                hRecords.get_value_data_as_integer(0))
                 content += "Container Name: {}\n".format(histNameDict[hcl])
@@ -113,8 +124,7 @@ def getContent(filepath, timeline=None):
                     continue
             else:
                 continue
-            content = "ID: {}.{}\n".format(hRecords.get_value_data_as_integer(1),
-                                           hRecords.get_value_data_as_integer(0))
+            content = "ID: {}.{}\n".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0))
             content += "Container Name: {}\n".format(histNameDict[hcl])
             content += "Created Time: {}\n".format(createdTime)
             content += "Accessed Time: {}\n".format(accessedTime)
@@ -132,7 +142,7 @@ def getContent(filepath, timeline=None):
     return items
 
 #Get downloads
-def getDownloads(filepath, timeline=None):
+def getDownloads(filepath, prefetchList, timeline=None):
     esedb_file = pyesedb.file()
     esedb_file.open(filepath)
     containers = esedb_file.get_table_by_name("Containers")
@@ -159,6 +169,9 @@ def getDownloads(filepath, timeline=None):
                     continue
             url = hRecords.get_value_data_as_string(17)
             fileName = hRecords.get_value_data_as_string(18)
+            if fileName.split('.')[1] == "exe":
+                prefetchList += fileName.upper()
+                print(fileName)
             fileSize = hRecords.get_value_data_as_integer(5)
             downloadPath = fixRespData(hRecords.get_value_data(21)) # 파싱필요
             content = "ID: {}.{}\n".format(hRecords.get_value_data_as_integer(1),

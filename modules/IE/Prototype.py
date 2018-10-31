@@ -79,7 +79,9 @@ def getPrototype(env, timeline=None):
     t_list = []
     from threading import Thread
     limitedTime = None
-    prototype = getWebArtifactItems(env)
+    result, prototype = getWebArtifactItems(env, prefetchList)
+    if not result:
+        return result, prototype
     if prototype:
         limitedTime = datetime.datetime.strptime(prototype[0][1], "%Y-%m-%d %H:%M:%S.%f")
     print("Web Artifact: {}".format(len(prototype)))
@@ -92,10 +94,8 @@ def getPrototype(env, timeline=None):
         t_list.append(Thread(target=getEventLogItemsForWin10, args=(evtxLogFor10[0], prototype, "IEXPLORE.EXE", limitedTime,)))
         t_list.append(Thread(target=getEventLogItemsForWin10, args=(evtxLogFor10[1], prototype, None, limitedTime,)))
     t_list.append(Thread(target=getReportWER, args=(env, prototype, reportArchive, limitedTime,)))
-    others = []
-    t_list.append(Thread(target=getAppCompatCache, args=(prototype, others, limitedTime,)))
-    print(others)
-    t_list.append(Thread(target=getPrefetchItems, args=(prototype, prefetchList, limitedTime,)))
+    t_list.append(Thread(target=getAppCompatCache, args=(prototype, prefetchList, limitedTime,)))
+    t_list.append(Thread(target=getPrefetchItems, args=(prototype, list(set(prefetchList)), limitedTime,)))
     total = len(t_list)
     print("Total Thread: {}".format(total))
     for i in range(total-1):
@@ -106,10 +106,9 @@ def getPrototype(env, timeline=None):
     t_list[total-1].start()
     t_list[total - 1].join()
     print(len(prototype))
-
     from operator import itemgetter
     prototype.sort(key=itemgetter(1))
-    return prototype
+    return True, prototype
 
     '''
     1. [빨] 웹 히스토리: 끝에 문서형 확장자가 없을 경우 단순 접근 (시작점)
@@ -124,7 +123,7 @@ def getPrototype(env, timeline=None):
     10. [파] IE 프리패치: 실행만
     11. [남] 웹 히스토리: dll, doc, docx, hta, xls, woff, pdf (확장자 검사)
     12. [남] 웹 캐시: dll, doc, docx, hta, xls, woff, pdf (확장자 검사)
-    13. [보] 웹 다운로드
-    14. [보] 레지스트리 검사 필요 -- 웹 다운로드에 있던 exe인 경우
+    13. [보] 웹 다운로드, 웹 히스토리(exe)
+    14. [보] 레지스트리 검사 필요 -- 웹 다운로드에 있던 exe인 경우, 그 외 회색
     15. [보] 13번 과정에서 EXE 모두 추출 후 프리패치 파싱
     '''

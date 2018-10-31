@@ -1,7 +1,7 @@
 import sys
 
-from PyQt5.QtGui import QMovie
-from PyQt5.QtWidgets import QWidget, QProgressBar, QLabel, QGridLayout, QSizePolicy, QBoxLayout
+from PyQt5.QtGui import QMovie, QImage
+from PyQt5.QtWidgets import QWidget, QProgressBar, QLabel, QGridLayout, QSizePolicy, QBoxLayout, QVBoxLayout
 from PyQt5.QtCore import Qt, QThread, QWaitCondition, QMutex, pyqtSignal, pyqtSlot
 
 class LoadingBarThread(QThread):
@@ -50,17 +50,16 @@ class LoadingBarThread(QThread):
 class LoadingWidget(QWidget):
     def __init__(self, parent):
         QWidget.__init__(self, parent)
-        self.loadingBarCSS = "background-color: darkslategray; border-color: darkslategray;"
-        # self.loadingWidgetCSS = "background-color: #31353a; border: 1px solid darkgray;"
-        self.loadingWidgetCSS = "background-color: #31353a;"
+        # self.loadingBarCSS = "border-color: darkslategray;"
+        self.setStyleSheet("background-color: #31353a;")
+        self.setContentsMargins(0, 0, 0, 0)
         self.gifPath = "img/loading.gif"
-        self.move(0, 110 + parent.search.height())
-        self.setFixedSize(parent.table.size())
-        self.setStyleSheet(self.loadingWidgetCSS)
         self.initUI()
 
     def initUI(self):
-        layout = QGridLayout(self)
+        layout = QBoxLayout(QBoxLayout.TopToBottom, self)
+        self.setLayout(layout)
+
         self.loadingMovie = QMovie(self.gifPath)
         self.loadingImg = QLabel(self)
         self.loadingImg.setMovie(self.loadingMovie)
@@ -69,15 +68,13 @@ class LoadingWidget(QWidget):
         layout.addWidget(self.loadingImg)
 
         self.loadingBar = QProgressBar(self)
-        self.loadingBar.setFixedSize(540, 10)
-        self.loadingBar.move((self.width() - 540) / 2, self.height()-180)
+        self.loadingBar.setFixedHeight(10)
         self.loadingBar.setTextVisible(False)
-        self.loadingBar.setStyleSheet(self.loadingBarCSS)
-        layout.addChildWidget(self.loadingBar)
+        # self.loadingBar.setStyleSheet(self.loadingBarCSS)
+        layout.addWidget(self.loadingBar)
 
         self.barThread = LoadingBarThread(self)
         self.barThread.change_value.connect(self.loadingBar.setValue)
-
         self.hide()
 
     def start(self):
@@ -86,6 +83,9 @@ class LoadingWidget(QWidget):
         self.show()
 
     def resume(self):
+        if self.barThread.cnt < 50:
+            self.barThread.cnt = 100
+            return
         self.barThread.toggle_status()
         if self.loadingMovie.state() != QMovie.Running:
             self.loadingMovie.start()
