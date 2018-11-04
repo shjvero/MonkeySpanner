@@ -275,12 +275,16 @@ def getWebArtifactItems(env, prefetchList, timeline=None):
             os.system(command1 + '"dllhost" >> ' + logPath)
             with open(logPath, "r+") as f:
                 prevTask = ''
+<<<<<<< HEAD
                 killedList = []
+=======
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
                 for line in f.readlines():
                     if line == "\n" or line.startswith("background"):
                         continue
                     t = line.split()[0]
                     if prevTask == t: continue
+<<<<<<< HEAD
                     killedList.append(t)
                     # i = 0
                     # for i in range(3):
@@ -295,6 +299,18 @@ def getWebArtifactItems(env, prefetchList, timeline=None):
             for proc in psutil.process_iter():
                 if proc.name in killedList:
                     proc.kill()
+=======
+
+                    i = 0
+                    for i in range(3):
+                        if os.system(command2 + '"{}" >> {}'.format(t, logPath)) == 0:
+                            break
+                        i += 1
+                    if i > 0:
+                        return False, '[Not terminated] "{}"'.format(t)
+                    prevTask = t
+            import shutil
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
             try:
                 shutil.copy(fullpath, cwd + "\\WebCacheV01.dat")
             except Exception as e:
@@ -325,10 +341,14 @@ def getNTFSItems(type):
     return items
 
 def getAppCompatCache(prototype, prefetchList, timeline):
+<<<<<<< HEAD
     rst = get_local_data(prefetchList, timeline)
     print("rst : ")
     print(rst)
     if rst:
         prototype += rst
+=======
+    prototype += get_local_data(prefetchList, timeline)
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
 
 

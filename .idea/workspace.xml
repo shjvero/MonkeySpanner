@@ -4,15 +4,20 @@
     <list default="true" id="23378966-e248-43e1-9817-746140378983" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/MainWindow.py" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/img/loading1.gif" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/img/loading2.gif" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" afterDir="false" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
       <change beforePath="$PROJECT_DIR$/modules/IE/Prototype.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/IE/Prototype.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/Prototype.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/Prototype.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/JumpListViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/JumpListViewer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/LoadingScreen.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/LoadingScreen.py" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/modules/UI/MenuBar.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/MenuBar.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/MsgDialog.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/NTFSViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSViewer.py" afterDir="false" />
@@ -21,6 +26,12 @@
       <change beforePath="$PROJECT_DIR$/modules/UI/TextViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/TextViewer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/Lib/site-packages/easy-install.pth" beforeDir="false" afterPath="$PROJECT_DIR$/venv/Lib/site-packages/easy-install.pth" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/venv/pip-selfcheck.json" beforeDir="false" afterPath="$PROJECT_DIR$/venv/pip-selfcheck.json" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/repo/WebCacheV01.dat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/repo/log.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/repo/target.txt" beforeDir="false" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,7 +43,11 @@
     <session id="-1788526241">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+<<<<<<< HEAD
           <entry key="project.closed" value="51" />
+=======
+          <entry key="project.closed" value="47" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
           <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.14" value="1" />
@@ -43,10 +58,17 @@
           <entry key="project.open.time.40" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.6" value="10" />
+<<<<<<< HEAD
           <entry key="project.open.time.7" value="16" />
           <entry key="project.open.time.8" value="11" />
           <entry key="project.open.time.9" value="6" />
           <entry key="project.opened" value="52" />
+=======
+          <entry key="project.open.time.7" value="15" />
+          <entry key="project.open.time.8" value="10" />
+          <entry key="project.open.time.9" value="6" />
+          <entry key="project.opened" value="49" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -54,28 +76,46 @@
           <entry key="gif" value="7" />
           <entry key="jpg" value="3" />
           <entry key="png" value="1" />
+<<<<<<< HEAD
           <entry key="py" value="248" />
+=======
+          <entry key="py" value="213" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
           <entry key="txt" value="23" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
+<<<<<<< HEAD
           <entry key="Image" value="11" />
           <entry key="PLAIN_TEXT" value="23" />
           <entry key="Python" value="248" />
+=======
+          <entry key="Image" value="10" />
+          <entry key="PLAIN_TEXT" value="23" />
+          <entry key="Python" value="213" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="2027" />
           <entry key="dummy" value="37" />
+<<<<<<< HEAD
           <entry key="py" value="101267" />
+=======
+          <entry key="py" value="96045" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="37" />
+<<<<<<< HEAD
           <entry key="Python" value="103294" />
+=======
+          <entry key="Python" value="98072" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -101,6 +141,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MainWindow.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="240">
               <caret line="164" column="46" lean-forward="true" selection-start-line="164" selection-start-column="46" selection-end-line="164" selection-end-column="46" />
               <folding>
@@ -111,11 +152,24 @@
                 <marker date="1541354145300" expanded="true" signature="5626:5627" ph="..." />
                 <marker date="1541354145300" expanded="true" signature="5961:5967" ph="..." />
                 <marker date="1541354145300" expanded="true" signature="6347:6355" ph="..." />
+=======
+            <state relative-caret-position="2087">
+              <caret line="144" column="50" lean-forward="true" selection-start-line="144" selection-start-column="50" selection-end-line="144" selection-end-column="50" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+                <marker date="1541006155122" expanded="true" signature="991:1772" ph="..." />
+                <marker date="1541006155122" expanded="true" signature="4549:4555" ph="..." />
+                <marker date="1541006155122" expanded="true" signature="4551:4555" ph="..." />
+                <marker date="1541006155122" expanded="true" signature="4643:4644" ph="..." />
+                <marker date="1541006155122" expanded="true" signature="4978:4984" ph="..." />
+                <marker date="1541006155122" expanded="true" signature="5363:5391" ph="..." />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
               </folding>
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/constant.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -130,6 +184,13 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="202">
               <caret line="168" column="23" lean-forward="true" selection-start-line="168" selection-start-column="23" selection-end-line="168" selection-end-column="23" />
+=======
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-102">
+              <caret line="136" lean-forward="true" selection-start-line="136" selection-end-line="136" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
                 <marker date="1541354145276" expanded="true" signature="4745:5146" ph="..." />
@@ -139,18 +200,30 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+<<<<<<< HEAD
         <entry file="file://$PROJECT_DIR$/modules/UI/NTFSViewer.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-190">
               <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
               <folding>
                 <element signature="e#0#27#0" expanded="true" />
+=======
+        <entry file="file://$PROJECT_DIR$/modules/Prototype.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="183">
+              <caret line="289" column="31" selection-start-line="289" selection-start-column="31" selection-end-line="289" selection-end-column="31" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
+                <marker date="1541011786908" expanded="true" signature="7726:7727" ph="..." />
+                <marker date="1541011786908" expanded="true" signature="14609:14614" ph="..." />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+<<<<<<< HEAD
         <entry file="file://$PROJECT_DIR$/modules/Prototype.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="226">
@@ -181,6 +254,14 @@
               <folding>
                 <element signature="e#0#84#0" expanded="true" />
                 <marker date="1541170851280" expanded="true" signature="5015:5019" ph="..." />
+=======
+        <entry file="file://$PROJECT_DIR$/modules/IE/Prototype.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="114">
+              <caret line="81" column="31" lean-forward="true" selection-start-line="81" selection-start-column="31" selection-end-line="81" selection-end-column="31" />
+              <folding>
+                <element signature="e#0#31#0" expanded="true" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
               </folding>
             </state>
           </provider>
@@ -197,6 +278,10 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
+<<<<<<< HEAD
+=======
+      <find>InternetExplorerPrototype</find>
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
       <find>importRegistry</find>
       <find>PrototypeForIE</find>
       <find>included</find>
@@ -225,8 +310,11 @@
       <find>DestFileLabel</find>
       <find>getAppCompatCache</find>
       <find>path</find>
+<<<<<<< HEAD
       <find>statusBar</find>
       <find>btnNumber</find>
+=======
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
     </findStrings>
     <replaceStrings>
       <replace>'</replace>
@@ -289,12 +377,22 @@
         <option value="$PROJECT_DIR$/modules/UI/TextViewer.py" />
         <option value="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" />
         <option value="$PROJECT_DIR$/modules/UI/MenuBar.py" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/modules/UI/NTFSViewer.py" />
         <option value="$PROJECT_DIR$/modules/Prototype.py" />
         <option value="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" />
         <option value="$PROJECT_DIR$/modules/IE/Prototype.py" />
         <option value="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" />
         <option value="$PROJECT_DIR$/MainWindow.py" />
+=======
+        <option value="$PROJECT_DIR$/MainWindow.py" />
+        <option value="$PROJECT_DIR$/modules/UI/LoadingScreen.py" />
+        <option value="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" />
+        <option value="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" />
+        <option value="$PROJECT_DIR$/modules/IE/Prototype.py" />
+        <option value="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" />
+        <option value="$PROJECT_DIR$/modules/Prototype.py" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
       </list>
     </option>
   </component>
@@ -321,6 +419,7 @@
             <path>
               <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
               <item name="Parser" type="462c0819:PsiDirectoryNode" />
+<<<<<<< HEAD
               <item name="libs" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -343,6 +442,8 @@
             <path>
               <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
               <item name="Parser" type="462c0819:PsiDirectoryNode" />
+=======
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
               <item name="modules" type="462c0819:PsiDirectoryNode" />
               <item name="UI" type="462c0819:PsiDirectoryNode" />
             </path>
@@ -536,7 +637,11 @@
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="1320" height="784" extended-state="6" />
     <layout>
+<<<<<<< HEAD
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4983165" visible="true" weight="0.21428572" />
+=======
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4983165" visible="true" weight="0.20476191" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5016835" side_tool="true" weight="0.19689542" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.32973805" />
@@ -588,6 +693,26 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+<<<<<<< HEAD
+=======
+    <entry file="file://$PROJECT_DIR$/eventlog_parser01.py" />
+    <entry file="file://$PROJECT_DIR$/loading.jpg" />
+    <entry file="file://$PROJECT_DIR$/logo.jpg" />
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/1076628052/PyQt5/QtCore/QTextStream.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="72" column="8" selection-start-line="72" selection-start-column="8" selection-end-line="72" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/1076628052/PyQt5/QtWidgets/QAbstractItemView.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="145">
+          <caret line="479" column="71" lean-forward="true" selection-start-line="479" selection-start-column="71" selection-end-line="479" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
     <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/1076628052/PyQt5/QtGui/QColor.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
@@ -655,6 +780,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/modules/UI/SelectionViewer.py" />
     <entry file="file://$PROJECT_DIR$/img/loading.jpg" />
     <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/qdarkstyle/__init__.py">
@@ -665,6 +791,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/img/loading.gif">
+=======
+    <entry file="file://$PROJECT_DIR$/img/loading1.gif">
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/1076628052/PyQt5/QtGui/QMovie.py">
@@ -674,6 +803,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/1076628052/PyQt5/QtWidgets/QTableWidget.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="212">
@@ -691,6 +821,10 @@
       <provider selected="true" editor-type-id="images" />
     </entry>
     <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/1076628052/PyQt5/QtGui/QFont.py">
+=======
+    <entry file="file://$PROJECT_DIR$/repo/target.txt" />
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/1076628052/time.py">
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="138">
           <caret line="299" column="8" selection-start-line="299" selection-start-column="8" selection-end-line="299" selection-end-column="8" />
@@ -740,6 +874,7 @@
         <state relative-caret-position="-342" />
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/libs/ParseEvtx/Views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
@@ -748,6 +883,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/libs/ParsePrefetch/prefetch.py">
+=======
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/1076628052/PyQt5/QtWidgets/QTableWidget.py">
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
           <caret line="17" selection-start-line="17" selection-end-line="17" />
@@ -761,6 +899,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/modules/UI/LoadingScreen.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-190">
@@ -769,6 +908,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py">
+=======
+    <entry file="file://$PROJECT_DIR$/modules/UI/StatusBar.py">
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="258">
           <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
@@ -780,6 +922,7 @@
         <state relative-caret-position="-1261" />
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-729" />
@@ -798,10 +941,50 @@
           <caret line="5" column="26" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
           <folding>
             <element signature="e#0#27#0" expanded="true" />
+=======
+    <entry file="file://$PROJECT_DIR$/img/logo.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/1076628052/PyQt5/QtGui/QFont.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="299" column="8" selection-start-line="299" selection-start-column="8" selection-end-line="299" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/1076628052/PyQt5/QtWidgets/QMessageBox.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="62">
+          <caret line="6" column="9" lean-forward="true" selection-start-line="6" selection-start-column="9" selection-end-line="6" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/JumpListViewer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="582">
+          <caret line="122" selection-start-line="122" selection-end-line="123" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="392">
+          <caret line="487" column="55" lean-forward="true" selection-start-line="487" selection-start-column="55" selection-end-line="487" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseEvtx/Views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-131">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+          <folding>
+            <element signature="e#764#802#0" expanded="true" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="354">
@@ -809,10 +992,21 @@
           <folding>
             <element signature="e#0#84#0" expanded="true" />
             <marker date="1541170851280" expanded="true" signature="5015:5019" ph="..." />
+=======
+    <entry file="file://$PROJECT_DIR$/repo/log.txt" />
+    <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1197">
+          <caret line="64" column="30" selection-start-line="64" selection-start-column="30" selection-end-line="64" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#84#0" expanded="true" />
+            <marker date="1540976564238" expanded="true" signature="4855:4859" ph="..." />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/modules/Prototype.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="226">
@@ -822,36 +1016,80 @@
             <marker date="1541346945833" expanded="true" signature="7726:7727" ph="..." />
             <marker date="1541346945833" expanded="true" signature="14856:14861" ph="..." />
           </folding>
+=======
+    <entry file="file://$PROJECT_DIR$/modules/constant.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-249">
+          <caret line="70" selection-start-line="70" selection-end-line="70" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="278">
           <caret line="418" column="50" lean-forward="true" selection-start-line="418" selection-start-column="50" selection-end-line="418" selection-end-column="50" />
+=======
+        <state relative-caret-position="155">
+          <caret line="276" column="24" selection-start-line="276" selection-start-column="24" selection-end-line="276" selection-end-column="24" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/JumpListViewer.py">
+    <entry file="file://$PROJECT_DIR$/modules/UI/LoadingScreen.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="-1501">
           <caret line="14" column="41" selection-start-line="14" selection-start-column="41" selection-end-line="14" selection-end-column="41" />
           <folding>
             <element signature="e#0#27#0" expanded="true" />
+=======
+        <state relative-caret-position="-266">
+          <caret line="52" column="55" selection-start-line="52" selection-start-column="55" selection-end-line="52" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-570">
+          <caret line="56" column="28" lean-forward="true" selection-start-line="56" selection-start-column="28" selection-end-line="56" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MainWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2087">
+          <caret line="144" column="50" lean-forward="true" selection-start-line="144" selection-start-column="50" selection-end-line="144" selection-end-column="50" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+            <marker date="1541006155122" expanded="true" signature="991:1772" ph="..." />
+            <marker date="1541006155122" expanded="true" signature="4549:4555" ph="..." />
+            <marker date="1541006155122" expanded="true" signature="4551:4555" ph="..." />
+            <marker date="1541006155122" expanded="true" signature="4643:4644" ph="..." />
+            <marker date="1541006155122" expanded="true" signature="4978:4984" ph="..." />
+            <marker date="1541006155122" expanded="true" signature="5363:5391" ph="..." />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/IE/Prototype.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="1938">
           <caret line="108" column="25" lean-forward="true" selection-start-line="108" selection-start-column="25" selection-end-line="108" selection-end-column="25" />
+=======
+        <state relative-caret-position="114">
+          <caret line="81" column="31" lean-forward="true" selection-start-line="81" selection-start-column="31" selection-end-line="81" selection-end-column="31" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
           <folding>
             <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/modules/constant.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1159">
@@ -871,10 +1109,21 @@
             <marker date="1541354145300" expanded="true" signature="5626:5627" ph="..." />
             <marker date="1541354145300" expanded="true" signature="5961:5967" ph="..." />
             <marker date="1541354145300" expanded="true" signature="6347:6355" ph="..." />
+=======
+    <entry file="file://$PROJECT_DIR$/modules/Prototype.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="183">
+          <caret line="289" column="31" selection-start-line="289" selection-start-column="31" selection-end-line="289" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1541011786908" expanded="true" signature="7726:7727" ph="..." />
+            <marker date="1541011786908" expanded="true" signature="14609:14614" ph="..." />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="202">
@@ -882,6 +1131,17 @@
           <folding>
             <element signature="e#0#9#0" expanded="true" />
             <marker date="1541354145276" expanded="true" signature="4745:5146" ph="..." />
+=======
+    <entry file="file://$PROJECT_DIR$/temp.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-102">
+          <caret line="136" lean-forward="true" selection-start-line="136" selection-end-line="136" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
           </folding>
         </state>
       </provider>

@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 from PyQt5.QtGui import QMovie
 from PyQt5.QtWidgets import QWidget, QProgressBar, QLabel, QSizePolicy, QBoxLayout
 from PyQt5.QtCore import Qt, QThread, QWaitCondition, QMutex, pyqtSignal
+=======
+import sys
+
+from PyQt5.QtGui import QMovie, QImage
+from PyQt5.QtWidgets import QWidget, QProgressBar, QLabel, QGridLayout, QSizePolicy, QBoxLayout, QVBoxLayout
+from PyQt5.QtCore import Qt, QThread, QWaitCondition, QMutex, pyqtSignal, pyqtSlot
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
 
 class LoadingBarThread(QThread):
     change_value = pyqtSignal(int)

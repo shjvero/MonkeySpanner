@@ -107,7 +107,10 @@ def getPrototype(env, timeline=None):
     t_list[total-1].start()
     t_list[total - 1].join()
     print(len(prototype))
+<<<<<<< HEAD
     '''
+=======
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
     from operator import itemgetter
     prototype.sort(key=itemgetter(1))
     return True, prototype

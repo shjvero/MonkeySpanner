@@ -122,6 +122,7 @@ class PrototypeTable(QTableWidget):
             elif self.isRowHidden(i):
                 self.showRow(i)
 
+<<<<<<< HEAD
     def filtering(self, type, state=0):
         target = None
         if type == 0:
@@ -161,8 +162,20 @@ class PrototypeTable(QTableWidget):
         self.setHorizontalHeaderLabels(self.customHeaders[_header])
 
     def showDetail(self, row, column):
+=======
+    # @pyqtSlot()
+    def changeColumnHeader(self, row, column):
+        _header = self.verticalHeaderItem(row).text()
+        self.setHorizontalHeaderLabels(self.customHeaders[_header])
+
+    # @pyqtSlot()
+    def showDetail(self, row, column):
+        print(row, column)
+>>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
         viewerTitle = self.verticalHeaderItem(row).text()
+        print(viewerTitle)
         viewerContent = self.prototype[row][-1]
+        print(viewerContent)
 
         from modules.UI.TextViewer import TextViewer
         # 프리패치 --> 표

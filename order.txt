@@ -1,0 +1,6 @@
+1. File System Log
+2. Export Button in NTFSViewer
+3. Sort Event Log Order by record-id
+4. Filtering (OK)
+5. os.system() convert python lib (without opening cmd)
+6. seperate detail view (prefetch is shown as table)
