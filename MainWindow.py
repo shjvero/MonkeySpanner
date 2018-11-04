@@ -5,7 +5,6 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QFont, QCursor
 from PyQt5.QtWidgets import *
 from modules.UI.MenuBar import MenuBar
-from modules.UI.StatusBar import StatusBar
 from modules.UI.PrototpyeTable import PrototypeTable
 from modules.UI.LoadingScreen import LoadingWidget
 
@@ -15,12 +14,15 @@ class Main(QMainWindow):
         self.checkEnv()
         self.w = self.width()
         self.h = self.height()
+        self.topWidgetHeight = 40
         self.selectionList = [
             "---- Select Software ----",
             "Adobe Reader", "Adobe Flash Player", "Chrome", "Edge", "HWP",
             "Internet Explorer", "MS-Office", "Kernel(Local Privilege Escalation)"
         ]
+        self.OPTIONS = ['None', 'Prefetch', 'Event Log', 'Registry', 'Web History', 'Web Cache', 'Download', 'WER']
         self.selectionWidth = 220
+        self.btnNumber = 0
         self.loadBtnWidth = 100
         self.searchWidth = self.w * 2
         self.selected = 0
@@ -55,7 +57,7 @@ class Main(QMainWindow):
         self.setWindowTitle("Monkey Spanner")
         self.setWindowIcon(QIcon("img/favicon2.jpg"))
         self.setMenuBar(MenuBar(self))
-        self.setStatusBar(StatusBar())
+        self.setStatusBar(QStatusBar())
 
         # Set up Layout
         self.screenWidget = QWidget()
@@ -69,51 +71,61 @@ class Main(QMainWindow):
 
         # Set up combo box (Software Selection)
         self.selection = QComboBox(self)
-        self.selection.setContentsMargins(10, 10, 10, 10)
         self.selection.setFont(QFont("Times New Roman", 12))
-        self.selection.setFixedWidth(self.selectionWidth)
+        self.selection.setFixedSize(self.selectionWidth, self.topWidgetHeight)
         self.selection.addItems(self.selectionList)
         self.selection.currentIndexChanged.connect(self.selectSoftware)
 
         # Set up Table Load Button
         self.loadBtn = QPushButton("GO!", self)
-        self.loadBtn.setFixedSize(self.loadBtnWidth, self.selection.height())
+        self.loadBtn.setFixedSize(self.loadBtnWidth, self.topWidgetHeight)
         self.loadBtn.setStyleSheet("background-color: darkslategray;")
         self.loadBtn.clicked.connect(self.completeSelection)
         self.loadBtn.setCursor(QCursor(Qt.PointingHandCursor))
 
         # Set up check box (Filtering)
         self.groupBox = QGroupBox(self)
+        self.groupBox.setFlat(True)
         chkboxLayout = QHBoxLayout()
         self.groupBox.setLayout(chkboxLayout)
-        self.options = [
-            QCheckBox('Filtering A', self),
-            QCheckBox('Filtering B', self),
-            QCheckBox('Filtering C', self),
-            QCheckBox('Filtering D', self),
-            QCheckBox('Filtering E', self),
-            QCheckBox('Filtering F', self),
-        ]
-        for option in self.options:
-            option.stateChanged.connect(lambda: self.toggledChkBtn(option))
-            chkboxLayout.addWidget(option)
+        self.option1 = QCheckBox(self.OPTIONS[1])
+        self.option1.stateChanged.connect(lambda: self.toggledChkBtn(self.option1))
+        chkboxLayout.addWidget(self.option1)
+        self.option2 = QCheckBox(self.OPTIONS[2])
+        self.option2.stateChanged.connect(lambda: self.toggledChkBtn(self.option2))
+        chkboxLayout.addWidget(self.option2)
+        self.option3 = QCheckBox(self.OPTIONS[3])
+        self.option3.stateChanged.connect(lambda: self.toggledChkBtn(self.option3))
+        chkboxLayout.addWidget(self.option3)
+        self.option4 = QCheckBox(self.OPTIONS[4])
+        self.option4.stateChanged.connect(lambda: self.toggledChkBtn(self.option4))
+        chkboxLayout.addWidget(self.option4)
+        self.option5 = QCheckBox(self.OPTIONS[5])
+        self.option5.stateChanged.connect(lambda: self.toggledChkBtn(self.option5))
+        chkboxLayout.addWidget(self.option5)
+        self.option6 = QCheckBox(self.OPTIONS[6])
+        self.option6.stateChanged.connect(lambda: self.toggledChkBtn(self.option6))
+        chkboxLayout.addWidget(self.option6)
+        self.option7 = QCheckBox(self.OPTIONS[7])
+        self.option7.stateChanged.connect(lambda: self.toggledChkBtn(self.option7))
+        chkboxLayout.addWidget(self.option7)
 
         # Set up text box for Search
         self.search = QLineEdit(self)
+        self.search.setFixedHeight(35)
         self.search.showMaximized()
-        self.search.setPlaceholderText("Filtering...")
+        self.search.setPlaceholderText("Search")
         self.search.editingFinished.connect(self.enterPressed)
-        self.search.textChanged.connect(self.textChanged)
-
-        # Set up Table
-        self.table = PrototypeTable(self, self.env)
 
         # Set up loading
         self.loadingWidget = LoadingWidget(self)
 
-        self.topLayout.addWidget(self.selection)
-        self.topLayout.addWidget(self.loadBtn)
-        self.topLayout.addWidget(self.groupBox)
+        # Set up Table
+        self.table = PrototypeTable(self, self.env)
+
+        self.topLayout.addWidget(self.selection, alignment=Qt.AlignBottom)
+        self.topLayout.addWidget(self.loadBtn, alignment=Qt.AlignBottom)
+        self.topLayout.addWidget(self.groupBox, alignment=Qt.AlignBottom)
         self.bottomLayout.addWidget(self.search)
         self.bottomLayout.addWidget(self.table)
         self.showMaximized()
@@ -124,6 +136,9 @@ class Main(QMainWindow):
     def completeSelection(self):
         if self.isLoaded: return
         self.isLoaded = True
+        self.bottomLayout.removeWidget(self.table)
+        self.bottomLayout.addWidget(self.loadingWidget)
+        self.table.hide()
         self.loadingWidget.start()
         from threading import Thread
         t = Thread(target=self.loadData, args=())
@@ -135,40 +150,109 @@ class Main(QMainWindow):
         self.presentSelected = self.selected
         self.timeline = None
         self.isLoaded = False
+        self.bottomLayout.removeWidget(self.loadingWidget)
+        self.bottomLayout.addWidget(self.table)
+        self.table.show()
 
-
-    def toggledChkBtn(self, b): # timeline set...?
+    def toggledChkBtn(self, b):
         msg = b.text()
-        if msg == "Filtering A":
-            if self.filtering1.isChecked():
-                msg += " is checked"
-                self.btnNumber = 1
-            else:
-                msg += " isn't checked"
-        elif msg == "Filtering B":
-            if self.filtering2.isChecked():
-                msg += " is checked"
-                self.btnNumber = 2
-            else:
-                msg += " isn't checked"
-        elif msg == "Filtering C":
-            if self.filtering3.isChecked():
-                msg += " is checked"
-                self.btnNumber = 3
-            else:
-                msg += " isn't checked"
         self.statusBar().showMessage(msg)
-
-    def textChanged(self):
-        if self.isLoaded:
-            return
-        # print("Load End.")
-        # self.table.search(self.search.text())
+        if self.presentSelected == 0: return
+        if msg == self.OPTIONS[1]:
+            if self.option1.isChecked():
+                self.btnNumber += 1
+                if self.btnNumber > 1:
+                    self.table.filtering(1, 2)
+                else:
+                    self.table.filtering(1)
+            else:
+                self.btnNumber -= 1
+                if self.btnNumber != 0:
+                    self.table.filtering(1, 1)
+                else:
+                    self.table.filtering(0)
+        elif msg == self.OPTIONS[2]:
+            if self.option2.isChecked():
+                self.btnNumber += 1
+                if self.btnNumber > 1:
+                    self.table.filtering(2, 2)
+                else:
+                    self.table.filtering(2)
+            else:
+                self.btnNumber -= 1
+                if self.btnNumber != 0:
+                    self.table.filtering(2, 1)
+                else:
+                    self.table.filtering(0)
+        elif msg == self.OPTIONS[3]:
+            if self.option3.isChecked():
+                self.btnNumber += 1
+                if self.btnNumber > 1:
+                    self.table.filtering(3, 2)
+                else:
+                    self.table.filtering(3)
+            else:
+                self.btnNumber -= 1
+                if self.btnNumber != 0:
+                    self.table.filtering(3, 1)
+                else:
+                    self.table.filtering(0)
+        elif msg == self.OPTIONS[4]:
+            if self.option4.isChecked():
+                self.btnNumber += 1
+                if self.btnNumber > 1:
+                    self.table.filtering(4, 2)
+                else:
+                    self.table.filtering(4)
+            else:
+                self.btnNumber -= 1
+                if self.btnNumber != 0:
+                    self.table.filtering(4, 1)
+                else:
+                    self.table.filtering(0)
+        elif msg == self.OPTIONS[5]:
+            if self.option5.isChecked():
+                self.btnNumber += 1
+                if self.btnNumber > 1:
+                    self.table.filtering(5, 2)
+                else:
+                    self.table.filtering(5)
+            else:
+                self.btnNumber -= 1
+                if self.btnNumber != 0:
+                    self.table.filtering(5, 1)
+                else:
+                    self.table.filtering(0)
+        elif msg == self.OPTIONS[6]:
+            if self.option6.isChecked():
+                self.btnNumber += 1
+                if self.btnNumber > 1:
+                    self.table.filtering(6, 2)
+                else:
+                    self.table.filtering(6)
+            else:
+                self.btnNumber -= 1
+                if self.btnNumber != 0:
+                    self.table.filtering(6, 1)
+                else:
+                    self.table.filtering(0)
+        elif msg == self.OPTIONS[7]:
+            if self.option7.isChecked():
+                self.btnNumber += 1
+                if self.btnNumber > 1:
+                    self.table.filtering(7, 2)
+                else:
+                    self.table.filtering(7)
+            else:
+                self.btnNumber -= 1
+                if self.btnNumber != 0:
+                    self.table.filtering(7, 1)
+                else:
+                    self.table.filtering(0)
 
     def enterPressed(self):
         if self.isLoaded:
             return
-        print("Load End.")
         self.table.search(self.search.text())
 
 if __name__ == "__main__":

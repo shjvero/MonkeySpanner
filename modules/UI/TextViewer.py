@@ -1,6 +1,4 @@
-import sys
-
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtWidgets import *
 
 class TextViewer(QWidget):
@@ -14,6 +12,7 @@ class TextViewer(QWidget):
         self.setWindowIcon(QIcon("../../img/logo.png"))
         self.resize(600, 500)
         self.label = QLabel()
+        self.label.setFont(QFont("Times New Roman", 12))
         self.label.setText(self.content)
         self.label.setMargin(10)
         # self.font()

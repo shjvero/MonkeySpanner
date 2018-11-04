@@ -257,43 +257,59 @@ def getJumplistItems(contents):
         })
     return _list
 
-def getWebArtifactItems(env, timeline=None):
+def getWebArtifactItems(env, prefetchList, timeline=None):
     import glob
-    fileList = glob.glob(".\\repo\\WebCacheV*.dat")
+    cwd = os.getcwd()
+    fileList = glob.glob(cwd + "\\WebCacheV*.dat")
     fullpath = ''
     items = {}
     if not fileList:
         dirname = PATH.IE_ARTIFACT_PATH[env]["History"]
         fullpath = glob.glob(dirname + "WebCacheV*.dat")[0]
+        logPath = cwd + '\\temp.txt'
         if os.path.exists(fullpath):
-            if os.system('tasklist | find /i "taskhost" > .\\repo\\target.txt') == 0:
-                flag = 0
-                with open(".\\repo\\target.txt", "r") as f:
-                    for line in f.readlines():
-                        if line == "\n":
-                            continue
-                        t = line.split()[0]
-                        if os.system('taskkill /f /im "{}" > .\\repo\\log.txt'.format(t)) == 0:
-                            print("[Kill] " + t)
-                            # if os.system('xcopy / s / h / i / y "{}" ".\\repo\\"'.format(fullpath)):
-                            #     print("Failed copy..")
-                            # else:
-                            #     fullpath = glob.glob(".\\repo\\WebCacheV*.dat")[0]
-                        else:
-                            flag += 1
-                            print("[Error] Dirty Shutdown: '{}'".format(t))
-                if flag > 0:
-                    return items
+            _log = ''
+            command1 = 'tasklist | find /i '
+            command2 = 'taskkill /f /im '
+            os.system(command1 + '"taskhost" > ' + logPath)
+            os.system(command1 + '"dllhost" >> ' + logPath)
+            with open(logPath, "r+") as f:
+                prevTask = ''
+                killedList = []
+                for line in f.readlines():
+                    if line == "\n" or line.startswith("background"):
+                        continue
+                    t = line.split()[0]
+                    if prevTask == t: continue
+                    killedList.append(t)
+                    # i = 0
+                    # for i in range(3):
+                    #     if os.system(command2 + '"{}" >> {}'.format(t, logPath)) == 0:
+                    #         break
+                    #     i += 1
+                    # if i > 0:
+                    #     return False, '[Not terminated] "{}"'.format(t)
+                    prevTask = t
+            print(killedList)
+            import shutil, psutil
+            for proc in psutil.process_iter():
+                if proc.name in killedList:
+                    proc.kill()
+            try:
+                shutil.copy(fullpath, cwd + "\\WebCacheV01.dat")
+            except Exception as e:
+                print(e)
+                return False, "Please terminate any process using " + fullpath
+            fullpath = glob.glob(cwd + "\\WebCacheV*.dat")[0]
     else:
         fullpath = fileList[0]
-
     # cookiesList = WebArtifact.getCookies(fullname)
     # domList = WebArtifact.getDom(fullname)
-    print("path: " + fullpath)
-    history = WebArtifact.getHistory(fullpath, timeline)
+    history = WebArtifact.getHistory(fullpath, prefetchList, timeline)
     caches = WebArtifact.getContent(fullpath, timeline)
-    download = WebArtifact.getDownloads(fullpath, history[0][1])
-    return history + caches + download
+    limitedTime = None if not history else datetime.datetime.strptime(history[0][1], "%Y-%m-%d %H:%M:%S.%f")
+    download = WebArtifact.getDownloads(fullpath, prefetchList, limitedTime)
+    return True, history + caches + download
 
 def getNTFSItems(type):
     items = []
@@ -309,8 +325,10 @@ def getNTFSItems(type):
     return items
 
 def getAppCompatCache(prototype, prefetchList, timeline):
-    res = get_local_data(timeline)
-    prototype += res[0]
-    prefetchList += res[1]
+    rst = get_local_data(prefetchList, timeline)
+    print("rst : ")
+    print(rst)
+    if rst:
+        prototype += rst
 
 

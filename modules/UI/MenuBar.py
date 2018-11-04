@@ -64,10 +64,13 @@ class MenuBar(QMenuBar):
                                                   "All Files (*)", options=options)
         fileType = type.text()
         if fileType == "$usnjrnl":
+            # viewer = NTFSViewer(fileName, 1)
             print()
         elif fileType == "$MFT":
+            # viewer = NTFSViewer(fileName, 2)
             print()
         elif fileType == "$LogFile":
+            # viewer = NTFSViewer(fileName, 3)
             print()
 
     def showJumpList(self):
@@ -103,6 +106,7 @@ class MenuBar(QMenuBar):
             print("LPE in JumpListViewer [None]")
         else:
             QMessageBox.question(self, "Help", "Please select software.", QMessageBox.Ok)
+            return
         content = getJumplistItems(hashList.copy())
         if not content:
             msg = "[Not Exists.]\n"
@@ -115,10 +119,13 @@ class MenuBar(QMenuBar):
         self.ui.show()
 
     def importRegistry(self):
-        print("Import Registry")
+        QMessageBox.question(self, "Help", "Preparing...", QMessageBox.Ok)
+        # print("Import Registry")
 
     def showUserEnvironment(self):
-        print("showUserEnvironment")
+        QMessageBox.question(self, "Help", "Preparing...", QMessageBox.Ok)
+        # print("showUserEnvironment")
 
     def showShortcutInfo(self):
-        print("showShortcutInfo")
+        QMessageBox.question(self, "Help", "Preparing...", QMessageBox.Ok)
+        # print("showShortcutInfo")
