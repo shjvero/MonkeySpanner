@@ -204,7 +204,6 @@ def read_win10_entries(bin_data, ver_magic, creators_update=False):
 		else:
 			path = entry_data.read(path_len).decode('utf-16le', 'replace')
 			global g_prefetchList
-<<<<<<< HEAD
 			from modules.constant import SYSTEMROOT
 			if path[-3].lower() == "exe":
 				if path.rsplit("\\", 1)[-1].upper() in g_prefetchList:
@@ -218,18 +217,6 @@ def read_win10_entries(bin_data, ver_magic, creators_update=False):
 				head = grayHead
 			else:
 				print("쓸모없는 dll 발생 in get_local_data: "+path)
-=======
-			if path[-3].lower() == "exe":
-				if path.rsplit("\\", 1)[-1].upper() in g_prefetchList:
-					head = purpleHead
-				elif path.startswith("C:\\Windows"):
-					head = grayHead
-				else:
-					continue
-			elif path.startswith("C:\\Windows"):
-				head = grayHead
-			else:
->>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
 				continue
 
 
@@ -280,7 +267,6 @@ def read_nt6_entries(bin_data, entry):
 			path = (bin_data.decode("unicode-escape")[entry.Offset:entry.Offset +
 							 entry.wLength])[8:].replace("\x00", "")
 			global g_prefetchList
-<<<<<<< HEAD
 			from modules.constant import SYSTEMROOT
 			if path[-3].lower() == "exe":
 				if path.rsplit("\\", 1)[-1].upper() in g_prefetchList:
@@ -294,18 +280,6 @@ def read_nt6_entries(bin_data, entry):
 				head = grayHead
 			else:
 				print("쓸모없는 dll 발생 in get_local_data")
-=======
-			if path[-3].lower() == "exe":
-				if path.rsplit("\\", 1)[-1].upper() in g_prefetchList:
-					head = purpleHead
-				elif path.startswith("C:\\Windows"):
-					head = grayHead
-				else:
-					continue
-			elif path.startswith("C:\\Windows"):
-				head = grayHead
-			else:
->>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
 				continue
 			# Test to see if the file may have been executed.
 			if (entry.FileFlags & CSRSS_FLAG):
@@ -461,7 +435,3 @@ def get_local_data(prefetchList, timeline=None):
 			out_list = unique_list(out_list)
 			#out_list.insert(0, output_header)
 			return out_list
-<<<<<<< HEAD
-=======
-	g_timeline = None
->>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd

@@ -1,25 +1,19 @@
-from PyQt5.QtWidgets import QMenuBar, QMenu, QAction, qApp, QFileDialog, QMessageBox
 from modules.UI.JumpListViewer import JumpListViewer
+from modules.UI.NTFSViewer import *
 
 class MenuBar(QMenuBar):
     def __init__(self, parent=None):
         super(MenuBar, self).__init__(parent)
         # 메뉴 생성
         fileMenu = self.addMenu("File")  # 메뉴그룹 생성
-        fileMenu.triggered[QAction].connect(self.openFileDialog)
+        # fileMenu.triggered[QAction].connect(self.openFileDialog)
         viewMenu = self.addMenu("View")
-        # viewMenu.triggered[QAction].connect(self.openFileDialog)
+        # viewMenu.triggered[QAction].connect(self.showNTFSViewer)
         helpMenu = self.addMenu("Help")
 
-        NTFSMenu = QMenu("Import FileSystem", self)  # 서브메뉴 생성
-        importUsnjrnl = QAction("$usnjrnl", self)
-        importMFT = QAction("$mft", self)
-        importLogFile = QAction("$LogFile", self)
-
-        NTFSMenu.addAction(importUsnjrnl)
-        NTFSMenu.addAction(importMFT)
-        NTFSMenu.addAction(importLogFile)
-        fileMenu.addMenu(NTFSMenu)
+        NTFSMenu = QAction("Import NTFS Log", self)
+        NTFSMenu.triggered.connect(self.showNTFSViewer)
+        fileMenu.addAction(NTFSMenu)
 
         jumplistMenu = QAction("Import JumpList", self)
         jumplistMenu.triggered.connect(self.showJumpList)
@@ -56,22 +50,24 @@ class MenuBar(QMenuBar):
         helpMenu.addAction(envAction)
         helpMenu.addAction(shortcutAction)
 
-    def openFileDialog(self, type):
-        print(type.text() + " is triggered")
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "",
-                                                  "All Files (*)", options=options)
-        fileType = type.text()
-        if fileType == "$usnjrnl":
-            # viewer = NTFSViewer(fileName, 1)
-            print()
-        elif fileType == "$MFT":
-            # viewer = NTFSViewer(fileName, 2)
-            print()
-        elif fileType == "$LogFile":
-            # viewer = NTFSViewer(fileName, 3)
-            print()
+    def showNTFSViewer(self):
+        self.pathArr = []
+        dialog = NTFSLogFileDialog(self)
+        # 1) 다이얼로그 창 띄우기 -- 경로 얻기
+        # 2) 얻은 경로로 파일 시스템 로그 추출
+        # 3) NTFSViewer 호출
+        '''
+        content = getJumplistItems(hashList.copy())
+        if not content:
+            msg = "[Not Exists.]\n"
+            for h in hashList:
+                msg += " - ".join(h)
+                msg += "\n"
+            QMessageBox.question(self, "Help", msg, QMessageBox.Ok)
+            return
+        self.ui = JumpListViewer(content)
+        self.ui.show()
+        '''
 
     def showJumpList(self):
         from modules.Prototype import getJumplistItems

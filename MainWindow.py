@@ -34,14 +34,15 @@ class Main(QMainWindow):
 
     def checkEnv(self):
         import platform, ctypes
-        if not ctypes.windll.shell32.IsUserAnAdmin():
-            msg = QMessageBox()
-            msg.setIcon(QMessageBox.Warning)
-            msg.setWindowTitle("Failed")
-            msg.setText("Not administrator")
-            msg.setStandardButtons(QMessageBox.Ok)
-            msg.buttonClicked.connect(sys.exit)
-            msg.exec_()
+        # if not ctypes.windll.shell32.IsUserAnAdmin():
+        # UAC 추가 할 것
+        #     msg = QMessageBox()
+        #     msg.setIcon(QMessageBox.Warning)
+        #     msg.setWindowTitle("Failed")
+        #     msg.setText("Not administrator")
+        #     msg.setStandardButtons(QMessageBox.Ok)
+        #     msg.buttonClicked.connect(sys.exit)
+        #     msg.exec_()
         self.env = platform.system() + platform.release()
         if self.env != "Windows7" and self.env != "Windows10":
             msg = QMessageBox()
@@ -116,10 +117,6 @@ class Main(QMainWindow):
         self.search.showMaximized()
         self.search.setPlaceholderText("Search")
         self.search.editingFinished.connect(self.enterPressed)
-<<<<<<< HEAD
-=======
-        self.search.textChanged.connect(self.textChanged)
->>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
 
         # Set up loading
         self.loadingWidget = LoadingWidget(self)
@@ -127,15 +124,9 @@ class Main(QMainWindow):
         # Set up Table
         self.table = PrototypeTable(self, self.env)
 
-<<<<<<< HEAD
         self.topLayout.addWidget(self.selection, alignment=Qt.AlignBottom)
         self.topLayout.addWidget(self.loadBtn, alignment=Qt.AlignBottom)
         self.topLayout.addWidget(self.groupBox, alignment=Qt.AlignBottom)
-=======
-        self.topLayout.addWidget(self.selection)
-        self.topLayout.addWidget(self.loadBtn)
-        self.topLayout.addWidget(self.groupBox)
->>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
         self.bottomLayout.addWidget(self.search)
         self.bottomLayout.addWidget(self.table)
         self.showMaximized()
@@ -164,11 +155,7 @@ class Main(QMainWindow):
         self.bottomLayout.addWidget(self.table)
         self.table.show()
 
-<<<<<<< HEAD
     def toggledChkBtn(self, b):
-=======
-    def toggledChkBtn(self, b): # timeline set...?
->>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
         msg = b.text()
         self.statusBar().showMessage(msg)
         if self.presentSelected == 0: return

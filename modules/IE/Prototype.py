@@ -90,7 +90,6 @@ def getPrototype(env, timeline=None):
         t_list.append(Thread(target=getEventLogItemsForWin7, args=(evtxLogFor7[1], prototype, "IEXPLORE.EXE", limitedTime, )))
         t_list.append(Thread(target=getEventLogItemsForWin7, args=(evtxLogFor7[2], prototype, None, limitedTime, )))
         t_list.append(Thread(target=getEventLogItemsForWin7, args=(evtxLogFor7[3], prototype, None, limitedTime, )))
-    '''
     elif env == "Windows10":
         t_list.append(Thread(target=getEventLogItemsForWin10, args=(evtxLogFor10[0], prototype, "IEXPLORE.EXE", limitedTime,)))
         t_list.append(Thread(target=getEventLogItemsForWin10, args=(evtxLogFor10[1], prototype, None, limitedTime,)))
@@ -107,10 +106,6 @@ def getPrototype(env, timeline=None):
     t_list[total-1].start()
     t_list[total - 1].join()
     print(len(prototype))
-<<<<<<< HEAD
-    '''
-=======
->>>>>>> 9f3ee44693e9cb324707e10311b594f52bae0dcd
     from operator import itemgetter
     prototype.sort(key=itemgetter(1))
     return True, prototype
