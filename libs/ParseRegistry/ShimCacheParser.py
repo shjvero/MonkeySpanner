@@ -205,7 +205,7 @@ def read_win10_entries(bin_data, ver_magic, creators_update=False):
 			path = entry_data.read(path_len).decode('utf-16le', 'replace')
 			global g_prefetchList
 			from modules.constant import SYSTEMROOT
-			if path[-3].lower() == "exe":
+			if path[-3:].lower() == "exe":
 				if path.rsplit("\\", 1)[-1].upper() in g_prefetchList:
 					head = purpleHead
 				elif path.lower().startswith(SYSTEMROOT.lower()):

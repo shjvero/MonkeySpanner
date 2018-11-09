@@ -271,30 +271,37 @@ def getWebArtifactItems(env, prefetchList, timeline=None):
             _log = ''
             command1 = 'tasklist | find /i '
             command2 = 'taskkill /f /im '
-            os.system(command1 + '"taskhost" > ' + logPath)
-            os.system(command1 + '"dllhost" >> ' + logPath)
-            with open(logPath, "r+") as f:
-                prevTask = ''
-                killedList = []
-                for line in f.readlines():
-                    if line == "\n" or line.startswith("background"):
-                        continue
-                    t = line.split()[0]
-                    if prevTask == t: continue
-                    killedList.append(t)
-                    # i = 0
-                    # for i in range(3):
-                    #     if os.system(command2 + '"{}" >> {}'.format(t, logPath)) == 0:
-                    #         break
-                    #     i += 1
-                    # if i > 0:
-                    #     return False, '[Not terminated] "{}"'.format(t)
-                    prevTask = t
-            print(killedList)
-            import shutil, psutil
-            for proc in psutil.process_iter():
-                if proc.name in killedList:
-                    proc.kill()
+            try:
+                killed_rst1 = os.system(command2 + "taskhostw.exe")
+                killed_rst2 = os.system(command2 + "dllhost.exe")
+            except Exception as e:
+                killed_rst1 = -1
+                killed_rst2 = -1
+            # os.system(command1 + '"taskhost" > ' + logPath)
+            # os.system(command1 + '"dllhost" >> ' + logPath)
+            # with open(logPath, "r+") as f:
+            #     prevTask = ''
+            #     killedList = []
+            #     for line in f.readlines():
+            #         if line == "\n" or line.startswith("background"):
+            #             continue
+            #         t = line.split()[0]
+            #         if prevTask == t: continue
+            #         killedList.append(t)
+            #         # i = 0
+            #         # for i in range(3):
+            #         #     if os.system(command2 + '"{}" >> {}'.format(t, logPath)) == 0:
+            #         #         break
+            #         #     i += 1
+            #         # if i > 0:
+            #         #     return False, '[Not terminated] "{}"'.format(t)
+            #         prevTask = t
+            # print(killedList)
+            # import shutil, psutil
+            # for proc in psutil.process_iter():
+            #     if proc.name in killedList:
+            #         proc.kill()
+            import shutil
             try:
                 shutil.copy(fullpath, cwd + "\\WebCacheV01.dat")
             except Exception as e:
@@ -310,19 +317,6 @@ def getWebArtifactItems(env, prefetchList, timeline=None):
     limitedTime = None if not history else datetime.datetime.strptime(history[0][1], "%Y-%m-%d %H:%M:%S.%f")
     download = WebArtifact.getDownloads(fullpath, prefetchList, limitedTime)
     return True, history + caches + download
-
-def getNTFSItems(type):
-    items = []
-    if type == 0:
-        print("ALL NTFS Log")
-    elif type == 1:
-        print("Usnjrnl")
-    elif type == 2:
-        print("MFT")
-    elif type == 3:
-        print("LogFile")
-
-    return items
 
 def getAppCompatCache(prototype, prefetchList, timeline):
     rst = get_local_data(prefetchList, timeline)

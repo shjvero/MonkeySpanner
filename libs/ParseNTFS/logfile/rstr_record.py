@@ -11,7 +11,7 @@
 ########################################################################################################################
 
 from binascii import hexlify
-from ntfs_parse import reverse_hexlify_int
+from libs.ParseNTFS import reverse_hexlify_int
 from .logfile_utils import search_fixup, replace_fixup
 
 

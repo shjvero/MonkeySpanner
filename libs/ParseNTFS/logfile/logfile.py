@@ -1,13 +1,4 @@
-########################################################################################################################
-# LogFile class
-#
-# Issues: Performance measurement not stable yet, output is not as expected.
-#
-########################################################################################################################
-
-import csv
-import sys
-import os
+import os, sys, csv
 
 from .rstr_record import RSTRRecord
 from .rcrd_record import RCRDRecord

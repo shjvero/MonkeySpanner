@@ -1,16 +1,8 @@
-########################################################################################################################
-# USNJrnl classes
-#
-########################################################################################################################
-
-import csv
+import os, sys, csv
 from binascii import hexlify
-import os
-import sys
+import os, sys
 
-from ntfs_parse import reverse, reverse_hexlify, reverse_hexlify_int, filetime_to_datetime
-from ntfs_parse import FileAttributesFlag
-
+from libs.ParseNTFS import reverse, reverse_hexlify, reverse_hexlify_int, filetime_to_datetime, FileAttributesFlag
 
 class UsnJrnl():
     def __init__(self, file):

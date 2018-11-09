@@ -34,15 +34,15 @@ class Main(QMainWindow):
 
     def checkEnv(self):
         import platform, ctypes
-        # if not ctypes.windll.shell32.IsUserAnAdmin():
-        # UAC 추가 할 것
-        #     msg = QMessageBox()
-        #     msg.setIcon(QMessageBox.Warning)
-        #     msg.setWindowTitle("Failed")
-        #     msg.setText("Not administrator")
-        #     msg.setStandardButtons(QMessageBox.Ok)
-        #     msg.buttonClicked.connect(sys.exit)
-        #     msg.exec_()
+        if not ctypes.windll.shell32.IsUserAnAdmin():
+            # UAC 추가 할 것
+            msg = QMessageBox()
+            msg.setIcon(QMessageBox.Warning)
+            msg.setWindowTitle("Failed")
+            msg.setText("Not administrator")
+            msg.setStandardButtons(QMessageBox.Ok)
+            msg.buttonClicked.connect(sys.exit)
+            msg.exec_()
         self.env = platform.system() + platform.release()
         if self.env != "Windows7" and self.env != "Windows10":
             msg = QMessageBox()

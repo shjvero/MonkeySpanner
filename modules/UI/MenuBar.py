@@ -6,17 +6,13 @@ class MenuBar(QMenuBar):
         super(MenuBar, self).__init__(parent)
         # 메뉴 생성
         fileMenu = self.addMenu("File")  # 메뉴그룹 생성
-        # fileMenu.triggered[QAction].connect(self.openFileDialog)
-        viewMenu = self.addMenu("View")
-        # viewMenu.triggered[QAction].connect(self.showNTFSViewer)
-        helpMenu = self.addMenu("Help")
 
         NTFSMenu = QAction("Import NTFS Log", self)
-        NTFSMenu.triggered.connect(self.showNTFSViewer)
+        NTFSMenu.triggered.connect(self.showNTFSLogFileDialog)
         fileMenu.addAction(NTFSMenu)
 
         jumplistMenu = QAction("Import JumpList", self)
-        jumplistMenu.triggered.connect(self.showJumpList)
+        jumplistMenu.triggered.connect(self.showJumpListViewer)
         fileMenu.addAction(jumplistMenu)
 
         registryMenu = QAction("Import Registry", self)
@@ -28,6 +24,10 @@ class MenuBar(QMenuBar):
         exit_menu.setStatusTip("종료")
         exit_menu.triggered.connect(qApp.quit)
         fileMenu.addAction(exit_menu)
+
+        viewMenu = self.addMenu("View")
+        helpMenu = self.addMenu("Help")
+
 
         reloadAction1 = QAction("Reload", self)
         reloadAction1.setShortcut("F5")
@@ -50,26 +50,29 @@ class MenuBar(QMenuBar):
         helpMenu.addAction(envAction)
         helpMenu.addAction(shortcutAction)
 
-    def showNTFSViewer(self):
-        self.pathArr = []
-        dialog = NTFSLogFileDialog(self)
-        # 1) 다이얼로그 창 띄우기 -- 경로 얻기
-        # 2) 얻은 경로로 파일 시스템 로그 추출
-        # 3) NTFSViewer 호출
-        '''
-        content = getJumplistItems(hashList.copy())
-        if not content:
-            msg = "[Not Exists.]\n"
-            for h in hashList:
-                msg += " - ".join(h)
-                msg += "\n"
-            QMessageBox.question(self, "Help", msg, QMessageBox.Ok)
-            return
-        self.ui = JumpListViewer(content)
-        self.ui.show()
-        '''
+    def showNTFSLogFileDialog(self):
+        self.ntfsDialog = NTFSLogFileDialog(self)
+        self.ntfsDialog.completeBtn.clicked.connect(self.showNTFSViewer)
 
-    def showJumpList(self):
+    def showNTFSViewer(self):
+        self.ntfsDialog.loadingBar.show()
+        self.ntfsDialog.barThread.start()
+        _path = [
+            self.ntfsDialog.mftPathTextBox.text(),
+            self.ntfsDialog.usnjrnlPathTextBox.text(),
+            self.ntfsDialog.logfilePathTextBox.text()
+        ]
+        self.ntfsViewer = NTFSViewer()
+        rst, msg = self.ntfsViewer.check(_path)
+        if rst:
+            self.ntfsViewer.load()
+            self.ntfsDialog.resume()
+            self.ntfsViewer.show()
+        else:
+            QMessageBox.warning(self, "Warning", msg, QMessageBox.Ok)
+            self.ntfsDialog.accept()
+
+    def showJumpListViewer(self):
         from modules.Prototype import getJumplistItems
         import modules.constant as CONSTANT
         self.selected = self.parent().presentSelected
@@ -111,8 +114,8 @@ class MenuBar(QMenuBar):
                 msg += "\n"
             QMessageBox.question(self, "Help", msg, QMessageBox.Ok)
             return
-        self.ui = JumpListViewer(content)
-        self.ui.show()
+        self.jumplistViewer = JumpListViewer(content)
+        self.jumplistViewer.show()
 
     def importRegistry(self):
         QMessageBox.question(self, "Help", "Preparing...", QMessageBox.Ok)

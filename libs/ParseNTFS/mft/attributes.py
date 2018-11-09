@@ -1,14 +1,8 @@
 from binascii import hexlify
 from collections import OrderedDict
 
-from ntfs_parse import reverse, reverse_hexlify, reverse_hexlify_int, filetime_to_datetime, FileAttributesFlag
+from libs.ParseNTFS import reverse, reverse_hexlify, reverse_hexlify_int, filetime_to_datetime, FileAttributesFlag, writeout_as_xxd
 from .common import _WIDTH, _INDENT, _BIG_BAR, _SMALL_BAR, _INDENTED_SMALL_BAR, AttributeTypeEnumConverter, AttributeTypeEnum
-
-from ntfs_parse import writeout_as_xxd
-
-
-
-
 
 class Attribute():
     def __init__(self, header=None, data=None, enum=None):

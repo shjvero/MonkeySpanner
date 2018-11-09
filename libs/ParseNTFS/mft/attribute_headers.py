@@ -1,7 +1,7 @@
 from binascii import hexlify
 import math
 
-from ntfs_parse import reverse, reverse_hexlify, reverse_hexlify_int, filetime_to_datetime, FileAttributesFlag
+from libs.ParseNTFS import reverse, reverse_hexlify, reverse_hexlify_int, filetime_to_datetime, FileAttributesFlag
 from .common import _WIDTH, _INDENT, _BIG_BAR, _SMALL_BAR, _INDENTED_SMALL_BAR, AttributeTypeEnum, AttributeTypeEnumConverter
 
 

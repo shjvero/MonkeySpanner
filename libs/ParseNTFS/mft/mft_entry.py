@@ -1,7 +1,7 @@
 from binascii import hexlify
 from collections import OrderedDict
 
-from ntfs_parse import reverse_hexlify
+from libs.ParseNTFS import reverse_hexlify
 from .common import _BIG_BAR, _SMALL_BAR, AttributeTypeEnum
 from .factories import AttributeFactory
 from .attributes import StandardInformation, FileName
@@ -202,6 +202,7 @@ class MFTEntry():
 
     def writeout_parsed(self, out):
         if not self.logfile_parse:
+            #out.write('\nMFT ENTRY %d, image offset: %d bytes\n' % (self.inum, self.image_byte_offset))
             out.write('\nMFT ENTRY %d, image offset: %d bytes\n' % (self.inum, self.image_byte_offset))
         out.write(_BIG_BAR)
         out.write('MFT entry header\n')
@@ -219,6 +220,32 @@ class MFTEntry():
         for key, arr in self.attributes.items():
             for attribute in arr:
                 attribute.writeout_parsed(out)
+
+    def detail(self):
+        fileNameAttrList = []
+        if AttributeTypeEnum.FILE_NAME in self.attributes.keys():
+            FileNameAttrs = self.attributes[AttributeTypeEnum.FILE_NAME]
+            import datetime
+            for attr in FileNameAttrs:
+                fileNameAttrList.append([
+                    attr.name,
+                    datetime.datetime.strftime(attr.file_creation_time_datetime, "%Y-%m-%d %H:%M:%S.%f"),
+                    datetime.datetime.strftime(attr.file_modification_time_datetime, "%Y-%m-%d %H:%M:%S.%f"),
+                    datetime.datetime.strftime(attr.mft_modification_time_datetime, "%Y-%m-%d %H:%M:%S.%f"),
+                    datetime.datetime.strftime(attr.file_access_time_datetime, "%Y-%m-%d %H:%M:%S.%f"),
+                    ])
+        usnList = None
+        if AttributeTypeEnum.STANDARD_INFORMATION in self.attributes.keys():
+            usnList = self.attributes[AttributeTypeEnum.STANDARD_INFORMATION][0].usn
+        return [
+            self.inum,
+            self.sequence_value,
+            self.is_base_entry,
+            self.is_in_use,
+            usnList,
+            self.lsn,
+            fileNameAttrList,
+        ]
 
     def format_csv(self):
         formatted = [

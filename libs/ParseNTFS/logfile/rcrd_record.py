@@ -13,9 +13,9 @@
 
 import os, sys
 from binascii import hexlify
-from ntfs_parse import reverse_hexlify_int
-from ntfs_parse.usn_jrnl import UsnRecord
-from ntfs_parse.mft import MFTEntry, AttributeFactory, AttributeTypeEnum
+from libs.ParseNTFS import reverse_hexlify_int
+from libs.ParseNTFS.usn_jrnl import UsnRecord
+from libs.ParseNTFS.mft import MFTEntry, AttributeFactory, AttributeTypeEnum
 from .logfile_utils import search_fixup, replace_fixup, writeout_as_xxd, get_operation_type
 
 

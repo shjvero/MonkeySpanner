@@ -1,23 +1,6 @@
-########################################################################################################################
-# BootSector class
-#
-# It takes an image and information on where it finds the required partition (you have to give it information that one
-# would otherwise take from the MBR/GPT). mmls is a good tool to find the required information.
-#
-# It stores the 512 bytes and offers handles for the information within. These handles are grouped according to raw
-# values, interpreted values and derived values. Take whatever you need. Not sure whether everything works correctly.
-#
-# Issues:
-#   - According to Brian Carriers book the MFT cluster offset is in byte 48-55 and the mirror is in 56-63. In my case
-#       (Windows 8.1 image) this seems to be swapped. "mft starting cluster: 786432", "mft mirror starting cluster: 2"
-# Boot sector: Brian Carrier page 272
-########################################################################################################################
-
-
-import sys
 import struct
 from binascii import hexlify
-from ntfs_parse import reverse, reverse_hexlify
+from libs.ParseNTFS import reverse, reverse_hexlify
 
 
 class BootSector():
