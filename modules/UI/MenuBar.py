@@ -51,6 +51,7 @@ class MenuBar(QMenuBar):
         helpMenu.addAction(shortcutAction)
 
     def showNTFSLogFileDialog(self):
+        from modules.UI.NTFSLogFileDialog import NTFSLogFileDialog
         self.ntfsDialog = NTFSLogFileDialog(self)
         self.ntfsDialog.completeBtn.clicked.connect(self.showNTFSViewer)
 
