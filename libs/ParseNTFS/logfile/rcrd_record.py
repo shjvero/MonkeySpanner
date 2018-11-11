@@ -336,7 +336,7 @@ class LSNRecordHeader:
     CLIENT_INDEX           = ('client index', 30, 31)
     RECORD_TYPE            = ('record type', 32, 35)
     TRANSACTION_ID         = ('transaction ID', 36, 39)
-    FLAG                   = ('flag', 40,41 )
+    FLAG                   = ('flag', 40, 41)
     RESERVED               = ('reserved', 42, 47)
 
     def __init__(self, data, nr, page_nr):

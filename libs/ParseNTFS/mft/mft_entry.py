@@ -234,16 +234,12 @@ class MFTEntry():
                     datetime.datetime.strftime(attr.mft_modification_time_datetime, "%Y-%m-%d %H:%M:%S.%f"),
                     datetime.datetime.strftime(attr.file_access_time_datetime, "%Y-%m-%d %H:%M:%S.%f"),
                     ])
-        usnList = None
-        if AttributeTypeEnum.STANDARD_INFORMATION in self.attributes.keys():
-            usnList = self.attributes[AttributeTypeEnum.STANDARD_INFORMATION][0].usn
         return [
-            self.inum,
-            self.sequence_value,
-            self.is_base_entry,
-            self.is_in_use,
-            usnList,
-            self.lsn,
+            str(self.inum),
+            str(self.sequence_value),
+            str(self.is_base_entry),
+            str(self.is_in_use),
+            str(self.lsn),
             fileNameAttrList,
         ]
 

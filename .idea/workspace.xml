@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="23378966-e248-43e1-9817-746140378983" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/modules/UI/MenuBar.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/MenuBar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/ParseNTFS/logfile/rcrd_record.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseNTFS/logfile/rcrd_record.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/ParseNTFS/mft/mft.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseNTFS/mft/mft.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/ParseNTFS/mft/mft_entry.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseNTFS/mft/mft_entry.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/NTFSViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSViewer.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,9 +19,10 @@
     <session id="-1788526241">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="56" />
+          <entry key="project.closed" value="58" />
           <entry key="project.open.time.11" value="2" />
           <entry key="project.open.time.12" value="1" />
+          <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.15" value="1" />
           <entry key="project.open.time.17" value="1" />
@@ -27,10 +32,10 @@
           <entry key="project.open.time.40" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.6" value="10" />
-          <entry key="project.open.time.7" value="16" />
+          <entry key="project.open.time.7" value="17" />
           <entry key="project.open.time.8" value="14" />
           <entry key="project.open.time.9" value="6" />
-          <entry key="project.opened" value="57" />
+          <entry key="project.opened" value="59" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -38,7 +43,7 @@
           <entry key="gif" value="7" />
           <entry key="jpg" value="3" />
           <entry key="png" value="1" />
-          <entry key="py" value="281" />
+          <entry key="py" value="292" />
           <entry key="txt" value="23" />
         </counts>
       </usages-collector>
@@ -46,20 +51,20 @@
         <counts>
           <entry key="Image" value="11" />
           <entry key="PLAIN_TEXT" value="23" />
-          <entry key="Python" value="281" />
+          <entry key="Python" value="292" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="2073" />
+          <entry key="Python Console" value="2186" />
           <entry key="dummy" value="37" />
-          <entry key="py" value="109915" />
+          <entry key="py" value="116235" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="37" />
-          <entry key="Python" value="111988" />
+          <entry key="Python" value="118421" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -85,8 +90,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="181">
-              <caret line="114" column="27" lean-forward="true" selection-start-line="114" selection-start-column="27" selection-end-line="114" selection-end-column="27" />
+            <state relative-caret-position="419">
+              <caret line="114" column="27" selection-start-line="114" selection-start-column="27" selection-end-line="114" selection-end-column="27" />
               <folding>
                 <element signature="e#0#52#0" expanded="true" />
               </folding>
@@ -94,36 +99,36 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/UI/NTFSViewer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="241" column="57" lean-forward="true" selection-start-line="241" selection-start-column="57" selection-end-line="241" selection-end-column="57" />
+            <state relative-caret-position="-472">
+              <caret line="263" selection-start-line="263" selection-end-line="263" />
               <folding>
                 <element signature="e#0#27#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="164">
-              <caret line="20" column="38" lean-forward="true" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
-              <folding>
-                <element signature="e#0#27#0" expanded="true" />
-                <marker date="1541912540674" expanded="true" signature="165:170" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/IE/Prototype.py">
+        <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/mft/attributes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="334">
-              <caret line="96" column="57" selection-start-line="96" selection-start-column="57" selection-end-line="96" selection-end-column="57" />
+            <state relative-caret-position="171">
+              <caret line="547" column="42" selection-start-line="547" selection-start-column="17" selection-end-line="547" selection-end-column="42" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-2206">
+              <caret line="27" column="42" selection-start-line="27" selection-start-column="42" selection-end-line="27" selection-end-column="42" />
+              <folding>
+                <element signature="e#0#27#0" expanded="true" />
+                <marker date="1541958027449" expanded="true" signature="190:195" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -131,8 +136,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="100" selection-start-line="100" selection-end-line="101" />
+            <state relative-caret-position="231">
+              <caret line="103" column="8" selection-start-line="103" selection-start-column="8" selection-end-line="104" selection-end-column="55" />
             </state>
           </provider>
         </entry>
@@ -148,25 +153,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>timeline[0]</find>
-      <find>g_prefetchList</find>
-      <find>print(&quot;Import</find>
-      <find>Information</find>
-      <find>Warning</find>
-      <find>loading</find>
-      <find>contents</find>
-      <find>StatusBar</find>
-      <find>Align</find>
-      <find>Alig</find>
-      <find>Qt</find>
-      <find>import csv</find>
-      <find>DestList</find>
-      <find>linkFileHeader</find>
-      <find>destListHeader</find>
-      <find>tableWidth</find>
-      <find>listViewWidth</find>
-      <find>listViewHeight</find>
-      <find>label2</find>
       <find>DestFileLabel</find>
       <find>getAppCompatCache</find>
       <find>path</find>
@@ -178,6 +164,25 @@
       <find>usn_jrnl</find>
       <find>showDetail</find>
       <find>exe</find>
+      <find>table3</find>
+      <find>label3</find>
+      <find>formatted_csv</find>
+      <find>row</find>
+      <find>setAlign</find>
+      <find>includedRow</find>
+      <find>usn_row</find>
+      <find>self.allCh</find>
+      <find>setitem</find>
+      <find>setTextAlignment</find>
+      <find>setEdit</find>
+      <find>self.item</find>
+      <find>enterP</find>
+      <find>search</find>
+      <find>def sear</find>
+      <find>modifiyChkBox</find>
+      <find>exportUsnBtn</find>
+      <find>export</find>
+      <find>def export</find>
     </findStrings>
     <replaceStrings>
       <replace>'</replace>
@@ -193,6 +198,12 @@
       <replace>DestFileLabel</replace>
       <replace>DestListLabel</replace>
       <replace>optionsLayout</replace>
+      <replace>table4</replace>
+      <replace>label4</replace>
+      <replace>usn_row</replace>
+      <replace>setItem</replace>
+      <replace>extendChkBox</replace>
+      <replace>exportUSNBtn</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -201,7 +212,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/SubWindow.py" />
         <option value="$PROJECT_DIR$/MenuBar.py" />
         <option value="$PROJECT_DIR$/StatusBar.py" />
         <option value="$PROJECT_DIR$/modules/UI/Search.py" />
@@ -240,18 +250,19 @@
         <option value="$PROJECT_DIR$/modules/UI/LoadingScreen.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/attribute_headers.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/attributes.py" />
-        <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/mft_entry.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/boot_sector/boot_sector.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/logfile/rstr_record.py" />
-        <option value="$PROJECT_DIR$/libs/ParseNTFS/logfile/rcrd_record.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/usn_jrnl/usn_jrnl.py" />
         <option value="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" />
         <option value="$PROJECT_DIR$/modules/Prototype.py" />
         <option value="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSLogFileDialog.py" />
         <option value="$PROJECT_DIR$/modules/UI/MenuBar.py" />
-        <option value="$PROJECT_DIR$/modules/UI/NTFSViewer.py" />
+        <option value="$PROJECT_DIR$/libs/ParseNTFS/logfile/rcrd_record.py" />
+        <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/mft.py" />
+        <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/mft_entry.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" />
+        <option value="$PROJECT_DIR$/modules/UI/NTFSViewer.py" />
       </list>
     </option>
   </component>
@@ -274,6 +285,38 @@
             <path>
               <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
               <item name="Parser" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Parser" type="462c0819:PsiDirectoryNode" />
+              <item name="libs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Parser" type="462c0819:PsiDirectoryNode" />
+              <item name="libs" type="462c0819:PsiDirectoryNode" />
+              <item name="ParseNTFS" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Parser" type="462c0819:PsiDirectoryNode" />
+              <item name="libs" type="462c0819:PsiDirectoryNode" />
+              <item name="ParseNTFS" type="462c0819:PsiDirectoryNode" />
+              <item name="logfile" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Parser" type="462c0819:PsiDirectoryNode" />
+              <item name="libs" type="462c0819:PsiDirectoryNode" />
+              <item name="ParseNTFS" type="462c0819:PsiDirectoryNode" />
+              <item name="mft" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Parser" type="462c0819:PsiDirectoryNode" />
+              <item name="libs" type="462c0819:PsiDirectoryNode" />
+              <item name="ParseNTFS" type="462c0819:PsiDirectoryNode" />
+              <item name="usn_jrnl" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
@@ -326,7 +369,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.NTFSDetailViewer">
+  <component name="RunManager" selected="Python.NTFSViewer">
     <configuration name="JumpListViewer" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Parser" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -441,9 +484,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.NTFSViewer" />
         <item itemvalue="Python.NTFSDetailViewer" />
         <item itemvalue="Python.MainWindow" />
-        <item itemvalue="Python.NTFSViewer" />
         <item itemvalue="Python.JumpListViewer" />
         <item itemvalue="Python.main" />
       </list>
@@ -474,7 +517,7 @@
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="1320" height="784" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4983165" visible="true" weight="0.23015873" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4983165" visible="true" weight="0.23809524" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5016835" side_tool="true" weight="0.19689542" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.32973805" />
@@ -482,7 +525,7 @@
       <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.50079364" side_tool="true" weight="0.30508474" />
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" weight="0.36517718" />
-      <window_info anchor="bottom" id="Run" order="5" weight="0.31895223" />
+      <window_info anchor="bottom" id="Run" order="5" weight="0.19414485" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32973805" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.3990755" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
@@ -526,8 +569,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/img/loading2.gif" />
-    <entry file="file://$PROJECT_DIR$/repo/target.txt" />
     <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/1076628052/time.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="186">
@@ -664,9 +705,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1577">
           <caret line="85" column="18" selection-start-line="85" selection-start-column="18" selection-end-line="85" selection-end-column="18" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -674,20 +712,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="57">
           <caret line="3" column="19" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/mft/attributes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/mft/mft_entry.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="3" column="27" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="27" />
         </state>
       </provider>
     </entry>
@@ -705,20 +729,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/logfile/rcrd_record.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="157">
-          <caret line="15" column="46" lean-forward="true" selection-start-line="15" selection-start-column="46" selection-end-line="15" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/usn_jrnl/usn_jrnl.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
           <caret line="5" selection-start-line="5" selection-end-line="5" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -736,16 +750,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MainWindow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2850">
-          <caret line="158" selection-start-line="158" selection-end-line="159" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/Prototype.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="263">
@@ -753,30 +757,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/IE/Prototype.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="96" column="57" selection-start-line="96" selection-start-column="57" selection-end-line="96" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="114" column="27" lean-forward="true" selection-start-line="114" selection-start-column="27" selection-end-line="114" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#52#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/NTFSLogFileDialog.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1472">
           <caret line="2" column="119" lean-forward="true" selection-start-line="2" selection-start-column="119" selection-end-line="2" selection-end-column="119" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -787,30 +771,101 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/NTFSViewer.py">
+    <entry file="file://$PROJECT_DIR$/MainWindow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="241" column="57" lean-forward="true" selection-start-line="241" selection-start-column="57" selection-end-line="241" selection-end-column="57" />
+        <state relative-caret-position="2850">
+          <caret line="158" selection-start-line="158" selection-end-line="159" />
           <folding>
-            <element signature="e#0#27#0" expanded="true" />
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/IE/Prototype.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="111" lean-forward="true" selection-start-line="111" selection-end-line="111" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/mft/mft.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="50" column="90" lean-forward="true" selection-start-line="50" selection-start-column="90" selection-end-line="50" selection-end-column="90" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/logfile/rcrd_record.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-672">
+          <caret line="338" column="42" selection-start-line="338" selection-start-column="42" selection-end-line="338" selection-end-column="42" />
+          <folding>
+            <element signature="e#671#685#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/logfile/logfile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="15" column="25" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="419">
+          <caret line="114" column="27" selection-start-line="114" selection-start-column="27" selection-end-line="114" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#52#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="103" column="8" selection-start-line="103" selection-start-column="8" selection-end-line="104" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/mft/mft_entry.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="239" column="36" lean-forward="true" selection-start-line="239" selection-start-column="36" selection-end-line="239" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/mft/attributes.py">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
-          <caret line="100" selection-start-line="100" selection-end-line="101" />
+          <caret line="547" column="42" selection-start-line="547" selection-start-column="17" selection-end-line="547" selection-end-column="42" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
-          <caret line="20" column="38" lean-forward="true" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
+        <state relative-caret-position="-2206">
+          <caret line="27" column="42" selection-start-line="27" selection-start-column="42" selection-end-line="27" selection-end-column="42" />
           <folding>
             <element signature="e#0#27#0" expanded="true" />
-            <marker date="1541912540674" expanded="true" signature="165:170" ph="..." />
+            <marker date="1541958027449" expanded="true" signature="190:195" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/NTFSViewer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-472">
+          <caret line="263" selection-start-line="263" selection-end-line="263" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
           </folding>
         </state>
       </provider>

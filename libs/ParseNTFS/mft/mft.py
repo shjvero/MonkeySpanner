@@ -49,7 +49,6 @@ class MFT():
         if AttributeTypeEnum.FILE_NAME in MFT_ENTRY.attributes.keys():
             Attr_FileName = MFT_ENTRY.attributes[AttributeTypeEnum.FILE_NAME][0]
             parent_mft_entry_num = Attr_FileName.parent_directory_file_reference_mft_entry
-            parent_mft_seq_num = Attr_FileName.parent_directory_file_reference_sequence_number
             if parent_mft_entry_num == entry_num:
                 return Attr_FileName.name
             return self.getFullPath(parent_mft_entry_num) + "\\" + Attr_FileName.name
