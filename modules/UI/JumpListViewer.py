@@ -18,9 +18,6 @@ class JumpListViewer(QWidget):
 
     def initUI(self):
         self.setWindowTitle("JumpList")
-        windowIcon = QIcon()
-        windowIcon.addPixmap(QPixmap(':../../img/logo.png'), QIcon.Normal, QIcon.Off)
-        self.setWindowIcon(windowIcon)
         self.setMinimumSize(self.w, self.h)
 
         # Layout

@@ -3,6 +3,14 @@ from PyQt5.Qt import *
 import modules.IE.Prototype as PrototypeForIE
 
 class PrototypeTable(QTableWidget):
+    PREFETCH_KEYWORD = "Preferch"
+    EVENTLOG_KEYWORD = "EventLog"
+    HISTORY_KEYWORD = "History"
+    DOWNLOAD_KEYWORD = "Download"
+    CACHE_KEYWORD = "Cache"
+    REGISTRY_KEYWORD = "Registry"
+    WER_KEYWORD = "Report.wer"
+
     def __init__(self, parent, env):
         super().__init__()
         self.setParent(parent)
@@ -56,7 +64,7 @@ class PrototypeTable(QTableWidget):
         self.initUI()
 
     def initUI(self):
-        self.setContentsMargins(10, 0, 0, 10)
+        self.setContentsMargins(10, 0, 20, 0)
         self.setColumnCount(5)
         self.setHorizontalHeaderLabels(["", "", "", "", "", ""])
         self.setRowCount(len(self.prototype))
@@ -128,19 +136,19 @@ class PrototypeTable(QTableWidget):
             self.search("")
             return
         elif type == 1:
-            target = "Prefetch"
+            target = PrototypeTable.PREFETCH_KEYWORD
         elif type == 2:
-            target = "EventLog"
+            target = PrototypeTable.EVENTLOG_KEYWORD
         elif type == 3:
-            target = "Registry"
+            target = PrototypeTable.REGISTRY_KEYWORD
         elif type == 4:
-            target = "History"
+            target = PrototypeTable.HISTORY_KEYWORD
         elif type == 5:
-            target = "Cache"
+            target = PrototypeTable.CACHE_KEYWORD
         elif type == 6:
-            target = "Download"
+            target = PrototypeTable.DOWNLOAD_KEYWORD
         elif type == 7:
-            target = "Report.wer"
+            target = PrototypeTable.WER_KEYWORD
         if state == 1: # only hide
             for row in range(len(self.prototype)):
                 if self.prototype[row][0][0] == target:
@@ -163,12 +171,21 @@ class PrototypeTable(QTableWidget):
     def showDetail(self, row, column):
         viewerTitle = self.verticalHeaderItem(row).text()
         viewerContent = self.prototype[row][-1]
-        from modules.UI.TextViewer import TextViewer
-        # 프리패치 --> 표
-        # 이벤트로그 --> 텍스트
-        # 히스토리, 캐시, 다운로드 --> 표
-        self.viewer = TextViewer()
-        self.viewer.initUI(viewerTitle, viewerContent)
+        if viewerTitle == PrototypeTable.PREFETCH_KEYWORD:
+            from modules.UI.PrefetchDetailViewer import PrefetchDetailViewer
+            self.viewer = PrefetchDetailViewer()
+            self.viewer.initUI(viewerTitle, viewerContent)
+        elif viewerTitle in [PrototypeTable.EVENTLOG_KEYWORD, PrototypeTable.WER_KEYWORD, PrototypeTable.REGISTRY_KEYWORD]:
+            from modules.UI.TextViewer import TextViewer
+            self.viewer = TextViewer()
+            self.viewer.initUI(viewerTitle, viewerContent)
+        elif viewerTitle in [PrototypeTable.HISTORY_KEYWORD, PrototypeTable.CACHE_KEYWORD, PrototypeTable.DOWNLOAD_KEYWORD]:
+            # 히스토리, 캐시, 다운로드 --> 표
+            from modules.UI.TextViewer import TextViewer
+            self.viewer = TextViewer()
+            self.viewer.initUI(viewerTitle, viewerContent)
+            print()
+
 
     def contextMenuEvent(self, event):
         menu = QMenu(self)

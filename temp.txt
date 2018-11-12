@@ -1,3 +1,0 @@
-taskhostw.exe                 3820 Console                    1     17,724 K
-dllhost.exe                  11844 Console                    1      9,872 K
-dllhost.exe                  10736 Console                    1     20,384 K

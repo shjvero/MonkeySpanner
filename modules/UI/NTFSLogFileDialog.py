@@ -1,11 +1,14 @@
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal, QObject
 from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import QDialog, QBoxLayout, QGridLayout, QLabel, QLineEdit, QPushButton, QProgressBar, QFileDialog
 
+class NTFSLogFileDialog(QDialog, QObject):
+    complete = pyqtSignal()
 
-class NTFSLogFileDialog(QDialog):
-    def __init__(self, parent):
-        super().__init__(parent)
+    def __init__(self, parent=None):
+        QDialog.__init__(self, parent)
+        QObject.__init__(self)
+        # super().__init__()
         self.initUI()
 
     def initUI(self):
@@ -34,18 +37,20 @@ class NTFSLogFileDialog(QDialog):
 
         # Set up Button
         self.importMFTBtn = QPushButton("...", self)
-        self.importMFTBtn.clicked.connect(self.MFTBtnClicked)
+        self.importMFTBtn.clicked.connect(self.btnClicekd_byTest)
         self.importMFTBtn.setCursor(QCursor(Qt.PointingHandCursor))
+
         self.importUsnJrnlBtn = QPushButton("...", self)
-        self.importUsnJrnlBtn.clicked.connect(self.UsnJrnlBtnClicked)
+        self.importUsnJrnlBtn .clicked.connect(self.btnClicekd_byTest)
         self.importUsnJrnlBtn.setCursor(QCursor(Qt.PointingHandCursor))
+
         self.importLogFileBtn = QPushButton("...", self)
-        self.importLogFileBtn.clicked.connect(self.LogFileBtnClicked)
+        self.importLogFileBtn .clicked.connect(self.btnClicekd_byTest)
         self.importLogFileBtn.setCursor(QCursor(Qt.PointingHandCursor))
 
-        self.completeBtn = QPushButton("Submit", self)
+        self.submitBtn = QPushButton("Submit", self)
         # self.setFixedSize(200, 40)
-        self.completeBtn.setCursor(QCursor(Qt.PointingHandCursor))
+        self.submitBtn.setCursor(QCursor(Qt.PointingHandCursor))
 
         # Set up Progress Bar
         self.loadingBar = QProgressBar(self)
@@ -66,34 +71,29 @@ class NTFSLogFileDialog(QDialog):
         self.gridlayout.addWidget(self.logfileLabel, 2, 0)
         self.gridlayout.addWidget(self.logfilePathTextBox, 2, 1)
         self.gridlayout.addWidget(self.importLogFileBtn, 2, 2)
-        self.layout.addWidget(self.completeBtn, alignment=Qt.AlignHCenter)
+        self.layout.addWidget(self.submitBtn, alignment=Qt.AlignHCenter)
         self.layout.addWidget(self.loadingBar)
 
         self.setWindowModality(Qt.WindowModal)
         self.show()
 
-    def MFTBtnClicked(self):
-        self.btnClicked(1)
+    def keyPressEvent(self, e):
+        if e.key() == Qt.Key_Escape:
+            self.close()
 
-    def UsnJrnlBtnClicked(self):
-        self.btnClicked(2)
-
-    def LogFileBtnClicked(self):
-        self.btnClicked(3)
-
-    def btnClicked(self, type):
-        # options = QFileDialog.Options()
-        # options |= QFileDialog.DontUseNativeDialog
-        options = QFileDialog.DontUseNativeDialog
+    def btnClicekd_byTest(self):
+        sender = self.sender()
         fileName = QFileDialog.getOpenFileName(self)
-        # fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "",
-        #                                           "All Files (*)", options=options)
-        if type == 1:
+        if sender is self.importMFTBtn:
             self.mftPathTextBox.setText(fileName[0])
-        elif type == 2:
+        elif sender is self.importUsnJrnlBtn:
             self.usnjrnlPathTextBox.setText(fileName[0])
-        elif type == 3:
+        elif sender is self.importLogFileBtn:
             self.logfilePathTextBox.setText(fileName[0])
+
+    def ready(self):
+        self.loadingBar.show()
+        self.barThread.start()
 
     def resume(self):
         if self.barThread.cnt < 50:
@@ -102,4 +102,4 @@ class NTFSLogFileDialog(QDialog):
         self.barThread.toggle_status()
 
     def clear(self):
-        self.accept()
+        self.complete.emit()

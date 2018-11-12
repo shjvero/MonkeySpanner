@@ -35,7 +35,6 @@ class Main(QMainWindow):
     def checkEnv(self):
         import platform, ctypes
         if not ctypes.windll.shell32.IsUserAnAdmin():
-            # UAC 추가 할 것
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Warning)
             msg.setWindowTitle("Failed")

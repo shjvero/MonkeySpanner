@@ -25,39 +25,39 @@ def getPrototype(env, timeline=None):
     evtxLogFor7 = [
         {
             "System.evtx": {
-                'eid': ['206', '7036'], # eid : [ { EID:[rid1,rid2] }, { EID:[rid1, rid2] } ]
+                'eid': [206, 7036], # eid : [ { EID:[rid1,rid2] }, { EID:[rid1, rid2] } ]
                 'providerName': ['Service Control Manager'],
                 'recordID': {
-                    '206': ['930'],
-                    '7036': ['929']
+                    '206': [930],
+                    '7036': [929]
                 }
             },
         },
         {
             "Application.evtx": {
-                'eid': ['1000', '1001'],
+                'eid': [1000, 1001],
                 'providerName': ['Appllication Error'],
                 'recordID': {
-                    '1000':['240'],
-                    '1001':['241', '238', '239']
+                    '1000': [240],
+                    '1001': [241, 238, 239]
                 }
             }
         },
         {
             "Microsoft-Windows-WER-Diag%4Operational.evtx": {
-                'eid': ['2'],
+                'eid': [2],
                 'providerName': ['Microsoft-Windows-WER-Diag'],
                 'recordID': {
-                    '2':['2', '1'],
+                    '2': [1, 2],
                 }
             }
         },
         {
             "Microsoft-Windows-Fault-Tolerant-Heap%4Operational.evtx": {
-                'eid': ['1001'],
+                'eid': [1001],
                 'providerName': ['Microsoft-Windows-Fault-Tolerant-Heap'],
                 'recordID': {
-                    '1001': ['1']
+                    '1001': [1]
                 }
             }
         }
@@ -65,14 +65,21 @@ def getPrototype(env, timeline=None):
     evtxLogFor10 = [
         {
             "Application.evtx": {
-                'eid': ['1000'],
-                'providerName': ['Application Error']
+                'eid': [1000, 1001],
+                'providerName': ['Application Error'],
+                'recordID': {
+                    '1000': [240],
+                    '1001': [241, 238, 239]
+                }
             }
         },
         {
             "Microsoft-Windows-Fault-Tolerant-Heap%4Operational.evtx": {
-                'eid': ['1001'],
-                'providerName': ['Microsoft-Windows-Fault-Tolerant-Heap']
+                'eid': [1001],
+                'providerName': ['Microsoft-Windows-Fault-Tolerant-Heap'],
+                'recordID': {
+                    '1001': [1]
+                }
             }
         },
     ]

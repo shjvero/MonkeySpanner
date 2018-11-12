@@ -1,8 +1,10 @@
-from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QCursor, QColor
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import *
 from libs.ParseNTFS import MFT, LogFile, UsnJrnl, AttributeTypeEnum
 import datetime
+from threading import Thread
+
 
 class NTFSViewer(QWidget):
     ONLY_SHOW = 1
@@ -14,9 +16,10 @@ class NTFSViewer(QWidget):
     OVERWRITE_KEYWORD = "DATA_OVERWRITE"
 
     def __init__(self):
-        super().__init__()
-        self.w = self.width()
-        self.h = self.height()
+        QWidget.__init__(self)
+        from modules.UI.NTFSLogFileDialog import NTFSLogFileDialog
+        self.ntfsDialog = NTFSLogFileDialog(self)
+        self.ntfsDialog.submitBtn.clicked.connect(self.ready)
         self.btnNum = 0
         self.usnjrnlTableHeaderItems = ['Timestamp',
                                         'USN',
@@ -26,20 +29,55 @@ class NTFSViewer(QWidget):
                                         'File Attributes',
                                         'Source']
         self.logfileTableHeaderItems = ['LSN',
-                                        'Transaction Number',
+                                        'Transaction #',
                                         'MFT Modified Time',
-                                        'File Accessed Time',
                                         'File Name',
                                         'Full Path',
+                                        'File Accessed Time',
                                         'Redo Operation',
                                         'Undo Operation',
                                         'Cluster Index',
                                         'Target VCN']
-        self.initUI()
+
+    def ready(self):
+        _path = [
+            self.ntfsDialog.mftPathTextBox.text(),
+            self.ntfsDialog.usnjrnlPathTextBox.text(),
+            self.ntfsDialog.logfilePathTextBox.text()
+        ]
+        rst, msg = self.check(_path)
+        if rst:
+            self.initUI()
+            self.ntfsDialog.ready()
+            try:
+                t = Thread(target=self.load, args=())
+                t.start()
+            except Exception as e:
+                QMessageBox.critical(self, "Error", "{}".format(e), QMessageBox.Ok)
+                self.ntfsDialog.accept()
+                return
+            self.ntfsDialog.complete.connect(self.showViewer)
+        else:
+            QMessageBox.critical(self, "Error", msg, QMessageBox.Ok)
+            self.ntfsDialog.accept()
+
+    def showViewer(self):
+        self.ntfsDialog.accept()
+        self.showMaximized()
+
+    def check(self, path):
+        for p in path:
+            if not p:
+                return False, "Please import log file."
+        self.mft = MFT(image_name=path[0])
+        if not self.mft.mft.is_valid:
+            return False, "Not $MFT file"
+        self.usnjrnl = UsnJrnl(path[1])
+        self.logfile = LogFile(dump_dir="errorpages", file_name=path[2])
+        return True, None
 
     def initUI(self):
         self.setWindowTitle("File System Log")
-        self.setMinimumSize(800, self.h)
 
         # Layout
         self.windowLayout = QBoxLayout(QBoxLayout.TopToBottom, self)
@@ -116,48 +154,38 @@ class NTFSViewer(QWidget):
         self.windowLayout.addWidget(self.ntfsTabs)
         self.setLayout(self.windowLayout)
 
-    def check(self, path):
-        import os
-        dump_dir = os.getcwd() + "\\errorpages"
-        try:
-            self.mft = MFT(image_name=path[0])
-            self.usnjrnl = UsnJrnl(path[1])
-            self.logfile = LogFile(dump_dir=dump_dir, file_name=path[2])
-        except Exception as e:
-            return False, "{}".format(e)
-        return True, None
-
     def load(self):
-        from threading import Thread
         tArr = []
-        tArr.append(Thread(target=self.mft.parse_all, args=()))
-        tArr.append(Thread(target=self.usnjrnl.parse, args=()))
-        tArr.append(Thread(target=self.logfile.parse_all, args=()))
+        try:
+            tArr.append(Thread(target=self.mft.parse_all, args=()))
+            tArr.append(Thread(target=self.usnjrnl.parse, args=()))
+            tArr.append(Thread(target=self.logfile.parse_all, args=()))
 
-        for t in tArr:
-            t.start()
+            for t in tArr:
+                t.start()
+            for t in tArr:
+                t.join()
 
-        for t in tArr:
-            t.join()
+            self.logfile.connect_transactions()
 
-        self.logfile.connect_transactions()
+            self.usnjrnl_len = len(self.usnjrnl.records)
+            self.logfile_len = len(self.logfile.rcrd_records)
 
-        self.usnjrnl_len = len(self.usnjrnl.records)
-        self.logfile_len = len(self.logfile.rcrd_records)
-
-        tArr.clear()
-        tArr.append(Thread(target=self.load_usnjrnlTable, args=()))
-        tArr.append(Thread(target=self.load_logfileTable, args=()))
-        for t in tArr:
-            t.start()
-        for t in tArr:
-            t.join()
-
+            tArr.clear()
+            tArr.append(Thread(target=self.load_usnjrnlTable, args=()))
+            tArr.append(Thread(target=self.load_logfileTable, args=()))
+            for t in tArr:
+                t.start()
+            for t in tArr:
+                t.join()
+        except Exception as e:
+            raise Exception(e)
         print("MFT total entry: {}".format(len(self.mft.entries)))
         print("UsnJrnl total record: {}".format(self.usnjrnl_len))
         print("LogFile total record: {}".format(self.logfile_len))
         print("Transaction total: {}".format(len(self.logfile.transactions)))
-        self.show()
+        self.ntfsDialog.resume()
+
 
     def load_usnjrnlTable(self):
         usn_row = 0
@@ -216,13 +244,15 @@ class NTFSViewer(QWidget):
         self.usnjrnlTable.setColumnWidth(2, 200)
         self.usnjrnlTable.setColumnWidth(3, 400)
         self.usnjrnlTable.setColumnWidth(4, 180)
-        self.usnjrnlTable.setColumnWidth(5, 120)
+        self.usnjrnlTable.setColumnWidth(5, 100)
         self.usnjrnlTable.horizontalHeader().setStretchLastSection(True)
+
 
     def load_logfileTable(self):
         log_row = 0
         for rcrd in self.logfile.rcrd_records:
-            prev_redo, prev_undo = 0, 0
+            prev_redo = 0
+            prev_undo = 0
             for (lsn_hdr, lsn_data) in rcrd.lsn_entries:
                 self.logfileTable.insertRow(log_row)
                 self.logfileTable.setItem(log_row, 0, QTableWidgetItem(str(lsn_hdr.this_lsn)))
@@ -236,7 +266,7 @@ class NTFSViewer(QWidget):
                     self.logfileTable.setItem(log_row, 4, QTableWidgetItem(self.mft.getFullPath(self_entry.inum)))
                     # File Accessed Time
                     self.logfileTable.setItem(log_row, 5, QTableWidgetItem(datetime.datetime.strftime(attr.file_access_time_datetime, "%Y-%m-%d %H:%M:%S.%f")))
-                    self.logfileTable.item(log_row, 3).setTextAlignment(Qt.AlignCenter)
+                    self.logfileTable.item(log_row, 5).setTextAlignment(Qt.AlignCenter)
                 except Exception as e:
                     print(e)
                     self.logfileTable.setItem(log_row, 3, QTableWidgetItem(""))
@@ -254,26 +284,32 @@ class NTFSViewer(QWidget):
                 self.logfileTable.setItem(log_row, 7, QTableWidgetItem(lsn_data.deriv_undo_operation_type))
                 self.logfileTable.setItem(log_row, 8, QTableWidgetItem(str(lsn_data.mft_cluster_index)))
                 self.logfileTable.setItem(log_row, 9, QTableWidgetItem(str(lsn_data.target_vcn)))
+                self.logfileTable.item(log_row, 1).setTextAlignment(Qt.AlignCenter)
                 self.logfileTable.item(log_row, 8).setTextAlignment(Qt.AlignCenter)
                 self.logfileTable.item(log_row, 9).setTextAlignment(Qt.AlignCenter)
                 if lsn_data.redo_operation == 3 and lsn_data.undo_operation == 2:
                     if prev_redo == 15 and prev_undo == 14:
                         for i in range(self.logfileTable.columnCount()):
+                            self.logfileTable.item(log_row-1, i).setBackground(QColor(255, 0, 0, 30))
                             self.logfileTable.item(log_row, i).setBackground(QColor(255, 0, 0, 30))
-                prev_redo, prev_undo = lsn_data.redo_operation, lsn_data.undo_operation
+                prev_redo = lsn_data.redo_operation
+                prev_undo = lsn_data.undo_operation
                 log_row += 1
 
+        print("log_row: {}".format(log_row))
         self.logfileTable.resizeColumnsToContents()
-        self.logfileTable.setColumnWidth(2, 150)
-        self.logfileTable.setColumnWidth(3, 150)
-        self.logfileTable.setColumnWidth(4, 300)
-        self.logfileTable.setColumnWidth(5, 400)
+        self.logfileTable.setColumnWidth(2, 170)
+        self.logfileTable.setColumnWidth(3, 200)
+        self.logfileTable.setColumnWidth(4, 400)
+        self.logfileTable.setColumnWidth(5, 170)
         self.logfileTable.setColumnWidth(6, 200)
         self.logfileTable.setColumnWidth(7, 200)
+
 
     def enterPressed(self):
         keyword = self.search.text()
         self.Search(keyword, NTFSViewer.SIMPLE_SHOW)
+
 
     def Search(self, keyword, type=None):
         table = self.logfileTable if self.ntfsTabs.currentIndex() else self.usnjrnlTable
@@ -298,6 +334,7 @@ class NTFSViewer(QWidget):
                         table.hideRow(i)
                     elif table.isRowHidden(i):
                         table.showRow(i)
+
 
     def filtering(self, b):
         msg = b.text()
@@ -356,9 +393,11 @@ class NTFSViewer(QWidget):
                 else:
                     self.Search(NTFSViewer.OVERWRITE_KEYWORD, NTFSViewer.ONLY_HIDE)
 
+
     def showDetail(self, row, column):
         from modules.UI.NTFSDetailViewer import NTFSDetailViewer
-        self.viewer = NTFSDetailViewer(self.details[row])
+        print(self.details[row])
+        self.parent().ntfsDetailViewer = NTFSDetailViewer(self.details[row])
 
 
     def exportUSN(self):
@@ -376,24 +415,23 @@ class NTFSViewer(QWidget):
         self.logfile.export_csv(new_path)
         QMessageBox.question(self, "Help", "Success! - Export $LogFile as CSV", QMessageBox.Ok)
 
-    def carve(self):
-        print()
+    def contextMenuEvent(self, event):
+        import os
+        menu = QMenu(self)
+        copyAction = menu.addAction("Copy")
+        if not self.ntfsTabs.currentIndex():
+            carveAction = menu.addAction("Carve")
+        action = menu.exec_(self.mapToGlobal(event.pos()))
+        if action == copyAction:
+            table = self.logfileTable if self.ntfsTabs.currentIndex() else self.usnjrnlTable
+            selected = table.selectedItems()
+            if len(selected) == 1:
+                copiedStr = selected[0].text()
+            else:
+                copiedStr = " ".join(currentQTableWidgetItem.text() for currentQTableWidgetItem in selected)
+            os.system("echo {} | clip".format(copiedStr))
+        elif action == carveAction:
+            self.carve()
 
-if __name__ == '__main__':
-    import sys
-    import qdarkstyle
-    app = QApplication(sys.argv)
-    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
-    w = NTFSViewer()
-    dir_path = "C:\\Users\\asdzx\\Desktop\\ntfs_parse\\sample\\"
-    _path = [
-        dir_path + "MFT",
-        dir_path + "usnjrnl",
-        dir_path + "LogFile",
-    ]
-    rst, msg = w.check(_path)
-    if rst:
-        w.load()
-        # w.resume()
-        w.show()
-    sys.exit(app.exec_())
+    def carve(self):
+        print("carve")

@@ -1,11 +1,13 @@
 __all__ = [
     'JumpListViewer',
+    'LoadingScreen',
     'MenuBar',
-    'MsgDialog.py',
+    'NTFSDetailViewer',
+    'NTFSLogFileDialog',
     'NTFSViewer',
+    'PrefetchDetailViewer',
     'PrototpyeTable',
-    'SelectionViewer',
-    'StatusBar',
     'TextViewer',
-    'TimelineSetDialog'
+    'TimelineSetDialog',
+    'WebArtifactDetailViewer'
 ]

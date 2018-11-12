@@ -1,14 +1,14 @@
 from modules.UI.JumpListViewer import JumpListViewer
-from modules.UI.NTFSViewer import *
+from PyQt5.QtWidgets import *
 
 class MenuBar(QMenuBar):
     def __init__(self, parent=None):
-        super(MenuBar, self).__init__(parent)
+        QMenuBar.__init__(self, parent)
         # 메뉴 생성
         fileMenu = self.addMenu("File")  # 메뉴그룹 생성
 
         NTFSMenu = QAction("Import NTFS Log", self)
-        NTFSMenu.triggered.connect(self.showNTFSLogFileDialog)
+        NTFSMenu.triggered.connect(self.showNTFSViewer)
         fileMenu.addAction(NTFSMenu)
 
         jumplistMenu = QAction("Import JumpList", self)
@@ -50,28 +50,9 @@ class MenuBar(QMenuBar):
         helpMenu.addAction(envAction)
         helpMenu.addAction(shortcutAction)
 
-    def showNTFSLogFileDialog(self):
-        from modules.UI.NTFSLogFileDialog import NTFSLogFileDialog
-        self.ntfsDialog = NTFSLogFileDialog(self)
-        self.ntfsDialog.completeBtn.clicked.connect(self.showNTFSViewer)
-
     def showNTFSViewer(self):
-        self.ntfsDialog.loadingBar.show()
-        self.ntfsDialog.barThread.start()
-        _path = [
-            self.ntfsDialog.mftPathTextBox.text(),
-            self.ntfsDialog.usnjrnlPathTextBox.text(),
-            self.ntfsDialog.logfilePathTextBox.text()
-        ]
-        self.ntfsViewer = NTFSViewer()
-        rst, msg = self.ntfsViewer.check(_path)
-        if rst:
-            self.ntfsViewer.load()
-            self.ntfsDialog.resume()
-            self.ntfsViewer.show()
-        else:
-            QMessageBox.warning(self, "Warning", msg, QMessageBox.Ok)
-            self.ntfsDialog.accept()
+        from modules.UI.NTFSViewer import NTFSViewer
+        self.parent().ntfsViewer = NTFSViewer()
 
     def showJumpListViewer(self):
         from modules.Prototype import getJumplistItems
@@ -115,8 +96,8 @@ class MenuBar(QMenuBar):
                 msg += "\n"
             QMessageBox.question(self, "Help", msg, QMessageBox.Ok)
             return
-        self.jumplistViewer = JumpListViewer(content)
-        self.jumplistViewer.show()
+        self.parent().jumplistViewer = JumpListViewer(content)
+        self.parent().jumplistViewer.show()
 
     def importRegistry(self):
         QMessageBox.question(self, "Help", "Preparing...", QMessageBox.Ok)

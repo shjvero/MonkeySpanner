@@ -29,9 +29,7 @@ class NTFSDetailViewer(QWidget):
         self.table1.verticalHeader().setVisible(False)
         self.table1.verticalHeader().setDefaultSectionSize(25)
         self.table1.verticalHeader().setMaximumSectionSize(25)
-        self.table1.verticalHeader().setStretchLastSection(True)
         self.table1.horizontalHeader().setVisible(False)
-        self.table1.horizontalHeader().setStretchLastSection(True)
         self.table1.setRowCount(5)
         self.table1.setColumnCount(2)
         self.table1.setItem(0, 0, QTableWidgetItem("MFT Entry Number  "))
@@ -42,9 +40,11 @@ class NTFSDetailViewer(QWidget):
         for i in range(len(contents[0])-1):
             self.table1.setItem(i, 1, QTableWidgetItem(contents[0][i]))
         self.table1.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        # self.table1.resizeColumnsToContents()
+        self.table1.resizeColumnsToContents()
         for c in range(self.table1.columnCount()):
             self.table1.setColumnWidth(c, 180)
+        self.table1.verticalHeader().setStretchLastSection(True)
+        self.table1.horizontalHeader().setStretchLastSection(True)
 
         self.table2 = QTableWidget(self)
         self.table2.setMinimumWidth(280)
@@ -52,9 +52,7 @@ class NTFSDetailViewer(QWidget):
         self.table2.verticalHeader().setVisible(False)
         self.table2.verticalHeader().setDefaultSectionSize(25)
         self.table2.verticalHeader().setMaximumSectionSize(25)
-        self.table2.verticalHeader().setStretchLastSection(True)
         self.table2.horizontalHeader().setVisible(False)
-        self.table2.horizontalHeader().setStretchLastSection(True)
         self.table2.setRowCount(5)
         self.table2.setColumnCount(2)
         self.table2.setItem(0, 0, QTableWidgetItem("USN"))
@@ -66,7 +64,9 @@ class NTFSDetailViewer(QWidget):
             self.table2.setItem(i, 1, QTableWidgetItem(contents[1][i]))
         self.table2.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table2.resizeColumnsToContents()
-        
+        self.table2.verticalHeader().setStretchLastSection(True)
+        self.table2.horizontalHeader().setStretchLastSection(True)
+
         if contents[0][-1]:
             attributes = contents[0][-1]
             self.table3 = QTableWidget(self)
@@ -74,8 +74,6 @@ class NTFSDetailViewer(QWidget):
             self.table3.verticalHeader().setVisible(False)
             self.table3.verticalHeader().setDefaultSectionSize(28)
             self.table3.verticalHeader().setMaximumSectionSize(28)
-            self.table3.verticalHeader().setStretchLastSection(True)
-            self.table3.horizontalHeader().setStretchLastSection(True)
             self.table3.setRowCount(len(contents[0][-1]))
             self.table3.setColumnCount(5)
             self.table3.setHorizontalHeaderLabels([
@@ -95,6 +93,8 @@ class NTFSDetailViewer(QWidget):
                     self.table3.item(row, c).setTextAlignment(Qt.AlignCenter)
             self.table3.setEditTriggers(QAbstractItemView.NoEditTriggers)
             self.table3.resizeColumnsToContents()
+            self.table3.verticalHeader().setStretchLastSection(True)
+            self.table3.horizontalHeader().setStretchLastSection(True)
         else:
             self.table3 = QLabel("None")
             self.table3.setFixedHeight(40)
@@ -107,7 +107,6 @@ class NTFSDetailViewer(QWidget):
             self.table4.verticalHeader().setVisible(False)
             self.table4.verticalHeader().setDefaultSectionSize(25)
             self.table4.verticalHeader().setMaximumSectionSize(25)
-            self.table4.horizontalHeader().setStretchLastSection(True)
             self.table4.setRowCount(len(contents[2][1]))
             self.table4.setColumnCount(3)
             self.table4.setHorizontalHeaderLabels(["LSN", "Redo Operation", "Undo Operation"])
@@ -128,6 +127,7 @@ class NTFSDetailViewer(QWidget):
             self.table4.setFixedHeight(60)
             self.table4.setFixedWidth(self.width())
             self.table4.setAlignment(Qt.AlignCenter)
+            self.table4.horizontalHeader().setStretchLastSection(True)
 
         self.layout.addRow(self.label1, self.label2)
         self.layout.addRow(self.table1, self.table2)
@@ -137,26 +137,3 @@ class NTFSDetailViewer(QWidget):
         self.layout.addRow(self.table4)
 
         self.show()
-
-if __name__ == '__main__':
-    data = [
-        ["123", "456", "789", "10123", "123124",
-             [
-                 ["ASDFAS", "2018-07-01 11:12:33.23423", "2018-07-01 11:12:33.23423", "2018-07-01 11:12:33.23423","2018-07-01 11:12:33.23423"],
-                 ["ASDFAS", "2018-07-01 11:12:33.23423", "2018-07-01 11:12:33.23423", "2018-07-01 11:12:33.23423","2018-07-01 11:12:33.23423"],
-                 ["ASDFAS", "2018-07-01 11:12:33.23423", "2018-07-01 11:12:33.23423", "2018-07-01 11:12:33.23423","2018-07-01 11:12:33.23423"],
-             ]
-         ],
-        ["123", "456", "789", "10123", "123124"],
-        [39,
-             [
-                 (1233, "ASDFAS", "ASDFASD"),
-                 (1233, "ASDFAS", "ASDFASD"),
-                 (1233, "ASDFAS", "ASDFASD")
-             ]
-        ],
-    ]
-    import sys
-    app = QApplication(sys.argv)
-    w = NTFSDetailViewer(data)
-    sys.exit(app.exec_())
