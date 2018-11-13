@@ -5,41 +5,40 @@ from PyQt5.QtWidgets import *
 class PrefetchDetailViewer(QWidget):
     def __init__(self):
         QWidget.__init__(self)
-        self.initUI("Prefetch", "contents")
 
     def initUI(self, viewerTitle, viewerContent):
         '''
         viewerContent = [
             [0] => FileName
-            [1] => (Exec name, Run Cnt)
-            [2] => (MFT seq #, MFT entry #)
-            [3] => [vol name, create date, serial num]
-            [4] => [ executed time list ]
+            [1] => [Exec name, Run Cnt]
+            [2] => [MFT seq #, MFT entry #]
+            [3] => [ executed time list ]
+            [4] => [vol name, create date, serial num]
             [5] => [ directory strings list ]
-            [6] => [ dll loading? ]
+            [6] => [ Resources loaded ]
         ]
         '''
         self.content = viewerContent
         self.setWindowTitle(viewerTitle)
         self.setMinimumHeight(self.height() + 100)
-        # self.resize(self.sizeHint())
 
         self.layout = QFormLayout(self)
 
         # File Name
-        self.fnameLabel = QLabel("File Name", self)
+        self.fnameLabel = QLabel(viewerContent[0], self)
         self.fnameLabel.setFixedHeight(40)
         self.fnameLabel.setAlignment(Qt.AlignCenter)
 
         # Prefetch Information
         self.pfInfoTable = QTableWidget(self)
-        self.pfInfoTable.setFixedSize(350, 65)
+        self.pfInfoTable.setMinimumSize(350, 65)
+        self.pfInfoTable.setMaximumSize(self.width(), 65)
         self.pfInfoTable.setRowCount(2)
         self.pfInfoTable.setColumnCount(2)
         self.pfInfoTable.setItem(0, 0, QTableWidgetItem("Executable Name  "))
         self.pfInfoTable.setItem(1, 0, QTableWidgetItem("Run Count"))
-        self.pfInfoTable.setItem(0, 1, QTableWidgetItem("<<<<Executable Name>>>>"))
-        self.pfInfoTable.setItem(1, 1, QTableWidgetItem("<<<<Run Count>>>>"))
+        self.pfInfoTable.setItem(0, 1, QTableWidgetItem(viewerContent[1][0]))
+        self.pfInfoTable.setItem(1, 1, QTableWidgetItem(viewerContent[1][1]))
         self.pfInfoTable.verticalHeader().setVisible(False)
         self.pfInfoTable.horizontalHeader().setVisible(False)
         self.pfInfoTable.resizeColumnsToContents()
@@ -48,13 +47,14 @@ class PrefetchDetailViewer(QWidget):
 
         # MFT Information
         self.mftInfoTable = QTableWidget(self)
-        self.mftInfoTable.setFixedSize(350, 65)
+        self.mftInfoTable.setMinimumSize(350, 65)
+        self.mftInfoTable.setMaximumSize(self.width(), 65)
         self.mftInfoTable.setRowCount(2)
         self.mftInfoTable.setColumnCount(2)
         self.mftInfoTable.setItem(0, 0, QTableWidgetItem("MFT Sequence Number  "))
         self.mftInfoTable.setItem(1, 0, QTableWidgetItem("MFT Entry Number"))
-        self.mftInfoTable.setItem(0, 1, QTableWidgetItem("<<<<Seq num>>>>"))
-        self.mftInfoTable.setItem(1, 1, QTableWidgetItem("<<<<Entry num>>"))
+        self.mftInfoTable.setItem(0, 1, QTableWidgetItem(viewerContent[2][0]))
+        self.mftInfoTable.setItem(1, 1, QTableWidgetItem(viewerContent[2][1]))
         self.mftInfoTable.verticalHeader().setVisible(False)
         self.mftInfoTable.horizontalHeader().setVisible(False)
         self.mftInfoTable.resizeColumnsToContents()
@@ -68,8 +68,8 @@ class PrefetchDetailViewer(QWidget):
         self.timeList = QListView(self)
         self.timeList.setFixedHeight(120)
         self.timeListModel = QStandardItemModel()
-        for i in range(6):
-            item = QStandardItem("2018-08-09 11:12:32.389248")
+        for i in range(len(viewerContent[3])):
+            item = QStandardItem(viewerContent[3][i])
             item.setTextAlignment(Qt.AlignCenter)
             self.timeListModel.appendRow(item)
         self.timeList.setModel(self.timeListModel)
@@ -84,11 +84,11 @@ class PrefetchDetailViewer(QWidget):
         self.volTable.setRowCount(3)
         self.volTable.setColumnCount(2)
         self.volTable.setItem(0, 0, QTableWidgetItem("Volumn Name  "))
-        self.volTable.setItem(0, 1, QTableWidgetItem("<<<<<<<<<Volumn Name>>>>>>>>>"))
+        self.volTable.setItem(0, 1, QTableWidgetItem(viewerContent[4][0]))
         self.volTable.setItem(1, 0, QTableWidgetItem("Creation Date  "))
-        self.volTable.setItem(1, 1, QTableWidgetItem("<<<<<Creation Date>>>>"))
+        self.volTable.setItem(1, 1, QTableWidgetItem(viewerContent[4][1]))
         self.volTable.setItem(2, 0, QTableWidgetItem("Serial Number  "))
-        self.volTable.setItem(2, 1, QTableWidgetItem("<<<<<Serial Number>>>>"))
+        self.volTable.setItem(2, 1, QTableWidgetItem(viewerContent[4][2]))
         self.volTable.verticalHeader().setVisible(False)
         self.volTable.horizontalHeader().setVisible(False)
         self.volTable.setColumnWidth(0, 150)
@@ -101,23 +101,22 @@ class PrefetchDetailViewer(QWidget):
         self.dirStrLabel.setAlignment(Qt.AlignBottom)
 
         self.dirStrList = QListView()
-        self.dirStrListModel = QStandardItemModel()
         self.dirStrList.setMinimumWidth(self.width())
-        for i in range(12):
-            self.dirStrListModel.appendRow(QStandardItem("DLL"*60))
+        self.dirStrListModel = QStandardItemModel()
+        for i in range(len(viewerContent[5])):
+            self.dirStrListModel.appendRow(QStandardItem(viewerContent[5][i]))
         self.dirStrList.setModel(self.dirStrListModel)
 
-        # TEST
-        self.dirStrLabel2 = QLabel("Directory Strings", self)
-        self.dirStrLabel2.setFixedHeight(30)
-        self.dirStrLabel2.setAlignment(Qt.AlignBottom)
+        self.rscLoadedLabel = QLabel("Resources Loaded", self)
+        self.rscLoadedLabel.setFixedHeight(30)
+        self.rscLoadedLabel.setAlignment(Qt.AlignBottom)
 
-        self.dirStrList2 = QListView()
-        self.dirStrListModel2 = QStandardItemModel()
-        self.dirStrList2.setMinimumWidth(self.width())
-        for i in range(12):
-            self.dirStrListModel2.appendRow(QStandardItem("DLL" * 60))
-        self.dirStrList2.setModel(self.dirStrListModel2)
+        self.rscLoadedList = QListView()
+        self.rscLoadedListModel = QStandardItemModel()
+        self.rscLoadedList.setMinimumWidth(self.width())
+        for i in range(len(viewerContent[6])):
+            self.rscLoadedListModel.appendRow(QStandardItem(viewerContent[6][i]))
+        self.rscLoadedList.setModel(self.rscLoadedListModel)
 
         # Resource DLL loading
         self.childLayout1 = QBoxLayout(QBoxLayout.TopToBottom)
@@ -136,8 +135,8 @@ class PrefetchDetailViewer(QWidget):
         self.layout.addRow(self.volTable)
         self.layout.addRow(self.dirStrLabel)
         self.layout.addRow(self.dirStrList)
-        self.layout.addRow(self.dirStrLabel2)
-        self.layout.addRow(self.dirStrList2)
+        self.layout.addRow(self.rscLoadedLabel)
+        self.layout.addRow(self.rscLoadedList)
         self.show()
 
     def contextMenuEvent(self, event):

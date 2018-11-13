@@ -3,7 +3,7 @@ from PyQt5.Qt import *
 import modules.IE.Prototype as PrototypeForIE
 
 class PrototypeTable(QTableWidget):
-    PREFETCH_KEYWORD = "Preferch"
+    PREFETCH_KEYWORD = "Prefetch"
     EVENTLOG_KEYWORD = "EventLog"
     HISTORY_KEYWORD = "History"
     DOWNLOAD_KEYWORD = "Download"
@@ -146,9 +146,10 @@ class PrototypeTable(QTableWidget):
         elif type == 5:
             target = PrototypeTable.CACHE_KEYWORD
         elif type == 6:
-            target = PrototypeTable.DOWNLOAD_KEYWORD
-        elif type == 7:
+            # target = PrototypeTable.DOWNLOAD_KEYWORD
             target = PrototypeTable.WER_KEYWORD
+        # elif type == 7:
+        #     target = PrototypeTable.WER_KEYWORD
         if state == 1: # only hide
             for row in range(len(self.prototype)):
                 if self.prototype[row][0][0] == target:
@@ -173,19 +174,16 @@ class PrototypeTable(QTableWidget):
         viewerContent = self.prototype[row][-1]
         if viewerTitle == PrototypeTable.PREFETCH_KEYWORD:
             from modules.UI.PrefetchDetailViewer import PrefetchDetailViewer
-            self.viewer = PrefetchDetailViewer()
-            self.viewer.initUI(viewerTitle, viewerContent)
+            self.pdv = PrefetchDetailViewer()
+            self.pdv.initUI(viewerTitle, viewerContent)
         elif viewerTitle in [PrototypeTable.EVENTLOG_KEYWORD, PrototypeTable.WER_KEYWORD, PrototypeTable.REGISTRY_KEYWORD]:
             from modules.UI.TextViewer import TextViewer
             self.viewer = TextViewer()
             self.viewer.initUI(viewerTitle, viewerContent)
-        elif viewerTitle in [PrototypeTable.HISTORY_KEYWORD, PrototypeTable.CACHE_KEYWORD, PrototypeTable.DOWNLOAD_KEYWORD]:
-            # 히스토리, 캐시, 다운로드 --> 표
-            from modules.UI.TextViewer import TextViewer
-            self.viewer = TextViewer()
-            self.viewer.initUI(viewerTitle, viewerContent)
-            print()
-
+        elif viewerTitle in [PrototypeTable.HISTORY_KEYWORD, PrototypeTable.CACHE_KEYWORD]: #, PrototypeTable.DOWNLOAD_KEYWORD
+            from modules.UI.WebArtifactDetailViewer import WebArtifactDetailViewer
+            self.wadv = WebArtifactDetailViewer()
+            self.wadv.initUI(viewerTitle, viewerContent)
 
     def contextMenuEvent(self, event):
         menu = QMenu(self)

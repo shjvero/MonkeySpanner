@@ -1,21 +1,3 @@
-#!/usr/bin/python
-
-# Copyright 2015 Adam Witt
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-# Contact: <accidentalassist@gmail.com>
-from argparse import ArgumentParser
 import binascii
 import ctypes
 from datetime import datetime,timedelta
@@ -24,7 +6,6 @@ import os
 import struct
 import sys
 import tempfile
-
 
 class Prefetch(object):
 	def __init__(self, infile):
@@ -274,53 +255,36 @@ class Prefetch(object):
 		return int(byteString, 16)
 
 
-	def prettyPrint(self):
+	def getContents(self):
 		# Prints important Prefetch data in a structured format
-		banner = "=" * (len(ntpath.basename(self.pFileName)) + 2)
-		_data = "\n{0}\n{1}\n{0}\n".format(banner, ntpath.basename(self.pFileName))
-		_data += "Executable Name: {}\n".format(self.executableName)
-		_data += "Run count: {}\n".format(self.runCount)
+		# banner = "=" * (len(ntpath.basename(self.pFileName)) + 5)
+		contents = [
+			ntpath.basename(self.pFileName),
+			# "{0}\n{1}\n{0}".format(banner, ntpath.basename(self.pFileName)),
+			[self.executableName, str(self.runCount)],
+			[str(self.mftRecordNumber), str(self.mftSeqNumber)],
+		]
 
+		timeList = []
 		if len(self.timestamps) > 1:
-			_data += "Last Executed:\n"
 			for i in self.timestamps:
-				_data += "	{}\n".format(i)
+				timeList.append("{}".format(i))
 		else:
-			_data += "Last Executed: {}\n".format(self.timestamps[0])
-		
-		_data += "\nVolume Information:\n"
+			timeList.append("{}".format(self.timestamps[0]))
+		contents.append(timeList)
+
 		for i in self.volumesInformationArray:
-			_data += "	Volume Name: {}\n".format(i["Volume Name"])
-			_data += "	Creation Date: {}\n".format(i["Creation Date"])
-			_data += "	Serial Number: {}\n".format(i["Serial Number"])
-			_data += "\n"
+			contents.append([
+				i["Volume Name"], "{}".format(i['Creation Date']), "{}".format(i["Serial Number"])
+			])
 
-		_data += "\nMFT Information:"
-		_data += "	Sequence Number: {}.\n".format(self.mftSeqNumber)
-		_data += "	Record Number: {}\n".format(self.mftRecordNumber)
-
-		_data += "\nDirectory Strings:\n"
+		dirStrList = []
 		for volume in self.directoryStringsArray:
 			for i in volume:
-				_data += "	{}\n".format(i)
-		_data += "\n"
-
-		_data += "Resources loaded:\n\n"
-		count = 1
-		for i in self.resources:
-			if i:
-				if count > 999:
-					_data += "{}: {}\n".format(count, i)
-				if count > 99:
-					_data += "{}:  {}\n".format(count, i)
-				elif count > 9:
-					_data += "{}:   {}\n".format(count, i)
-				else:
-					_data += "{}:    {}\n".format(count, i)
-			count += 1
-		_data += "\n"
-
-		return _data
+				dirStrList.append("{}".format(i))
+		contents.append(dirStrList)
+		contents.append([rsc for rsc in self.resources if rsc])
+		return contents
 
 class DecompressWin10(object):
 	def __init__(self):

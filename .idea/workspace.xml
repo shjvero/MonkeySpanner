@@ -1,280 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/modules/UI/PrefetchDetailViewer.py" line="134" mnemonic="9" />
+    <bookmark url="file://$PROJECT_DIR$/modules/UI/PrefetchDetailViewer.py" line="133" mnemonic="9" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="23378966-e248-43e1-9817-746140378983" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/MainWindow.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/ParsePrefetch/prefetch.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParsePrefetch/prefetch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/IE/Prototype.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/IE/Prototype.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/Prototype.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/Prototype.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/JumpListViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/JumpListViewer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/MenuBar.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/MenuBar.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/NTFSLogFileDialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSLogFileDialog.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/NTFSViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSViewer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/UI/PrefetchDetailViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/PrefetchDetailViewer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1010_4024" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1041_1456" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1043_4000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1111_3904" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_11570_4016" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_11570_4064" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_11571_3904" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_11571_3952" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_11572_3976" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_11572_4024" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_11573_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_11573_4096" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_11574_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_11575_4008" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_11575_4056" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_11576_3992" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_11576_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_11577_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1228_4008" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_12592_4032" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_12592_4080" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_12593_3912" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_12593_3960" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_12594_4072" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_12595_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_12595_4096" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_12596_3968" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_12596_4016" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_12597_4008" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_12597_4056" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_12598_4080" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_12599_3640" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_12599_3688" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_12600_4096" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13668_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13669_3920" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13669_3968" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13670_4096" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13671_3896" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13671_3944" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13672_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13672_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13673_3992" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13673_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13674_3952" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13674_4000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13675_3896" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13675_3944" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13676_3960" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13676_4008" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13677_4016" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13677_4064" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13678_3848" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13678_3896" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13679_3888" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13679_3936" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13680_4000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13762_3992" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13762_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13763_3976" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13763_4024" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13764_4016" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13764_4064" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13765_4032" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13765_4080" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13766_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13766_4096" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13767_3952" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13767_4000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13768_4056" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13769_3968" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13769_4016" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13770_3920" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13770_3968" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_13771_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15982_4064" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15983_4072" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15984_4072" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15985_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15985_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15986_3904" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15986_3952" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15987_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15987_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15988_3936" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15988_3984" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15989_3896" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15989_3944" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15990_3976" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15990_4024" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15991_4008" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15991_4056" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15992_3992" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15992_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15993_4096" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15994_4016" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15994_4064" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_15995_4064" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16076_3968" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16076_4016" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16077_4064" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16078_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16078_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16079_4080" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16080_4072" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16081_3496" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16081_3544" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16082_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16083_4016" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16083_4064" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16084_3896" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16084_3944" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16085_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16085_4096" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16086_4056" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_16087_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1689_3448" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1691_3944" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1691_3992" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1692_3984" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1692_4032" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1693_4080" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1694_3936" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1694_3984" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1695_4064" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1_1360" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_1_1408" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_2997_3496" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_2_1864" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_2_1912" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3000_3984" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3000_4032" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3001_4008" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3001_4056" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3002_3960" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3002_4008" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3003_4000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3003_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3004_4072" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3005_4080" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3006_4000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3006_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3007_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3008_4032" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3008_4080" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3009_3904" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3009_3952" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3010_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3010_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3011_3904" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3011_3952" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3012_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3062_3408" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_3_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4002_2360" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4005_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4005_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4006_3888" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4006_3936" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4007_4032" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4007_4080" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4008_3984" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4008_4032" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4009_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4172_2440" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4175_3944" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4175_3992" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4176_4024" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4176_4072" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4177_4056" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4178_4096" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4179_4016" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_480_3824" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_480_3872" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_481_3928" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_481_3976" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_482_4000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_482_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_4830_4056" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_483_3856" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_483_3904" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_484_3976" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_484_4024" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_485_3952" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_485_4000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_486_4000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_486_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_487_4000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_487_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_488_3936" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_5011_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_5131_3912" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_5261_4064" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_5525_4032" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_5542_3976" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_5791_3976" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_5799_4024" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_65_3928" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_65_3976" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_66_4032" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_66_4080" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_67_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_67_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_683_4000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_683_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_684_4072" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_6853_4056" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_685_3960" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_685_4008" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_686_3992" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_686_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_687_3992" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_687_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_688_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_68_4096" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_69_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_70_4072" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_71_4000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_71_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_72_3936" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_72_3984" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_73_4008" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_73_4056" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_740_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_740_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_741_3744" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_741_3792" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_742_4000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_742_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_743_3928" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_743_3976" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_744_3976" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_74_3968" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_74_4016" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_75_4016" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_75_4064" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_7641_4048" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_768_3992" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_768_4040" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_769_4024" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_769_4072" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_76_4064" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_770_3976" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_8155_3960" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_8463_4072" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_8478_3944" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_8491_4056" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_8503_4080" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_8510_4008" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_8974_3968" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_9113_3976" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_9320_4024" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_9380_4000" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_9440_4016" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_9481_2056" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_9484_2032" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_9687_2264" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/errorpages/page_9742_4088" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/venv/pip-selfcheck.json" beforeDir="false" afterPath="$PROJECT_DIR$/venv/pip-selfcheck.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/UI/WebArtifactDetailViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/WebArtifactDetailViewer.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -300,10 +40,10 @@
           <entry key="project.open.time.40" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.6" value="10" />
-          <entry key="project.open.time.7" value="18" />
+          <entry key="project.open.time.7" value="19" />
           <entry key="project.open.time.8" value="14" />
           <entry key="project.open.time.9" value="7" />
-          <entry key="project.opened" value="62" />
+          <entry key="project.opened" value="63" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -311,7 +51,7 @@
           <entry key="gif" value="7" />
           <entry key="jpg" value="3" />
           <entry key="png" value="2" />
-          <entry key="py" value="329" />
+          <entry key="py" value="342" />
           <entry key="txt" value="23" />
         </counts>
       </usages-collector>
@@ -319,20 +59,20 @@
         <counts>
           <entry key="Image" value="12" />
           <entry key="PLAIN_TEXT" value="23" />
-          <entry key="Python" value="329" />
+          <entry key="Python" value="342" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="2186" />
+          <entry key="Python Console" value="2218" />
           <entry key="dummy" value="37" />
-          <entry key="py" value="125979" />
+          <entry key="py" value="128334" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="37" />
-          <entry key="Python" value="128165" />
+          <entry key="Python" value="130552" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -344,24 +84,12 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MainWindow.py">
+        <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="36" column="53" lean-forward="true" selection-start-line="36" selection-start-column="53" selection-end-line="36" selection-end-column="53" />
+            <state relative-caret-position="171">
+              <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
               <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
-              <caret line="98" column="37" selection-start-line="98" selection-start-column="37" selection-end-line="98" selection-end-column="37" />
-              <folding>
-                <element signature="e#0#52#0" expanded="true" />
+                <element signature="e#0#9#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -370,17 +98,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="259">
-              <caret line="67" column="30" lean-forward="true" selection-start-line="67" selection-start-column="30" selection-end-line="67" selection-end-column="30" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/IE/Prototype.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-182">
-              <caret line="107" column="28" lean-forward="true" selection-start-line="107" selection-start-column="28" selection-end-line="107" selection-end-column="28" />
+            <state relative-caret-position="95">
+              <caret line="7" column="31" lean-forward="true" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -388,8 +107,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/UI/WebArtifactDetailViewer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-676">
-              <caret line="22" selection-start-line="22" selection-end-line="22" />
+            <state relative-caret-position="200">
+              <caret line="45" column="43" lean-forward="true" selection-start-line="45" selection-start-column="43" selection-end-line="45" selection-end-column="43" />
               <folding>
                 <element signature="e#0#27#0" expanded="true" />
               </folding>
@@ -397,14 +116,47 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/UI/PrefetchDetailViewer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="26" column="28" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
+            <state relative-caret-position="152">
+              <caret line="44" column="69" lean-forward="true" selection-start-line="44" selection-start-column="69" selection-end-line="44" selection-end-column="69" />
               <folding>
                 <element signature="e#0#27#0" expanded="true" />
-                <marker date="1542036330250" expanded="true" signature="177:258" ph="..." />
+                <marker date="1542125440536" expanded="true" signature="177:214" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/libs/ParsePrefetch/prefetch.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="257" column="26" lean-forward="true" selection-start-line="257" selection-start-column="26" selection-end-line="257" selection-end-column="26" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modules/IE/Prototype.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="98" column="42" selection-start-line="98" selection-start-column="42" selection-end-line="98" selection-end-column="42" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/modules/Prototype.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="152">
+              <caret line="146" column="47" lean-forward="true" selection-start-line="146" selection-start-column="47" selection-end-line="146" selection-end-column="47" />
+              <folding>
+                <element signature="e#0#14#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -421,23 +173,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>self.item</find>
-      <find>enterP</find>
-      <find>search</find>
-      <find>def sear</find>
-      <find>modifiyChkBox</find>
-      <find>exportUsnBtn</find>
-      <find>export</find>
-      <find>def export</find>
-      <find />
-      <find>self.width()</find>
-      <find>self.w</find>
-      <find>self.h</find>
-      <find>argv</find>
-      <find>args</find>
-      <find>parent</find>
-      <find>completeBtn</find>
-      <find>click</find>
       <find>context</find>
       <find>current</find>
       <find>self.ntfsTabs</find>
@@ -451,6 +186,23 @@
       <find>setD</find>
       <find>WER</find>
       <find>datetime</find>
+      <find>pre</find>
+      <find>_data</find>
+      <find>filtering</find>
+      <find>fixRe</find>
+      <find>directoryStrings</find>
+      <find>directoryStringsArray</find>
+      <find>[-3</find>
+      <find>SYSTEMROOT</find>
+      <find>entry_list</find>
+      <find>timeline</find>
+      <find>g_timeline</find>
+      <find>2018-11</find>
+      <find>prefetchList</find>
+      <find>convert_filetime</find>
+      <find>print(row</find>
+      <find>read_win10_entries</find>
+      <find>read_cache</find>
     </findStrings>
     <replaceStrings>
       <replace>'</replace>
@@ -476,6 +228,7 @@
       <replace>submitBtn</replace>
       <replace>child2Layout</replace>
       <replace>childLayout2</replace>
+      <replace>contents</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -490,7 +243,6 @@
         <option value="$PROJECT_DIR$/libs/ParseEvtx/Script/evtx_filter_records.py" />
         <option value="$PROJECT_DIR$/libs/ParseEvtx/Evtx/Views.py" />
         <option value="$PROJECT_DIR$/libs/ParseEvtx/__init__.py" />
-        <option value="$PROJECT_DIR$/libs/ParsePrefetch/prefetch.py" />
         <option value="$PROJECT_DIR$/modules/common.py" />
         <option value="$PROJECT_DIR$/modules/__init__.py" />
         <option value="$PROJECT_DIR$/libs/ParseEvtx/Evtx.py" />
@@ -506,33 +258,34 @@
         <option value="$PROJECT_DIR$/repo/log.txt" />
         <option value="$PROJECT_DIR$/repo/target.txt" />
         <option value="$PROJECT_DIR$/modules/UI/MsgDialog.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/modules/constant.py" />
         <option value="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" />
         <option value="$PROJECT_DIR$/modules/UI/TextViewer.py" />
-        <option value="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" />
         <option value="$PROJECT_DIR$/modules/UI/LoadingScreen.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/attribute_headers.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/attributes.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/boot_sector/boot_sector.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/logfile/rstr_record.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/usn_jrnl/usn_jrnl.py" />
-        <option value="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/logfile/rcrd_record.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/mft.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/mft_entry.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSLogViewerMain.py" />
         <option value="$PROJECT_DIR$/NTFSLogViewerMain.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" />
-        <option value="$PROJECT_DIR$/MainWindow.py" />
         <option value="$PROJECT_DIR$/modules/UI/JumpListViewer.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSLogFileDialog.py" />
         <option value="$PROJECT_DIR$/modules/UI/MenuBar.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSViewer.py" />
         <option value="$PROJECT_DIR$/modules/UI/__init__.py" />
-        <option value="$PROJECT_DIR$/modules/UI/PrefetchDetailViewer.py" />
-        <option value="$PROJECT_DIR$/modules/UI/WebArtifactDetailViewer.py" />
+        <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/MainWindow.py" />
         <option value="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" />
+        <option value="$PROJECT_DIR$/modules/UI/WebArtifactDetailViewer.py" />
+        <option value="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" />
+        <option value="$PROJECT_DIR$/modules/UI/PrefetchDetailViewer.py" />
+        <option value="$PROJECT_DIR$/libs/ParsePrefetch/prefetch.py" />
+        <option value="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" />
         <option value="$PROJECT_DIR$/modules/IE/Prototype.py" />
         <option value="$PROJECT_DIR$/modules/Prototype.py" />
       </list>
@@ -550,6 +303,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -560,7 +314,19 @@
             <path>
               <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
               <item name="Parser" type="462c0819:PsiDirectoryNode" />
-              <item name="img" type="462c0819:PsiDirectoryNode" />
+              <item name="libs" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Parser" type="462c0819:PsiDirectoryNode" />
+              <item name="libs" type="462c0819:PsiDirectoryNode" />
+              <item name="ParsePrefetch" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Parser" type="462c0819:PsiDirectoryNode" />
+              <item name="libs" type="462c0819:PsiDirectoryNode" />
+              <item name="ParseWebArtifact" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
@@ -583,7 +349,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -614,7 +379,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.MainWindow">
+  <component name="RunManager" selected="Python.main">
     <configuration name="MainWindow" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Parser" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -649,27 +414,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/NTFSLogViewerMain.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="NTFSLogViewerMain" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Parser" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modules/UI" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/modules/UI/NTFSLogViewerMain.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -720,20 +464,41 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Parser" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.MainWindow" />
-      <item itemvalue="Python.NTFSLogViewerMain" />
       <item itemvalue="Python.NTFSLogViewerMain (1)" />
       <item itemvalue="Python.PrefetchDetailViewer" />
       <item itemvalue="Python.WebArtifactDetailViewer" />
+      <item itemvalue="Python.main" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.MainWindow" />
         <item itemvalue="Python.WebArtifactDetailViewer" />
         <item itemvalue="Python.PrefetchDetailViewer" />
         <item itemvalue="Python.NTFSLogViewerMain (1)" />
-        <item itemvalue="Python.NTFSLogViewerMain" />
       </list>
     </recent_temporary>
   </component>
@@ -761,8 +526,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="1320" height="784" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4983165" visible="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4983165" visible="true" weight="0.21111111" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" sideWeight="0.5016835" side_tool="true" weight="0.19689542" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.32973805" />
@@ -770,7 +536,7 @@
       <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.50079364" side_tool="true" weight="0.30508474" />
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" weight="0.36517718" />
-      <window_info anchor="bottom" id="Run" order="5" weight="0.17873652" />
+      <window_info active="true" anchor="bottom" id="Run" order="5" visible="true" weight="0.35439137" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32973805" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.3990755" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
@@ -824,7 +590,6 @@
     <entry file="file://$PROJECT_DIR$/repo/log.txt" />
     <entry file="file://$PROJECT_DIR$/temp.txt" />
     <entry file="file://$PROJECT_DIR$/modules/UI/MsgDialog.py" />
-    <entry file="file://$PROJECT_DIR$/main.py" />
     <entry file="file://$PROJECT_DIR$/img/loading1.gif" />
     <entry file="file://$PROJECT_DIR$/libs/ParseEvtx/BinaryParser.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -848,13 +613,6 @@
     <entry file="file://$PROJECT_DIR$/libs/ParseEvtx/Views.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParsePrefetch/prefetch.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
           <caret line="17" selection-start-line="17" selection-end-line="17" />
         </state>
       </provider>
@@ -886,13 +644,6 @@
     <entry file="file://$PROJECT_DIR$/modules/UI/TimelineSetDialog.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="87">
-          <caret line="26" column="4" selection-start-line="26" selection-start-column="4" selection-end-line="26" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/libs/ParseRegistry/RegistryParse.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -917,13 +668,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="212">
           <caret line="562" column="8" selection-start-line="562" selection-start-column="8" selection-end-line="562" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="212" column="21" lean-forward="true" selection-start-line="212" selection-start-column="21" selection-end-line="212" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -1008,16 +752,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/NTFSLogViewerMain.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
-          <folding>
-            <element signature="e#0#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
@@ -1029,10 +763,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="236">
           <caret line="132" column="52" lean-forward="true" selection-start-line="132" selection-start-column="52" selection-end-line="132" selection-end-column="52" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-            <marker date="1542027584200" expanded="true" signature="190:195" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1040,9 +770,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="445">
           <caret line="41" column="56" selection-start-line="41" selection-start-column="56" selection-end-line="41" selection-end-column="56" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1050,29 +777,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="164">
           <caret line="125" column="8" selection-start-line="125" selection-start-column="8" selection-end-line="127" selection-end-column="52" />
-          <folding>
-            <element signature="e#0#39#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="98" column="37" selection-start-line="98" selection-start-column="37" selection-end-line="98" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#52#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MainWindow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="36" column="53" lean-forward="true" selection-start-line="36" selection-start-column="53" selection-end-line="36" selection-end-column="53" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1090,41 +794,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
+    <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="259">
-          <caret line="67" column="30" lean-forward="true" selection-start-line="67" selection-start-column="30" selection-end-line="67" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/constant.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="29" column="19" selection-start-line="29" selection-start-column="19" selection-end-line="29" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/Prototype.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="193" column="49" selection-start-line="193" selection-start-column="49" selection-end-line="193" selection-end-column="59" />
+        <state relative-caret-position="1843">
+          <caret line="98" column="37" selection-start-line="98" selection-start-column="37" selection-end-line="98" selection-end-column="37" />
           <folding>
-            <element signature="e#0#14#0" expanded="true" />
+            <element signature="e#0#52#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/IE/Prototype.py">
+    <entry file="file://$PROJECT_DIR$/NTFSLogViewerMain.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-182">
-          <caret line="107" column="28" lean-forward="true" selection-start-line="107" selection-start-column="28" selection-end-line="107" selection-end-column="28" />
+        <state relative-caret-position="133">
+          <caret line="7" column="22" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MainWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="123">
+          <caret line="105" column="83" selection-start-line="105" selection-start-column="83" selection-end-line="105" selection-end-column="83" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="7" column="31" lean-forward="true" selection-start-line="7" selection-start-column="31" selection-end-line="7" selection-end-column="31" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/WebArtifactDetailViewer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-676">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
+        <state relative-caret-position="200">
+          <caret line="45" column="43" lean-forward="true" selection-start-line="45" selection-start-column="43" selection-end-line="45" selection-end-column="43" />
           <folding>
             <element signature="e#0#27#0" expanded="true" />
           </folding>
@@ -1133,11 +853,59 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/PrefetchDetailViewer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="26" column="28" selection-start-line="26" selection-start-column="28" selection-end-line="26" selection-end-column="28" />
+        <state relative-caret-position="152">
+          <caret line="44" column="69" lean-forward="true" selection-start-line="44" selection-start-column="69" selection-end-line="44" selection-end-column="69" />
           <folding>
             <element signature="e#0#27#0" expanded="true" />
-            <marker date="1542036330250" expanded="true" signature="177:258" ph="..." />
+            <marker date="1542125440536" expanded="true" signature="177:214" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParsePrefetch/prefetch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="257" column="26" lean-forward="true" selection-start-line="257" selection-start-column="26" selection-end-line="257" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/constant.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="28" column="28" selection-start-line="28" selection-start-column="16" selection-end-line="28" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="988">
+          <caret line="287" column="38" lean-forward="true" selection-start-line="287" selection-start-column="38" selection-end-line="287" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="76" column="64" lean-forward="true" selection-start-line="76" selection-start-column="64" selection-end-line="76" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/IE/Prototype.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="190">
+          <caret line="98" column="42" selection-start-line="98" selection-start-column="42" selection-end-line="98" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/Prototype.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="146" column="47" lean-forward="true" selection-start-line="146" selection-start-column="47" selection-end-line="146" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>

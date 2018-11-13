@@ -1,5 +1,4 @@
 import sys
-import qdarkstyle
 from PyQt5.QtCore import Qt
 
 from PyQt5.QtGui import QIcon, QFont, QCursor
@@ -20,7 +19,7 @@ class Main(QMainWindow):
             "Adobe Reader", "Adobe Flash Player", "Chrome", "Edge", "HWP",
             "Internet Explorer", "MS-Office", "Kernel(Local Privilege Escalation)"
         ]
-        self.OPTIONS = ['None', 'Prefetch', 'Event Log', 'Registry', 'Web History', 'Web Cache', 'Download', 'WER']
+        self.OPTIONS = ['None', 'Prefetch', 'Event Log', 'Registry', 'Web History', 'Web Cache', 'WER'] #, 'Download'
         self.selectionWidth = 220
         self.btnNumber = 0
         self.loadBtnWidth = 100
@@ -55,7 +54,7 @@ class Main(QMainWindow):
     def initUI(self):
         # Set up default UI
         self.setWindowTitle("Monkey Spanner")
-        self.setWindowIcon(QIcon("img/favicon2.jpg"))
+        self.setWindowIcon(QIcon("logo.ico"))
         self.setMenuBar(MenuBar(self))
         self.setStatusBar(QStatusBar())
 
@@ -106,9 +105,9 @@ class Main(QMainWindow):
         self.option6 = QCheckBox(self.OPTIONS[6])
         self.option6.stateChanged.connect(lambda: self.toggledChkBtn(self.option6))
         chkboxLayout.addWidget(self.option6)
-        self.option7 = QCheckBox(self.OPTIONS[7])
-        self.option7.stateChanged.connect(lambda: self.toggledChkBtn(self.option7))
-        chkboxLayout.addWidget(self.option7)
+        # self.option7 = QCheckBox(self.OPTIONS[7])
+        # self.option7.stateChanged.connect(lambda: self.toggledChkBtn(self.option7))
+        # chkboxLayout.addWidget(self.option7)
 
         # Set up text box for Search
         self.search = QLineEdit(self)
@@ -236,27 +235,21 @@ class Main(QMainWindow):
                     self.table.filtering(6, 1)
                 else:
                     self.table.filtering(0)
-        elif msg == self.OPTIONS[7]:
-            if self.option7.isChecked():
-                self.btnNumber += 1
-                if self.btnNumber > 1:
-                    self.table.filtering(7, 2)
-                else:
-                    self.table.filtering(7)
-            else:
-                self.btnNumber -= 1
-                if self.btnNumber != 0:
-                    self.table.filtering(7, 1)
-                else:
-                    self.table.filtering(0)
+        # elif msg == self.OPTIONS[7]:
+        #     if self.option7.isChecked():
+        #         self.btnNumber += 1
+        #         if self.btnNumber > 1:
+        #             self.table.filtering(7, 2)
+        #         else:
+        #             self.table.filtering(7)
+        #     else:
+        #         self.btnNumber -= 1
+        #         if self.btnNumber != 0:
+        #             self.table.filtering(7, 1)
+        #         else:
+        #             self.table.filtering(0)
 
     def enterPressed(self):
         if self.isLoaded:
             return
         self.table.search(self.search.text())
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
-    w = Main()
-    sys.exit(app.exec_())

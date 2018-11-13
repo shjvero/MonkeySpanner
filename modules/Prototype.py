@@ -17,8 +17,7 @@ def getEventLogItemsForWin7(evtxList, prototype, appName=None, timeline=None):
     for fileName, category in evtxList.items():
         fullPath = PATH.EVENTLOG + fileName
         checkedEID = category['eid']
-        checkedRID = category['recordID']
-        # checkedProviders = category['providerName']
+        checkedProviders = category['providerName']
         with evtx.Evtx(fullPath) as log:
             if fileName.startswith("App"):
                 for event in log.records():
@@ -28,16 +27,21 @@ def getEventLogItemsForWin7(evtxList, prototype, appName=None, timeline=None):
                         if not loggedTime: continue
                         providerName = systemTag[0].get("Name")
                         eventID = systemTag[1].text
-                        recordID = systemTag[6].text
-                        # if eventID in checkedEID and providerName in checkedProviders:
-                        if int(eventID) in checkedEID and int(recordID) in checkedRID[eventID]:
+                        if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
                             eventDataTag = event.lxml()[1]
                             if eventDataTag[0].text != appName: continue
                             etc = eventDataTag[0].text
                             if timeline:
                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
                                     continue
-                            level = '오류' if systemTag[2].text == '2' else '정보'  # 정보는 4
+                            if systemTag[2].text == '1':
+                                level = 'Fatal'
+                            elif systemTag[2].text == '2':
+                                level = 'Error'
+                            elif systemTag[2].text == '3':
+                                level = 'Warning'
+                            elif systemTag[2].text == '4':
+                                level = 'Information'
 
                             items.append([orangeHead, loggedTime, providerName, eventID, level, etc, event.xml()])
                     except Exception as e:
@@ -51,10 +55,8 @@ def getEventLogItemsForWin7(evtxList, prototype, appName=None, timeline=None):
                         if not loggedTime: continue
                         providerName = systemTag[0].get("Name")
                         eventID = systemTag[1].text
-                        recordID = systemTag[8].text
                         head = []
-                        # if eventID in checkedEID and providerName in checkedProviders:
-                        if eventID in checkedEID and int(recordID) in checkedRID[eventID]:
+                        if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
                             etc = ''
                             if fileName.startswith("System"):
                                 eventDataTag = event.lxml()[1]
@@ -63,7 +65,7 @@ def getEventLogItemsForWin7(evtxList, prototype, appName=None, timeline=None):
                                     continue
                                 head = orangeHead
                             elif fileName.endswith("Fault-Tolerant-Heap%4Operational.evtx"):
-                                etc = '내결함성 있는 힙'
+                                etc = 'Heap Corruption'
                                 head = greenHead
                             elif fileName.endswith("WER-Diag%4Operational.evtx"):
                                 eventDataTag = event.lxml()[1]
@@ -73,7 +75,14 @@ def getEventLogItemsForWin7(evtxList, prototype, appName=None, timeline=None):
                             if timeline:
                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
                                     continue
-                            level = '오류' if systemTag[3].text == '2' else '정보'
+                            if systemTag[3].text == '1':
+                                level = 'Fatal'
+                            elif systemTag[3].text == '2':
+                                level = 'Error'
+                            elif systemTag[3].text == '3':
+                                level = 'Warning'
+                            elif systemTag[3].text == '4':
+                                level = 'Information'
 
                             items.append([head, loggedTime, providerName, eventID, level, etc, event.xml()])
                     except Exception as e:
@@ -89,8 +98,7 @@ def getEventLogItemsForWin10(evtxList, prototype, appName=None, timeline=None):
     for fileName, category in evtxList.items():
         fullPath = PATH.EVENTLOG + fileName
         checkedEID = category['eid']
-        checkedRID = category['recordID']
-        # checkedProviders = category['providerName']
+        checkedProviders = category['providerName']
         with evtx.Evtx(fullPath) as log:
             if fileName.startswith("App") or fileName.startswith("System"):
                 for event in log.records():
@@ -100,10 +108,7 @@ def getEventLogItemsForWin10(evtxList, prototype, appName=None, timeline=None):
                         if not loggedTime: continue
                         providerName = systemTag[0].get("Name")
                         eventID = systemTag[1].text
-                        recordID = systemTag[6].text
-
-                        # if eventID in checkedEID and providerName in checkedProviders:
-                        if eventID in checkedEID and int(recordID) in checkedRID[eventID]:
+                        if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
                             etc = ''
                             if fileName.startswith("App"):
                                 eventDataTag = event.lxml()[1]
@@ -112,7 +117,14 @@ def getEventLogItemsForWin10(evtxList, prototype, appName=None, timeline=None):
                             elif timeline:
                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
                                     continue
-                            level = '오류' if systemTag[2].text == '2' else '정보'  # 정보는 4
+                            if systemTag[2].text == '1':
+                                level = 'Fatal'
+                            elif systemTag[2].text == '2':
+                                level = 'Error'
+                            elif systemTag[2].text == '3':
+                                level = 'Warning'
+                            elif systemTag[2].text == '4':
+                                level = 'Information'
 
                             items.append([orangeHead, loggedTime, providerName, eventID, level, etc, event.xml()])
 
@@ -127,14 +139,20 @@ def getEventLogItemsForWin10(evtxList, prototype, appName=None, timeline=None):
                         if not loggedTime: continue
                         providerName = systemTag[0].get("Name")
                         eventID = systemTag[1].text
-                        recordID = systemTag[8].text
-                        # if eventID in checkedEID and providerName in checkedProviders:
-                        if eventID in checkedEID and int(recordID) in checkedRID[eventID]:
+                        if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
                             if timeline:
                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
                                     continue
-                            level = '오류' if systemTag[3].text == '2' else '정보'
-                            etc = '힙 손상'
+                            if systemTag[3].text == '1':
+                                level = 'Fatal'
+                            elif systemTag[3].text == '2':
+                                level = 'Error'
+                            elif systemTag[3].text == '3':
+                                level = 'Warning'
+                            elif systemTag[3].text == '4':
+                                level = 'Information'
+
+                            etc = 'Heap Corruption'
                             items.append([greenHead, loggedTime, providerName, eventID, level, etc, event.xml()])
                     except Exception as e:
                         print("Error: {}".format(e))
@@ -182,7 +200,7 @@ def getPrefetchItems(prototype, included, timeline=None):
                 # if limitedTime:
                 #     if createdTimeObj < limitedTime:
                 #         head[1] = 0
-                content = p.prettyPrint()
+                content = p.getContents()
                 items.append([redHead, createdTime, pf_name, p.executableName, "Create", content])
                 for timestamp in p.timestamps:
                     if timeline:
@@ -196,7 +214,7 @@ def getPrefetchItems(prototype, included, timeline=None):
             elif not timeline and p.executableName not in included:
                 continue
             elif p.executableName in included[2:]:
-                content = p.prettyPrint()
+                content = p.getContents()
                 head = purpleHead
                 if createdTimeObj > timeline:
                     items.append([head, createdTime, pf_name, p.executableName, "Create", content])
@@ -207,7 +225,7 @@ def getPrefetchItems(prototype, included, timeline=None):
                 continue
             else:
                 continue
-            content = p.prettyPrint()
+            content = p.getContents()
             items.append([head, createdTime, pf_name, p.executableName, "Create", content])
             for timestamp in p.timestamps:
                 items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
@@ -318,14 +336,13 @@ def getWebArtifactItems(env, prefetchList, timeline=None):
     # domList = WebArtifact.getDom(fullname)
     history = WebArtifact.getHistory(fullpath, prefetchList, timeline)
     caches = WebArtifact.getContent(fullpath, timeline)
-    limitedTime = None if not history else datetime.datetime.strptime(history[0][1], "%Y-%m-%d %H:%M:%S.%f")
-    download = WebArtifact.getDownloads(fullpath, prefetchList, limitedTime)
-    return True, history + caches + download
+    # limitedTime = None if not history else datetime.datetime.strptime(history[0][1], "%Y-%m-%d %H:%M:%S.%f")
+    # download = WebArtifact.getDownloads(fullpath, prefetchList, limitedTime)
+    # return True, history + caches + download
+    return True, history + caches
 
 def getAppCompatCache(prototype, prefetchList, timeline):
     rst = get_local_data(prefetchList, timeline)
-    print("rst : ")
-    print(rst)
     if rst:
         prototype += rst
 

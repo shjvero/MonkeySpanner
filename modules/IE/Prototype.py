@@ -15,49 +15,47 @@ def getColumnHeader():
         # └ Response Header exists.(??)
         "Report.wer": ["Modified Time", "Path", "Created Time", "", ""],                # 3 columns
         # └ Detail exists (wer)
-        "Registry": ["Modified Time", "Execution Path", "Size", "Exec Flag", ""]       # 4 columns
+        "Registry": ["Modified Time", "Execution Path", "Size", "Exec Flag", "Registry Key"]       # 4 columns
         # └ Detail exists (path)
     }
 
 def getPrototype(env, timeline=None):
+    from operator import itemgetter
     prefetchList= ["IEXPLORE.EXE", "WERFAULT.EXE", "CMD.EXE", "POWERSHELL.EXE", "RUNDLL32.EXE"]
     reportArchive = "AppCrash_IEXPLORE.EXE"
     evtxLogFor7 = [
         {
             "System.evtx": {
-                'eid': [206, 7036], # eid : [ { EID:[rid1,rid2] }, { EID:[rid1, rid2] } ]
-                'providerName': ['Service Control Manager'],
-                'recordID': {
-                    '206': [930],
-                    '7036': [929]
+                'eid': [206, 7036],
+                'providerName': {
+                    # '206': 'Microsoft-Windows-Application-Experience'
+                    # >> 프로그램 호환성 관리자 서비스에서 2단계 초기화를 수행했습니다. (필요?)
+                    '7036': 'Service Control Manager',
                 }
             },
         },
         {
             "Application.evtx": {
                 'eid': [1000, 1001],
-                'providerName': ['Appllication Error'],
-                'recordID': {
-                    '1000': [240],
-                    '1001': [241, 238, 239]
+                'providerName': {
+                    '1000': 'Application Error',
+                    '1001': 'Windows Error Reporting',
                 }
             }
         },
         {
             "Microsoft-Windows-WER-Diag%4Operational.evtx": {
                 'eid': [2],
-                'providerName': ['Microsoft-Windows-WER-Diag'],
-                'recordID': {
-                    '2': [1, 2],
+                'providerName': {
+                    '2': 'Microsoft-Windows-WER-Diag'
                 }
             }
         },
         {
             "Microsoft-Windows-Fault-Tolerant-Heap%4Operational.evtx": {
                 'eid': [1001],
-                'providerName': ['Microsoft-Windows-Fault-Tolerant-Heap'],
-                'recordID': {
-                    '1001': [1]
+                'providerName': {
+                    '1001': 'Microsoft-Windows-Fault-Tolerant-Heap',
                 }
             }
         }
@@ -66,19 +64,17 @@ def getPrototype(env, timeline=None):
         {
             "Application.evtx": {
                 'eid': [1000, 1001],
-                'providerName': ['Application Error'],
-                'recordID': {
-                    '1000': [240],
-                    '1001': [241, 238, 239]
+                'providerName': {
+                    '1000': 'Application Error',
+                    '1001': 'Windows Error Reporting',
                 }
             }
         },
         {
             "Microsoft-Windows-Fault-Tolerant-Heap%4Operational.evtx": {
                 'eid': [1001],
-                'providerName': ['Microsoft-Windows-Fault-Tolerant-Heap'],
-                'recordID': {
-                    '1001': [1]
+                'providerName': {
+                    '1001': 'Microsoft-Windows-Fault-Tolerant-Heap',
                 }
             }
         },
@@ -86,10 +82,11 @@ def getPrototype(env, timeline=None):
     t_list = []
     from threading import Thread
     limitedTime = None
-    result, prototype = getWebArtifactItems(env, prefetchList)
+    result, prototype = getWebArtifactItems(env, prefetchList) # 다운로드된 것만 따로해서 레지스트리에서 검사필요?
     if not result:
         return result, prototype
     if prototype:
+        prototype.sort(key=itemgetter(1))
         limitedTime = datetime.datetime.strptime(prototype[0][1], "%Y-%m-%d %H:%M:%S.%f")
     print("Web Artifact: {}".format(len(prototype)))
     if env == "Windows7":
@@ -113,7 +110,6 @@ def getPrototype(env, timeline=None):
     t_list[total-1].start()
     t_list[total - 1].join()
     print(len(prototype))
-    from operator import itemgetter
     prototype.sort(key=itemgetter(1))
     return True, prototype
 
@@ -131,6 +127,6 @@ def getPrototype(env, timeline=None):
     11. [남] 웹 히스토리: dll, doc, docx, hta, xls, woff, pdf (확장자 검사)
     12. [남] 웹 캐시: dll, doc, docx, hta, xls, woff, pdf (확장자 검사)
     13. [보] 웹 다운로드, 웹 히스토리(exe)
-    14. [보] 레지스트리 검사 필요 -- 웹 다운로드에 있던 exe인 경우, 그 외 회색
+    14. [보] 레지스트리 - 호환성 캐시 회색
     15. [보] 13번 과정에서 EXE 모두 추출 후 프리패치 파싱
     '''

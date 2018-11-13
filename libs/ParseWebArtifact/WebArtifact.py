@@ -18,7 +18,8 @@ def getFiletime(dt):
 #Fix response data
 def fixRespData(txtin):
     if txtin is not None:
-        fixed = txtin.decode("unicode-escape").replace("\n","\\").replace("\r","\\").replace(","," ").replace('"'," ")
+        # fixed = txtin.decode("unicode-escape").replace("\n","\\").replace("\r","\\").replace(","," ").replace('"'," ")
+        fixed = txtin.decode("unicode-escape").replace(","," ").replace('"'," ")
         return ''.join(i for i in fixed if ord(i)<128)
     else:
         return ""
@@ -65,20 +66,22 @@ def getHistory(filepath, prefetchList, timeline=None):
                     head = purpleHead
                 else:
                     head = redHead
-                content = "ID: {}.{}\n".format(hRecords.get_value_data_as_integer(1),
-                                               hRecords.get_value_data_as_integer(0))
-                content += "Container Name: {}\n".format(histNameDict[hcl])
-                content += "Created Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(10)))
-                content += "Accessed Time: {}\n".format(accessedTime)
-                content += "Modified Time: {}\n".format(modifiedTime)
-                content += "Expires Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(11)))
-                content += "Synced Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(9)))
-                content += "Sync Count: {}\n".format(hRecords.get_value_data_as_integer(15))
-                content += "Access Count: {}\n".format(hRecords.get_value_data_as_integer(8))
-                content += "URL: {}\n".format(_url)
-                content += "File Name: {}\n".format(hRecords.get_value_data_as_string(18))
-                content += "File Size: {}\n".format(hRecords.get_value_data_as_integer(5))
-                content += "Directory: {}\n".format(histDirDict[hcl])
+                content = [
+                    "{}.{}".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0)),
+                    histNameDict[hcl],
+                    "{}".format(getFiletime(hRecords.get_value_data_as_integer(10))),
+                    "{}".format(accessedTime),
+                    "{}".format(modifiedTime),
+                    "{}".format(getFiletime(hRecords.get_value_data_as_integer(11))),
+                    "{}".format(getFiletime(hRecords.get_value_data_as_integer(9))),
+                    str(hRecords.get_value_data_as_integer(15)),
+                    str(hRecords.get_value_data_as_integer(8)),
+                    _url,
+                    hRecords.get_value_data_as_string(18),
+                    str(hRecords.get_value_data_as_integer(5)),
+                    histDirDict[hcl],
+                    None
+                ]
                 items.append([head, accessedTime, URL, modifiedTime, content])
 
     return items
@@ -107,7 +110,7 @@ def getContent(filepath, timeline=None):
         histCont = esedb_file.get_table_by_name(hcl)
         for hRecords in histCont.records:
             accessedTime = getFiletime(hRecords.get_value_data_as_integer(13))
-            url = hRecords.get_value_data_as_string(17)
+            _url = hRecords.get_value_data_as_string(17)
             fileName = hRecords.get_value_data_as_string(18)
             fileSize = str(hRecords.get_value_data_as_integer(5))
             createdTime = str(getFiletime(hRecords.get_value_data_as_integer(10)))
@@ -122,24 +125,26 @@ def getContent(filepath, timeline=None):
                     continue
             else:
                 continue
-            content = "ID: {}.{}\n".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0))
-            content += "Container Name: {}\n".format(histNameDict[hcl])
-            content += "Created Time: {}\n".format(createdTime)
-            content += "Accessed Time: {}\n".format(accessedTime)
-            content += "Modified Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(12)))
-            content += "Expires Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(11)))
-            content += "Synced Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(9)))
-            content += "Sync Count: {}\n".format(hRecords.get_value_data_as_integer(15))
-            content += "Access Count: {}\n".format(hRecords.get_value_data_as_integer(8))
-            content += "URL: {}\n".format(url)
-            content += "File Name: {}\n".format(fileName)
-            content += "File Size: {}\n".format(fileSize)
-            content += "Response Headers: {}\n".format(fixRespData(hRecords.get_value_data(21)))
-            content += "Directory: {}\n".format(histDirDict[hcl])
-            items.append([head, accessedTime, url, fileName, fileSize, createdTime, content])
+            content = [
+                "{}.{}".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0)),
+                histNameDict[hcl],
+                "{}".format(createdTime),
+                "{}".format(accessedTime),
+                "{}".format(getFiletime(hRecords.get_value_data_as_integer(12))),
+                "{}".format(getFiletime(hRecords.get_value_data_as_integer(11))),
+                "{}".format(getFiletime(hRecords.get_value_data_as_integer(9))),
+                str(hRecords.get_value_data_as_integer(15)),
+                str(hRecords.get_value_data_as_integer(8)),
+                _url,
+                fileName,
+                fileSize,
+                histDirDict[hcl],
+                fixRespData(hRecords.get_value_data(21)),
+            ]
+            items.append([head, accessedTime, _url, fileName, fileSize, createdTime, content])
     return items
 
-#Get downloads
+'''
 def getDownloads(filepath, prefetchList, timeline=None):
     esedb_file = pyesedb.file()
     esedb_file.open(filepath)
@@ -165,33 +170,32 @@ def getDownloads(filepath, prefetchList, timeline=None):
             if timeline:
                 if datetime.datetime.strptime(accessedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
                     continue
-            url = hRecords.get_value_data_as_string(17)
+            _url = hRecords.get_value_data_as_string(17)
             fileName = hRecords.get_value_data_as_string(18)
             if fileName.split('.')[1] == "exe":
                 prefetchList += fileName.upper()
                 print(fileName)
-            fileSize = hRecords.get_value_data_as_integer(5)
+            fileSize = str(hRecords.get_value_data_as_integer(5))
             downloadPath = fixRespData(hRecords.get_value_data(21)) # 파싱필요
-            content = "ID: {}.{}\n".format(hRecords.get_value_data_as_integer(1),
-                                           hRecords.get_value_data_as_integer(0))
-            content += "Container Name: {}\n".format(histNameDict[hcl])
-            content += "Created Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(10)))
-            content += "Accessed Time: {}\n".format(accessedTime)
-            content += "Modified Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(12)))
-            content += "Expires Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(11)))
-            content += "Synced Time: {}\n".format(getFiletime(hRecords.get_value_data_as_integer(9)))
-            content += "Sync Count: {}\n".format(hRecords.get_value_data_as_integer(15))
-            content += "Access Count: {}\n".format(hRecords.get_value_data_as_integer(8))
-            content += "URL: {}\n".format(url)
-            content += "File Name: {}\n".format(fileName)
-            content += "File Size: {}\n".format(fileSize)
-            content += "Response Headers: {}\n".format(downloadPath)
-            content += "Directory: {}\n".format(histDirDict[hcl])
-            items.append([purpleHead, accessedTime, url, fileName, fileSize, "", content])
-
+            content = [
+                "{}.{}".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0)),
+                histNameDict[hcl],
+                "{}".format(getFiletime(hRecords.get_value_data_as_integer(10))),
+                "{}".format(accessedTime),
+                "{}".format(getFiletime(hRecords.get_value_data_as_integer(12))),
+                "{}".format(getFiletime(hRecords.get_value_data_as_integer(11))),
+                "{}".format(getFiletime(hRecords.get_value_data_as_integer(9))),
+                str(hRecords.get_value_data_as_integer(15)),
+                str(hRecords.get_value_data_as_integer(8)),
+                _url,
+                fileName,
+                fileSize,
+                histDirDict[hcl],
+                downloadPath,
+            ]
+            items.append([purpleHead, accessedTime, _url, fileName, fileSize, "", content])
     return items
 
-#Get cookies
 def getCookies(filepath):
     esedb_file = pyesedb.file()
     esedb_file.open(filepath)
@@ -232,7 +236,6 @@ def getCookies(filepath):
 
     return items
 
-#Get DOM
 def getDom(filepath):
     esedb_file = pyesedb.file()
     esedb_file.open(filepath)
@@ -271,3 +274,4 @@ def getDom(filepath):
                 }
             ])
     return items
+'''

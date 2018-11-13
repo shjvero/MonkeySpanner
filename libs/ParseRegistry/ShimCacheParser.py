@@ -72,6 +72,7 @@ class CacheEntryNt6(object):
 # Convert FILETIME to datetime.
 # Based on http://code.activestate.com/recipes/511425-filetime-to-datetime/
 def convert_filetime(dwLowDateTime, dwHighDateTime):
+	global g_timeline
 	try:
 		date = datetime.datetime(1601, 1, 1, 0, 0, 0)
 		temp_time = dwHighDateTime
@@ -170,72 +171,73 @@ def read_cache(cachebin, quiet=False):
 
 # Read Windows 10 Apphelp Cache entry format
 def read_win10_entries(bin_data, ver_magic, creators_update=False):
+	try:
+		offset = 0
+		entry_meta_len = 12
+		entry_list = []
 
-	offset = 0
-	entry_meta_len = 12
-	entry_list = []
-
-	# Skip past the stats in the header
-	if creators_update:
-		cache_data = bin_data[WIN10_CREATORS_STATS_SIZE:]
-	else:
-		cache_data = bin_data[WIN10_STATS_SIZE:]
-
-	from io import BytesIO
-	data = BytesIO(cache_data)
-	while data.tell() < len(cache_data):
-		header = data.read(entry_meta_len)
-		# Read in the entry metadata
-		# Note: the crc32 hash is of the cache entry data
-		magic, crc32_hash, entry_len = struct.unpack('<4sLL', header)
-		magic = magic.decode()
-		
-		# Check the magic tag
-		if magic != ver_magic:
-			raise Exception("Invalid version magic tag found: 0x%x" % struct.unpack("<L", magic)[0])
-
-		entry_data = BytesIO(data.read(entry_len))
-
-		# Read the path length
-		head = []
-		path_len = struct.unpack('<H', entry_data.read(2))[0]
-		if path_len == 0:
-			path = 'None'
+		# Skip past the stats in the header
+		if creators_update:
+			cache_data = bin_data[WIN10_CREATORS_STATS_SIZE:]
 		else:
-			path = entry_data.read(path_len).decode('utf-16le', 'replace')
-			global g_prefetchList
-			from modules.constant import SYSTEMROOT
-			if path[-3:].lower() == "exe":
-				if path.rsplit("\\", 1)[-1].upper() in g_prefetchList:
-					head = purpleHead
-				elif path.lower().startswith(SYSTEMROOT.lower()):
+			cache_data = bin_data[WIN10_STATS_SIZE:]
+
+		from io import BytesIO
+		data = BytesIO(cache_data)
+		while data.tell() < len(cache_data):
+			header = data.read(entry_meta_len)
+			# Read in the entry metadata
+			# Note: the crc32 hash is of the cache entry data
+			magic, crc32_hash, entry_len = struct.unpack('<4sLL', header)
+			magic = magic.decode()
+
+			# Check the magic tag
+			if magic != ver_magic:
+				raise Exception("Invalid version magic tag found: 0x%x" % struct.unpack("<L", magic)[0])
+
+			entry_data = BytesIO(data.read(entry_len))
+
+			# Read the path length
+			head = grayHead
+			path_len = struct.unpack('<H', entry_data.read(2))[0]
+			if path_len == 0:
+				path = 'None'
+			else:
+				path = entry_data.read(path_len).decode('utf-16le', 'replace')
+
+				global g_prefetchList
+				from modules.constant import SYSTEMROOT, LOCALAPPDATA
+				if path[-3:].lower() == "exe":
+					head = grayHead
+				elif SYSTEMROOT.lower() in path.lower() or LOCALAPPDATA in path.lower():
 					head = grayHead
 				else:
-					print("쓸모없는 exe 발생 in get_local_data"+path)
 					continue
-			elif path.lower().startswith(SYSTEMROOT.lower()):
-				head = grayHead
-			else:
-				print("쓸모없는 dll 발생 in get_local_data: "+path)
+
+			# Read the remaining entry data
+			low_datetime, high_datetime = struct.unpack('<LL', entry_data.read(8))
+
+			last_mod_date = convert_filetime(low_datetime, high_datetime)
+			if not last_mod_date:
 				continue
+			try:
+				last_mod_date = last_mod_date.strftime("%Y-%m-%d %H:%M:%S.%f")
+			except ValueError as e:
+				continue
+				#last_mod_date = bad_entry_data
 
+			row = [head, last_mod_date, path, 'N/A', 'N/A', "AppCompatCache"]
 
-		# Read the remaining entry data
-		low_datetime, high_datetime = struct.unpack('<LL', entry_data.read(8))
+			if row not in entry_list:
+				entry_list.append(row)
+				if path[-3:].lower() == "exe":
+					added = path.rsplit("\\", 1)[-1].upper()
+					g_prefetchList.append(added)
 
-		last_mod_date = convert_filetime(low_datetime, high_datetime)
-		if not last_mod_date:
-			continue
-		try:
-			last_mod_date = last_mod_date.strftime("%Y-%m-%d %H:%M:%S.%f")
-		except ValueError:
-			continue
-			#last_mod_date = bad_entry_data
-
-		row = [head, last_mod_date, path, 'N/A', 'N/A', "AppCompatCache"]
-		entry_list.append(row)
-
-	return entry_list
+		return entry_list
+	except (RuntimeError, ValueError, NameError) as err:
+		print('[-] Error reading Shim Cache data: %s...' % err)
+		return None
 
 # Read the Shim Cache Windows 7/2k8-R2 entry format,
 # return a list of last modifed dates/paths.
@@ -263,34 +265,30 @@ def read_nt6_entries(bin_data, entry):
 				last_mod_date = last_mod_date.strftime("%Y-%m-%d %H:%M:%S.%f")
 			except ValueError as e:
 				print(e)
-				continue
 			path = (bin_data.decode("unicode-escape")[entry.Offset:entry.Offset +
 							 entry.wLength])[8:].replace("\x00", "")
 			global g_prefetchList
-			from modules.constant import SYSTEMROOT
-			if path[-3].lower() == "exe":
-				if path.rsplit("\\", 1)[-1].upper() in g_prefetchList:
-					head = purpleHead
-				elif path.lower().startswith(SYSTEMROOT.lower()):
-					head = grayHead
-				else:
-					print("쓸모없는 exe 발생 in get_local_data")
-					continue
-			elif path.lower().startswith(SYSTEMROOT.lower()):
+			from modules.constant import SYSTEMROOT, LOCALAPPDATA
+			if path[-3:].lower() == "exe":
+				head = grayHead
+			elif SYSTEMROOT.lower() in path.lower() or LOCALAPPDATA in path.lower():
 				head = grayHead
 			else:
-				print("쓸모없는 dll 발생 in get_local_data")
 				continue
+
 			# Test to see if the file may have been executed.
 			if (entry.FileFlags & CSRSS_FLAG):
 				exec_flag = 'True'
 			else:
 				exec_flag = 'False'
 
-			hit = [head, last_mod_date, path, 'N/A', exec_flag, "AppCompatCache"]
+			row = [head, last_mod_date, path, 'N/A', exec_flag, "AppCompatCache"]
 
-			if hit not in entry_list:
-				entry_list.append(hit)
+			if row not in entry_list:
+				entry_list.append(row)
+				if path[-3:].lower() == "exe":
+					added = path.rsplit("\\", 1)[-1].upper()
+					g_prefetchList.append(added)
 		return entry_list
 
 	except (RuntimeError, ValueError, NameError) as err:
@@ -399,24 +397,21 @@ def get_local_data(prefetchList, timeline=None):
 		try:
 			control_name = reg.EnumKey(hSystem, i)
 			if 'controlset' in control_name.lower():
-				hSessionMan = reg.OpenKey(hReg,
-										  'SYSTEM\\%s\\Control\\Session Manager' % control_name)
+				hSessionMan = reg.OpenKey(hReg, 'SYSTEM\\%s\\Control\\Session Manager' % control_name)
 				for i in range(1024):
 					try:
 						subkey_name = reg.EnumKey(hSessionMan, i)
 						if ('appcompatibility' in subkey_name.lower()
 							or 'appcompatcache' in subkey_name.lower()):
 							appcompat_key = reg.OpenKey(hSessionMan, subkey_name)
-							bin_data = reg.QueryValueEx(appcompat_key,
-														'AppCompatCache')[0]
+							bin_data = reg.QueryValueEx(appcompat_key, 'AppCompatCache')[0]
 							tmp_list = read_cache(bin_data)
 							if tmp_list:
-								path_name = 'SYSTEM\\%s\\Control\\Session Manager\\%s' % (control_name, subkey_name)
+								path_name = "Registry Path:\n"
+								path_name += 'SYSTEM\\%s\\Control\\Session Manager\\%s' % (control_name, subkey_name)
 								for row in tmp_list:
-									#if g_verbose:
 									row.append(path_name)
 									if row not in out_list:
-										print(row)
 										out_list.append(row)
 					except EnvironmentError as e:
 						print(e)
