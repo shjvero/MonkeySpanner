@@ -256,22 +256,14 @@ class Prefetch(object):
 
 
 	def getContents(self):
-		# Prints important Prefetch data in a structured format
-		# banner = "=" * (len(ntpath.basename(self.pFileName)) + 5)
 		contents = [
 			ntpath.basename(self.pFileName),
-			# "{0}\n{1}\n{0}".format(banner, ntpath.basename(self.pFileName)),
 			[self.executableName, str(self.runCount)],
 			[str(self.mftRecordNumber), str(self.mftSeqNumber)],
 		]
 
-		timeList = []
-		if len(self.timestamps) > 1:
-			for i in self.timestamps:
-				timeList.append("{}".format(i))
-		else:
-			timeList.append("{}".format(self.timestamps[0]))
-		contents.append(timeList)
+		total = len(self.timestamps) - 1
+		contents.append(["{}".format(self.timestamps[i]) for i in range(total, -1, -1)])
 
 		for i in self.volumesInformationArray:
 			contents.append([
@@ -369,37 +361,6 @@ class DecompressWin10(object):
 				sys.exit('Decompressed with a different size than original!')
 
 		return bytearray(ntDecompressed)
-
-
-
-def sortTimestamps(directory):
-	timestamps = []
-
-	for i in os.listdir(directory):
-		if i.endswith(".pf"):
-			if os.path.getsize(directory + i) > 0:
-				try:
-					p = Prefetch(directory + i)
-				except Exception as e:
-					print("[ - ] {} could not be parsed".format(i))
-					continue
-			else:
-				continue
-			
-			start = 0
-			end = 8
-			while end <= len(p.lastRunTime):
-				tstamp = struct.unpack_from("Q", p.lastRunTime[start:end])[0]
-
-				if tstamp:
-					timestamps.append((tstamp, i[:-3]))
-					start += 8
-					end += 8
-				else:
-					break
-	
-	return sorted(timestamps, key=lambda tup: tup[0], reverse=True)
-	
 
 def convertTimestamp(timestamp):
 		return str(datetime(1601,1,1) + timedelta(microseconds=timestamp / 10.))

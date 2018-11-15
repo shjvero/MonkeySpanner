@@ -397,7 +397,8 @@ class NTFSViewer(QWidget):
     def showDetail(self, row, column):
         from modules.UI.NTFSDetailViewer import NTFSDetailViewer
         print(self.details[row])
-        self.parent().ntfsDetailViewer = NTFSDetailViewer(self.details[row])
+        # self.parent().ntfsDetailViewer = NTFSDetailViewer(self.details[row])
+        self.ntfsDetailViewer = NTFSDetailViewer(self.details[row])
 
 
     def exportUSN(self):

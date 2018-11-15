@@ -48,9 +48,8 @@ class LoadingBarThread(QThread):
 class LoadingWidget(QWidget):
     def __init__(self, parent):
         QWidget.__init__(self, parent)
-        # self.loadingBarCSS = "border-color: darkslategray;"
         self.setStyleSheet("background-color: #31353a;")
-        self.setContentsMargins(0, 0, 0, 0)
+        self.setAutoFillBackground(True)
         self.gifPath = "img/loading.gif"
         self.initUI()
 
@@ -68,11 +67,12 @@ class LoadingWidget(QWidget):
         self.loadingBar = QProgressBar(self)
         self.loadingBar.setFixedHeight(10)
         self.loadingBar.setTextVisible(False)
-        # self.loadingBar.setStyleSheet(self.loadingBarCSS)
         layout.addWidget(self.loadingBar)
 
         self.barThread = LoadingBarThread(self)
         self.barThread.change_value.connect(self.loadingBar.setValue)
+        self.layout().setContentsMargins(0, 0, 0, 0)
+
         self.hide()
 
     def start(self):

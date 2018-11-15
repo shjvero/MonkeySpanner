@@ -70,7 +70,7 @@ def escape_value(s):
       str: the escaped string.
     '''
     esc = xml.sax.saxutils.escape(s)
-    esc = esc.encode('ascii', 'xmlcharrefreplace').decode('ascii')
+    esc = esc.encode('utf-16', 'xmlcharrefreplace').decode('utf-16') # ascii
     esc = RESTRICTED_CHARS.sub('', esc)
     return esc
 

@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QWidget, QTableWidget, QLabel, QApplication, QTableW
 
 class NTFSDetailViewer(QWidget):
     def __init__(self, contents):
-        super(NTFSDetailViewer, self).__init__()
+        QWidget.__init__(self)
         self.initUI(contents)
 
     def initUI(self, contents):

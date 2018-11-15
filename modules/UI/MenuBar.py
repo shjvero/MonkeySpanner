@@ -4,51 +4,72 @@ from PyQt5.QtWidgets import *
 class MenuBar(QMenuBar):
     def __init__(self, parent=None):
         QMenuBar.__init__(self, parent)
-        # 메뉴 생성
-        fileMenu = self.addMenu("File")  # 메뉴그룹 생성
+        self.menu = ["File", "View", "Settings", "Help"]
+        self.action = [
+            ["Export as CSV", "Exit"],
+            ["Import NTFS Log", "Import JumpList", "Import RecentFileCache.bcf", "Import Amcache.hve", "Import Registry"],
+            ["Reload"],
+            ["Environment", "About"]
+        ]
+        self.initUI()
 
-        NTFSMenu = QAction("Import NTFS Log", self)
+    def initUI(self):
+        fileMenu = self.addMenu(self.menu[0])
+        viewMenu = self.addMenu(self.menu[1])
+        settingMenu = self.addMenu(self.menu[2])
+        helpMenu = self.addMenu(self.menu[3])
+
+        # File
+        exportMenu = QAction(self.action[0][0], self)
+        exportMenu.setShortcut("Ctrl+S")
+        exportMenu.setToolTip("Only list currently visible")
+        exportMenu.triggered.connect(self.export)
+        fileMenu.addAction(exportMenu)
+
+        exitMenu = QAction(self.action[0][1], self)
+        exitMenu.setShortcut("Ctrl+Q")
+        exitMenu.triggered.connect(qApp.quit)
+        fileMenu.addAction(exitMenu)
+
+        # View
+        NTFSMenu = QAction(self.action[1][0], self)
         NTFSMenu.triggered.connect(self.showNTFSViewer)
-        fileMenu.addAction(NTFSMenu)
+        viewMenu.addAction(NTFSMenu)
 
-        jumplistMenu = QAction("Import JumpList", self)
+        jumplistMenu = QAction(self.action[1][1], self)
         jumplistMenu.triggered.connect(self.showJumpListViewer)
-        fileMenu.addAction(jumplistMenu)
+        viewMenu.addAction(jumplistMenu)
 
-        registryMenu = QAction("Import Registry", self)
+        recentfilebcfMenu = QAction(self.action[1][2], self)
+        recentfilebcfMenu.triggered.connect(self.showRecentFileBCF)
+        viewMenu.addAction(recentfilebcfMenu)
+
+        amcacheMenu = QAction(self.action[1][3], self)
+        amcacheMenu.triggered.connect(self.showAmcache)
+        viewMenu.addAction(amcacheMenu)
+
+        registryMenu = QAction(self.action[1][4], self)
         registryMenu.triggered.connect(self.importRegistry)
-        fileMenu.addAction(registryMenu)
+        viewMenu.addAction(registryMenu)
 
-        exit_menu = QAction("Exit", self)  # 메뉴 객체 생성
-        exit_menu.setShortcut("Ctrl+Q")  # 단축키 생성
-        exit_menu.setStatusTip("종료")
-        exit_menu.triggered.connect(qApp.quit)
-        fileMenu.addAction(exit_menu)
-
-        viewMenu = self.addMenu("View")
-        helpMenu = self.addMenu("Help")
-
-
-        reloadAction1 = QAction("Reload", self)
+        # Settings
+        reloadAction1 = QAction(self.action[2][0], self)
         reloadAction1.setShortcut("F5")
-        timelineAction2 = QAction("Reload with Timeline", self)
-        timelineAction2.setShortcut("F6")
-        fullScreenAction3 = QAction("Full Screen", self, checkable=True)
-        fullScreenAction3.setShortcut("F11")
-        fullScreenAction3.setChecked(False)
-        viewAction4 = QAction("View Option 4", self, checkable=True)
-        viewAction4.setChecked(False)
-        viewMenu.addAction(reloadAction1)
-        viewMenu.addAction(timelineAction2)
-        viewMenu.addAction(fullScreenAction3)
-        viewMenu.addAction(viewAction4)
+        registryMenu.triggered.connect(self.reload)
+        settingMenu.addAction(reloadAction1)
 
-        envAction = QAction("Environment", self)
+        # timelineAction2 = QAction("Reload with Timeline", self)
+        # timelineAction2.setShortcut("F6")
+        # settingMenu.addAction(timelineAction2)
+
+        # Help
+        envAction = QAction(self.action[3][0], self)
         envAction.triggered.connect(self.showUserEnvironment)
-        shortcutAction = QAction("Shortcut", self)
-        shortcutAction.triggered.connect(self.showShortcutInfo)
         helpMenu.addAction(envAction)
-        helpMenu.addAction(shortcutAction)
+
+        aboutAction = QAction(self.action[3][1], self)
+        aboutAction.triggered.connect(self.showAbout)
+        helpMenu.addAction(aboutAction)
 
     def showNTFSViewer(self):
         from modules.UI.NTFSViewer import NTFSViewer
@@ -88,25 +109,40 @@ class MenuBar(QMenuBar):
         else:
             QMessageBox.question(self, "Help", "Please select software.", QMessageBox.Ok)
             return
-        content = getJumplistItems(hashList.copy())
+        content = getJumplistItems(hashList)
         if not content:
             msg = "[Not Exists.]\n"
             for h in hashList:
                 msg += " - ".join(h)
                 msg += "\n"
-            QMessageBox.question(self, "Help", msg, QMessageBox.Ok)
+            QMessageBox.information(self, "Help", msg, QMessageBox.Ok)
             return
         self.parent().jumplistViewer = JumpListViewer(content)
-        self.parent().jumplistViewer.show()
+
+    def showRecentFileBCF(self):
+        from modules.Prototype import getRecentFileCache
+        from modules.UI.ListViewer import ListViewer
+        fileName = QFileDialog.getOpenFileName(self)
+        rst, contents = getRecentFileCache(fileName[0])
+        if rst:
+            self.parent().listViewer = ListViewer("RecentFileCache Viewer", contents)
+        else:
+            QMessageBox.information(self, "Help", contents, QMessageBox.Ok)
+
+    def showAmcache(self):
+        QMessageBox.question(self, "Help", "Preparing...", QMessageBox.Ok)
+
+    def export(self):
+        QMessageBox.question(self, "Help", "Preparing...", QMessageBox.Ok)
+
+    def reload(self):
+        QMessageBox.question(self, "Help", "Preparing...", QMessageBox.Ok)
 
     def importRegistry(self):
         QMessageBox.question(self, "Help", "Preparing...", QMessageBox.Ok)
-        # print("Import Registry")
 
     def showUserEnvironment(self):
         QMessageBox.question(self, "Help", "Preparing...", QMessageBox.Ok)
-        # print("showUserEnvironment")
 
-    def showShortcutInfo(self):
+    def showAbout(self):
         QMessageBox.question(self, "Help", "Preparing...", QMessageBox.Ok)
-        # print("showShortcutInfo")

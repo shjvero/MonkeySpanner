@@ -232,7 +232,8 @@ def read_win10_entries(bin_data, ver_magic, creators_update=False):
 				entry_list.append(row)
 				if path[-3:].lower() == "exe":
 					added = path.rsplit("\\", 1)[-1].upper()
-					g_prefetchList.append(added)
+					if added not in g_prefetchList:
+						g_prefetchList.append(added)
 
 		return entry_list
 	except (RuntimeError, ValueError, NameError) as err:
@@ -288,7 +289,8 @@ def read_nt6_entries(bin_data, entry):
 				entry_list.append(row)
 				if path[-3:].lower() == "exe":
 					added = path.rsplit("\\", 1)[-1].upper()
-					g_prefetchList.append(added)
+					if added not in g_prefetchList:
+						g_prefetchList.append(added)
 		return entry_list
 
 	except (RuntimeError, ValueError, NameError) as err:
@@ -396,7 +398,8 @@ def get_local_data(prefetchList, timeline=None):
 	for i in range(1024):
 		try:
 			control_name = reg.EnumKey(hSystem, i)
-			if 'controlset' in control_name.lower():
+			# if 'controlset' in control_name.lower():
+			if 'currentcontrolset' in control_name.lower():
 				hSessionMan = reg.OpenKey(hReg, 'SYSTEM\\%s\\Control\\Session Manager' % control_name)
 				for i in range(1024):
 					try:

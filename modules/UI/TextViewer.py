@@ -9,10 +9,8 @@ class TextViewer(QWidget):
     def initUI(self, viewerTitle, viewerContent):
         self.content = viewerContent
         self.setWindowTitle(viewerTitle)
-        self.setWindowIcon(QIcon("../../img/logo.png"))
         self.resize(600, 500)
         self.label = QLabel()
-        self.label.setFont(QFont("Times New Roman", 12))
         self.label.setText(self.content)
         self.label.setMargin(10)
         # self.font()

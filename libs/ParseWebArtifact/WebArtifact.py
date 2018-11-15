@@ -1,7 +1,11 @@
 import pyesedb
 import datetime
+import modules.constant as CONSTANT
 
-EXE_EXTENSION = ["dll", "rtf", "doc", "docx", "hta", "xls", "ppts", "pptx", "pdf", "woff", "hwp", "bat"]
+DOM_EXTENSION = ['htm', 'html', 'js', 'css', 'php', 'jsp', 'asp', 'aspx']
+DOC_EXTENSION = ['doc', 'docx', 'hta', 'rtf', 'xls', 'ppts', 'pptx', 'pdf', 'woff', 'sct', 'wsc']
+ETC_EXTENSION = ['dll', 'bat', 'exe']
+
 #Get file time
 def getFiletime(dt):
     if dt == 0:
@@ -56,7 +60,7 @@ def getHistory(filepath, prefetchList, timeline=None):
                     continue
                 accessedTime = getFiletime(hRecords.get_value_data_as_integer(13))
                 modifiedTime = getFiletime(hRecords.get_value_data_as_integer(12))
-                if URL[-3:] in EXE_EXTENSION:
+                if URL[-3:] in DOC_EXTENSION:
                     head = navyHead
                 elif URL[-3:] == "exe":
                     try:
@@ -87,7 +91,7 @@ def getHistory(filepath, prefetchList, timeline=None):
     return items
 
 #Get content
-def getContent(filepath, timeline=None):
+def getContent(filepath, timeline=None, type=CONSTANT.IE):
     esedb_file = pyesedb.file()
     esedb_file.open(filepath)
     containers = esedb_file.get_table_by_name("Containers")
@@ -103,8 +107,10 @@ def getContent(filepath, timeline=None):
             histDirDict["Container_%s" % cRecords.get_value_data_as_integer(0)] = cRecords.get_value_data_as_string(10)
 
     items = []
-    redHead = ["Cache", 1]
-    navyHead = ["Cache", 6]
+    grayHead = [CONSTANT.CACHE_KEYWORD, 0]
+    redHead = [CONSTANT.CACHE_KEYWORD, 1]
+    navyHead = [CONSTANT.CACHE_KEYWORD, 6]
+
     #Get content from each container
     for hcl in histContList:
         histCont = esedb_file.get_table_by_name(hcl)
@@ -117,12 +123,20 @@ def getContent(filepath, timeline=None):
             head = []
             if fileName.count("."):
                 extension = fileName.split(".")[1]
-                if extension in ["htm", "html", "js", "php", "jsp", "asp", "aspx"]:
-                    head = redHead
-                elif extension in EXE_EXTENSION:
-                    head = navyHead
-                else:
-                    continue
+                if type == CONSTANT.IE:
+                    if extension in DOM_EXTENSION:
+                        head = redHead
+                    elif extension in DOC_EXTENSION + ETC_EXTENSION:
+                        head = navyHead
+                    else:
+                        continue
+                elif type == CONSTANT.OFFICE:
+                    if extension in DOC_EXTENSION:
+                        head = navyHead
+                    elif extension in ETC_EXTENSION:
+                        head = grayHead
+                    else:
+                        continue
             else:
                 continue
             content = [
@@ -194,84 +208,5 @@ def getDownloads(filepath, prefetchList, timeline=None):
                 downloadPath,
             ]
             items.append([purpleHead, accessedTime, _url, fileName, fileSize, "", content])
-    return items
-
-def getCookies(filepath):
-    esedb_file = pyesedb.file()
-    esedb_file.open(filepath)
-    containers = esedb_file.get_table_by_name("Containers")
-
-    #Get list of containers that contain IE cookies
-    histContList = []
-    histNameDict = dict()
-    histDirDict = dict()
-    for cRecords in containers.records:
-        if "Cookies" in cRecords.get_value_data_as_string(8):
-            histContList.append("Container_%s" % cRecords.get_value_data_as_integer(0))
-            histNameDict["Container_%s" % cRecords.get_value_data_as_integer(0)] = cRecords.get_value_data_as_string(8)
-            histDirDict["Container_%s" % cRecords.get_value_data_as_integer(0)] = cRecords.get_value_data_as_string(10)
-
-    items = []
-    #Get cookies from each container
-    for hcl in histContList:
-        histCont = esedb_file.get_table_by_name(hcl)
-        for hRecords in histCont.records:
-            items.append([
-                getFiletime(hRecords.get_value_data_as_integer(13)),  # Accessed Time
-                {
-                    'ID': "{}.{}".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0)),
-                    # 'ContainerName': histNameDict[hcl],
-                    'Created': getFiletime(hRecords.get_value_data_as_integer(10)),
-                    'Modified': getFiletime(hRecords.get_value_data_as_integer(12)),
-                    'Expires': getFiletime(hRecords.get_value_data_as_integer(11)),
-                    'Synced': getFiletime(hRecords.get_value_data_as_integer(9)),
-                    'SyncCount': hRecords.get_value_data_as_integer(15),
-                    'AccessCount': hRecords.get_value_data_as_integer(8),
-                    'URL': hRecords.get_value_data_as_string(17),
-                    'FileName': hRecords.get_value_data_as_string(18),
-                    'FileSize': hRecords.get_value_data_as_integer(5),
-                    'Directory': histDirDict[hcl],
-                }
-            ])
-
-    return items
-
-def getDom(filepath):
-    esedb_file = pyesedb.file()
-    esedb_file.open(filepath)
-    containers = esedb_file.get_table_by_name("Containers")
-
-    #Get list of containers that contain IE DOM info
-    histContList = []
-    histNameDict = dict()
-    histDirDict = dict()
-    for cRecords in containers.records:
-        if "DOMStore" in cRecords.get_value_data_as_string(8):
-            histContList.append("Container_%s" % cRecords.get_value_data_as_integer(0))
-            histNameDict["Container_%s" % cRecords.get_value_data_as_integer(0)] = cRecords.get_value_data_as_string(8)
-            histDirDict["Container_%s" % cRecords.get_value_data_as_integer(0)] = cRecords.get_value_data_as_string(10)
-
-    items = []
-    #Get DOM info from each container
-    for hcl in histContList:
-        histCont = esedb_file.get_table_by_name(hcl)
-        for hRecords in histCont.records:
-            items.append([
-                getFiletime(hRecords.get_value_data_as_integer(13)),  # Accessed Time
-                {
-                    'ID': "{}.{}".format(hRecords.get_value_data_as_integer(1), hRecords.get_value_data_as_integer(0)),
-                    'ContainerName': histNameDict[hcl],
-                    'Created': getFiletime(hRecords.get_value_data_as_integer(10)),
-                    'Modified': getFiletime(hRecords.get_value_data_as_integer(12)),
-                    'Expires': getFiletime(hRecords.get_value_data_as_integer(11)),
-                    'Synced': getFiletime(hRecords.get_value_data_as_integer(9)),
-                    'SyncCount': hRecords.get_value_data_as_integer(15),
-                    'AccessCount': hRecords.get_value_data_as_integer(8),
-                    'URL': hRecords.get_value_data_as_string(17),
-                    'FileName': hRecords.get_value_data_as_string(18),
-                    'FileSize': hRecords.get_value_data_as_integer(5),
-                    'Directory': histDirDict[hcl],
-                }
-            ])
     return items
 '''

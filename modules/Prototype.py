@@ -1,171 +1,400 @@
 import olefile
+import modules.constant as CONSTANT
 
 from libs.ParsePrefetch.prefetch import *
 from libs.ParseJumpList.JumpListParser import *
 from libs.ParseRegistry.ShimCacheParser import get_local_data
 import libs.ParseEvtx.Evtx as evtx
 import libs.ParseWebArtifact.WebArtifact as WebArtifact
-import modules.constant as PATH
-import datetime
 
-def getEventLogItemsForWin7(evtxList, prototype, appName=None, timeline=None):
+def getApplicationEvtx(compared, prototype, checkedSW, timeline=None):
     items = []
-    headStr = "EventLog"
-    orangeHead = [headStr, 2]
-    yellowHead = [headStr, 3]
-    greenHead = [headStr, 4]
-    for fileName, category in evtxList.items():
-        fullPath = PATH.EVENTLOG + fileName
-        checkedEID = category['eid']
-        checkedProviders = category['providerName']
-        with evtx.Evtx(fullPath) as log:
-            if fileName.startswith("App"):
-                for event in log.records():
-                    try:
-                        systemTag = event.lxml()[0]
-                        loggedTime = systemTag[5].get("SystemTime")
-                        if not loggedTime: continue
-                        providerName = systemTag[0].get("Name")
-                        eventID = systemTag[1].text
-                        if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
-                            eventDataTag = event.lxml()[1]
-                            if eventDataTag[0].text != appName: continue
-                            etc = eventDataTag[0].text
-                            if timeline:
-                                if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-                                    continue
-                            if systemTag[2].text == '1':
-                                level = 'Fatal'
-                            elif systemTag[2].text == '2':
-                                level = 'Error'
-                            elif systemTag[2].text == '3':
-                                level = 'Warning'
-                            elif systemTag[2].text == '4':
-                                level = 'Information'
+    wer_info = []
+    origin = checkedSW[0]
+    orangeHead = [CONSTANT.EVENTLOG_KEYWORD, 2]
 
-                            items.append([orangeHead, loggedTime, providerName, eventID, level, etc, event.xml()])
-                    except Exception as e:
-                        print("Error: {}".format(e))
-                        continue
-            elif fileName.startswith("System") or fileName.endswith("Fault-Tolerant-Heap%4Operational.evtx") or fileName.endswith("WER-Diag%4Operational.evtx"):
-                for event in log.records():
-                    try:
-                        systemTag = event.lxml()[0]
-                        loggedTime = systemTag[7].get("SystemTime")
-                        if not loggedTime: continue
-                        providerName = systemTag[0].get("Name")
-                        eventID = systemTag[1].text
-                        head = []
-                        if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
-                            etc = ''
-                            if fileName.startswith("System"):
-                                eventDataTag = event.lxml()[1]
-                                etc = eventDataTag[0].text
-                                if not etc.startswith("Windows Error Reporting"):
-                                    continue
-                                head = orangeHead
-                            elif fileName.endswith("Fault-Tolerant-Heap%4Operational.evtx"):
-                                etc = 'Heap Corruption'
-                                head = greenHead
-                            elif fileName.endswith("WER-Diag%4Operational.evtx"):
-                                eventDataTag = event.lxml()[1]
-                                etc = eventDataTag.get("Name")
-                                head = yellowHead
+    fullPath = CONSTANT.EVENTLOG + compared['channel']
+    checkedEID = compared['eid']
+    checkedProviders = compared['providerName']
+    with evtx.Evtx(fullPath) as log:
+        for event in log.records():
+            try:
+                systemTag = event.lxml()[0]
+                loggedTime = systemTag[5].get("SystemTime")
+                if not loggedTime: continue
+                providerName = systemTag[0].get("Name")
+                eventID = systemTag[1].text
+                if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
+                    if timeline:
+                        if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                            continue
+                    etc = ''
+                    eventDataTag = event.lxml()[1]
+                    if int(eventID) == 1000:
+                        if eventDataTag[0].text not in origin: continue
+                        etc = eventDataTag[0].text      # idx - 0 (SW), 3 (Module), 6 (Exception Code)
+                    elif int(eventID) == 1001:
+                        appcrashList = checkedSW[0] + checkedSW[1]
+                        if eventDataTag[2].text != 'APPCRASH' or eventDataTag[5].text not in appcrashList: continue
+                        etc = eventDataTag[5].text      # idx - 5 (SW), 8 (Module), 11 (Exception Code), 16 (PATH)
+                        wer_info.append([eventDataTag[16].text, eventDataTag[8].text, eventDataTag[11].text])
 
-                            if timeline:
-                                if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-                                    continue
-                            if systemTag[3].text == '1':
-                                level = 'Fatal'
-                            elif systemTag[3].text == '2':
-                                level = 'Error'
-                            elif systemTag[3].text == '3':
-                                level = 'Warning'
-                            elif systemTag[3].text == '4':
-                                level = 'Information'
+                    if systemTag[2].text == '1':
+                        level = 'Fatal'
+                    elif systemTag[2].text == '2':
+                        level = 'Error'
+                    elif systemTag[2].text == '3':
+                        level = 'Warning'
+                    elif systemTag[2].text == '4':
+                        level = 'Information'
 
-                            items.append([head, loggedTime, providerName, eventID, level, etc, event.xml()])
-                    except Exception as e:
-                        print("Error: {}".format(e))
-
+                    items.append([orangeHead, loggedTime, providerName, eventID, level, etc, event.xml()])
+            except Exception as e:
+                print("Error: Application.evtx {}".format(e))
+            continue
+    if wer_info:
+        type = CONSTANT.IE if not checkedSW[1] else CONSTANT.OFFICE
+        getReportWER(wer_info, items, type)
     prototype += items
 
-def getEventLogItemsForWin10(evtxList, prototype, appName=None, timeline=None):
+def getWERDiagEvtxForWin7(compared, prototype, timeline=None):
     items = []
-    orangeHead = ["EventLog", 2]
-    greenHead = ["EventLog", 4]
+    yellowHead = [CONSTANT.EVENTLOG_KEYWORD, 3]
 
-    for fileName, category in evtxList.items():
-        fullPath = PATH.EVENTLOG + fileName
-        checkedEID = category['eid']
-        checkedProviders = category['providerName']
-        with evtx.Evtx(fullPath) as log:
-            if fileName.startswith("App") or fileName.startswith("System"):
-                for event in log.records():
-                    try:
-                        systemTag = event.lxml()[0]
-                        loggedTime = systemTag[5].get("SystemTime")
-                        if not loggedTime: continue
-                        providerName = systemTag[0].get("Name")
-                        eventID = systemTag[1].text
-                        if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
-                            etc = ''
-                            if fileName.startswith("App"):
-                                eventDataTag = event.lxml()[1]
-                                if eventDataTag[0].text != appName: continue
-                                etc = eventDataTag[0].text
-                            elif timeline:
-                                if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-                                    continue
-                            if systemTag[2].text == '1':
-                                level = 'Fatal'
-                            elif systemTag[2].text == '2':
-                                level = 'Error'
-                            elif systemTag[2].text == '3':
-                                level = 'Warning'
-                            elif systemTag[2].text == '4':
-                                level = 'Information'
+    fullPath = CONSTANT.EVENTLOG + compared['channel']
+    checkedEID = compared['eid']
+    checkedProviders = compared['providerName']
+    with evtx.Evtx(fullPath) as log:
+        for event in log.records():
+            try:
+                systemTag = event.lxml()[0]
+                loggedTime = systemTag[7].get("SystemTime")
+                if not loggedTime: continue
+                providerName = systemTag[0].get("Name")
+                eventID = systemTag[1].text
+                if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
+                    if timeline:
+                        if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                            continue
+                    if systemTag[3].text == '1':
+                        level = 'Fatal'
+                    elif systemTag[3].text == '2':
+                        level = 'Error'
+                    elif systemTag[3].text == '3':
+                        level = 'Warning'
+                    elif systemTag[3].text == '4':
+                        level = 'Information'
+                    etc = 'Heap Corruption'
+                    items.append([yellowHead, loggedTime, providerName, eventID, level, etc, event.xml()])
+            except Exception as e:
+                print("Error: {}".format(e))
+    prototype += items
 
-                            items.append([orangeHead, loggedTime, providerName, eventID, level, etc, event.xml()])
+def getFalutHeapEvtx(compared, prototype, type, timeline=None):
+    items = []
+    head = None
+    if type == CONSTANT.IE:
+        head = [CONSTANT.EVENTLOG_KEYWORD, 4]
+    elif type == CONSTANT.OFFICE:
+        head = [CONSTANT.EVENTLOG_KEYWORD, 3]
 
-                    except Exception as e:
-                        print("Error: {}".format(e))
-                        continue
-            elif fileName.endswith("Fault-Tolerant-Heap%4Operational.evtx"):
-                for event in log.records():
-                    try:
-                        systemTag = event.lxml()[0]
-                        loggedTime = systemTag[7].get("SystemTime")
-                        if not loggedTime: continue
-                        providerName = systemTag[0].get("Name")
-                        eventID = systemTag[1].text
-                        if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
-                            if timeline:
-                                if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-                                    continue
-                            if systemTag[3].text == '1':
-                                level = 'Fatal'
-                            elif systemTag[3].text == '2':
-                                level = 'Error'
-                            elif systemTag[3].text == '3':
-                                level = 'Warning'
-                            elif systemTag[3].text == '4':
-                                level = 'Information'
+    fullPath = CONSTANT.EVENTLOG + compared['channel']
+    checkedEID = compared['eid']
+    checkedProviders = compared['providerName']
+    with evtx.Evtx(fullPath) as log:
+        for event in log.records():
+            try:
+                systemTag = event.lxml()[0]
+                loggedTime = systemTag[7].get("SystemTime")
+                if not loggedTime: continue
+                providerName = systemTag[0].get("Name")
+                eventID = systemTag[1].text
+                if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
+                    if timeline:
+                        if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                            continue
+                    if systemTag[3].text == '1':
+                        level = 'Fatal'
+                    elif systemTag[3].text == '2':
+                        level = 'Error'
+                    elif systemTag[3].text == '3':
+                        level = 'Warning'
+                    elif systemTag[3].text == '4':
+                        level = 'Information'
+                    eventDataTag = event.lxml()[1]
+                    etc = eventDataTag.get("Name")
+                    items.append([head, loggedTime, providerName, eventID, level, etc, event.xml()])
+            except Exception as e:
+                print("Error: Fault.evtx {}".format(e))
+    prototype += items
 
-                            etc = 'Heap Corruption'
-                            items.append([greenHead, loggedTime, providerName, eventID, level, etc, event.xml()])
-                    except Exception as e:
-                        print("Error: {}".format(e))
+def getOAlertsEvtx(compared, prototype, timeline=None):
+    items = []
+    yellowHead = [CONSTANT.EVENTLOG_KEYWORD, 3]
 
-        prototype += items
+    fullPath = CONSTANT.EVENTLOG + compared['channel']
+    checkedEID = compared['eid']
+    with evtx.Evtx(fullPath) as log:
+        for event in log.records():
+            try:
+                systemTag = event.lxml()[0]
+                loggedTime = systemTag[5].get("SystemTime")
+                if not loggedTime: continue
+                providerName = systemTag[0].get("Name")
+                eventID = systemTag[1].text
+                if int(eventID) in checkedEID:
+                    if timeline:
+                        if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                            continue
+                    if systemTag[2].text == '1':
+                        level = 'Fatal'
+                    elif systemTag[2].text == '2':
+                        level = 'Error'
+                    elif systemTag[2].text == '3':
+                        level = 'Warning'
+                    elif systemTag[2].text == '4':
+                        level = 'Information'
+                    eventDataTag = event.lxml()[1]
+                    etc = eventDataTag[0].text
+                    items.append([yellowHead, loggedTime, providerName, eventID, level, etc, event.xml()])
+            except Exception as e:
+                print("Error: OAlert.evtx {}".format(e))
+    prototype += items
+#
+# def getEventLogItemsForWin7(compared, prototype, origin=None, timeline=None):
+#     items = []
+#     headStr = "EventLog"
+#     orangeHead = [headStr, 2]
+#     yellowHead = [headStr, 3]
+#     greenHead = [headStr, 4]
+#     for fileName, category in compared.items():
+#         fullPath = CONSTANT.EVENTLOG + fileName
+#         checkedEID = category['eid']
+#         checkedProviders = category['providerName']
+#         with evtx.Evtx(fullPath) as log:
+#             if fileName.startswith("App"):
+#                 for event in log.records():
+#                     try:
+#                         systemTag = event.lxml()[0]
+#                         loggedTime = systemTag[5].get("SystemTime")
+#                         if not loggedTime: continue
+#                         providerName = systemTag[0].get("Name")
+#                         eventID = systemTag[1].text
+#                         if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
+#                             eventDataTag = event.lxml()[1]
+#                             if int(eventID) == 1000 and eventDataTag[0].text not in origin: continue
+#                             etc = eventDataTag[0].text
+#                             if timeline:
+#                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+#                                     continue
+#                             if systemTag[2].text == '1':
+#                                 level = 'Fatal'
+#                             elif systemTag[2].text == '2':
+#                                 level = 'Error'
+#                             elif systemTag[2].text == '3':
+#                                 level = 'Warning'
+#                             elif systemTag[2].text == '4':
+#                                 level = 'Information'
+#
+#                             items.append([orangeHead, loggedTime, providerName, eventID, level, etc, event.xml()])
+#                     except Exception as e:
+#                         print("Error: {}".format(e))
+#                         continue
+#             elif fileName.endswith("Fault-Tolerant-Heap%4Operational.evtx") or fileName.endswith("WER-Diag%4Operational.evtx"):
+#                 for event in log.records():
+#                     try:
+#                         systemTag = event.lxml()[0]
+#                         loggedTime = systemTag[7].get("SystemTime")
+#                         if not loggedTime: continue
+#                         providerName = systemTag[0].get("Name")
+#                         eventID = systemTag[1].text
+#                         head = []
+#                         if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
+#                             etc = ''
+#                             if fileName.endswith("Fault-Tolerant-Heap%4Operational.evtx"):
+#                                 etc = 'Heap Corruption'
+#                                 head = greenHead
+#                             elif fileName.endswith("WER-Diag%4Operational.evtx"):
+#                                 eventDataTag = event.lxml()[1]
+#                                 etc = eventDataTag.get("Name")
+#                                 head = yellowHead
+#
+#                             if timeline:
+#                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+#                                     continue
+#                             if systemTag[3].text == '1':
+#                                 level = 'Fatal'
+#                             elif systemTag[3].text == '2':
+#                                 level = 'Error'
+#                             elif systemTag[3].text == '3':
+#                                 level = 'Warning'
+#                             elif systemTag[3].text == '4':
+#                                 level = 'Information'
+#
+#                             items.append([head, loggedTime, providerName, eventID, level, etc, event.xml()])
+#                     except Exception as e:
+#                         print("Error: {}".format(e))
+#             elif fileName.startswith("OAlerts"):
+#                 for event in log.records():
+#                     try:
+#                         systemTag = event.lxml()[0]
+#                         loggedTime = systemTag[5].get("SystemTime")
+#                         if not loggedTime: continue
+#                         providerName = systemTag[0].get("Name")
+#                         eventID = systemTag[1].text
+#                         if int(eventID) in checkedEID:
+#                             if timeline:
+#                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+#                                     continue
+#                             if systemTag[2].text == '1':
+#                                 level = 'Fatal'
+#                             elif systemTag[2].text == '2':
+#                                 level = 'Error'
+#                             elif systemTag[2].text == '3':
+#                                 level = 'Warning'
+#                             elif systemTag[2].text == '4':
+#                                 level = 'Information'
+#                             eventDataTag = event.lxml()[1]
+#                             etc = eventDataTag[0].text
+#                             items.append([yellowHead, loggedTime, providerName, eventID, level, etc, event.xml()])
+#                     except Exception as e:
+#                         print("Error: {}".format(e))
+#     prototype += items
+#
+# def getEventLogItemsForWin10(compared, prototype, checkedSW=None, timeline=None):
+#     items = []
+#     headStr = "EventLog"
+#     orangeHead = [headStr, 2]
+#     yellowHead = [headStr, 3]
+#     greenHead = [headStr, 4]
+#     origin = checkedSW[0]
+#     reportArchive = []
+#     for fileName, category in compared.items():
+#         fullPath = CONSTANT.EVENTLOG + fileName
+#         checkedEID = category['eid']
+#         checkedProviders = category['providerName']
+#         with evtx.Evtx(fullPath) as log:
+#             if fileName.startswith("App"): # or fileName.startswith("System"):
+#                 for event in log.records():
+#                     try:
+#                         systemTag = event.lxml()[0]
+#                         loggedTime = systemTag[5].get("SystemTime")
+#                         if not loggedTime: continue
+#                         providerName = systemTag[0].get("Name")
+#                         eventID = systemTag[1].text
+#                         if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
+#                             etc = ''
+#                             # if fileName.startswith("App"):
+#                             eventDataTag = event.lxml()[1]
+#                             if int(eventID) == 1000:
+#                                 if eventDataTag[0].text not in origin: continue
+#                                 etc = eventDataTag[0].text
+#                             elif int(eventID) == 1001:
+#                                 appcrashList = checkedSW[0] + checkedSW[1]
+#                                 if eventDataTag[2].text != 'APPCRASH' or eventDataTag[5].text not in appcrashList: continue
+#                                 etc = eventDataTag[5].text
+#                                 reportArchive.append(eventDataTag[16].text)
+#                             # elif timeline:
+#                             if timeline:
+#                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+#                                     continue
+#                             if systemTag[2].text == '1':
+#                                 level = 'Fatal'
+#                             elif systemTag[2].text == '2':
+#                                 level = 'Error'
+#                             elif systemTag[2].text == '3':
+#                                 level = 'Warning'
+#                             elif systemTag[2].text == '4':
+#                                 level = 'Information'
+#
+#                             items.append([orangeHead, loggedTime, providerName, eventID, level, etc, event.xml()])
+#                     except Exception as e:
+#                         print("Error: {}".format(e))
+#                         continue
+#             elif fileName.endswith("Fault-Tolerant-Heap%4Operational.evtx"):
+#                 for event in log.records():
+#                     try:
+#                         systemTag = event.lxml()[0]
+#                         loggedTime = systemTag[7].get("SystemTime")
+#                         if not loggedTime: continue
+#                         providerName = systemTag[0].get("Name")
+#                         eventID = systemTag[1].text
+#                         if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
+#                             if timeline:
+#                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+#                                     continue
+#                             if systemTag[3].text == '1':
+#                                 level = 'Fatal'
+#                             elif systemTag[3].text == '2':
+#                                 level = 'Error'
+#                             elif systemTag[3].text == '3':
+#                                 level = 'Warning'
+#                             elif systemTag[3].text == '4':
+#                                 level = 'Information'
+#                             etc = 'Heap Corruption'
+#                             items.append([greenHead, loggedTime, providerName, eventID, level, etc, event.xml()])
+#                     except Exception as e:
+#                         print("Error: {}".format(e))
+#             elif fileName.startswith("OAlerts"):
+#                 for event in log.records():
+#                     try:
+#                         systemTag = event.lxml()[0]
+#                         loggedTime = systemTag[5].get("SystemTime")
+#                         if not loggedTime: continue
+#                         providerName = systemTag[0].get("Name")
+#                         eventID = systemTag[1].text
+#                         if int(eventID) in checkedEID:
+#                             if timeline:
+#                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+#                                     continue
+#                             if systemTag[2].text == '1':
+#                                 level = 'Fatal'
+#                             elif systemTag[2].text == '2':
+#                                 level = 'Error'
+#                             elif systemTag[2].text == '3':
+#                                 level = 'Warning'
+#                             elif systemTag[2].text == '4':
+#                                 level = 'Information'
+#                             eventDataTag = event.lxml()[1]
+#                             etc = eventDataTag[0].text
+#                             items.append([yellowHead, loggedTime, providerName, eventID, level, etc, event.xml()])
+#                     except Exception as e:
+#                         print("Error: {}".format(e))
+#
+#         prototype += items
 
-def getReportWER(env, prototype, _dirname, timeline=None):
+def getReportWER(wer_info, prototype, type):
+    import os
+    import time
+    head = None
+    if type == CONSTANT.IE:
+        head = [CONSTANT.WER_KEYWORD, 3]
+    elif type == CONSTANT.OFFICE:
+        head = [CONSTANT.WER_KEYWORD, 4]
+
+    for data in wer_info:
+        if os.path.exists(data[0]):
+            fullpath = data[0] + "\\Report.wer"
+            f = open(fullpath, "rb")
+            content = f.read().decode('utf-16')
+            createdTime = datetime.datetime.fromtimestamp(os.path.getctime(fullpath))
+            modifiedTime = datetime.datetime.fromtimestamp(os.path.getmtime(fullpath))
+            prototype.append([head, "{}".format(modifiedTime), fullpath, data[1], data[2], "{}".format(createdTime), content])
+
+'''
+def getReportWER(env, prototype, reportArchive, type, timeline=None,):
     import time
     items = []
-    yellowHead = ["Report.wer", 3]
-    for dirname in os.listdir(PATH.WER[env]):
-        if dirname.startswith(_dirname):
-            fullpath = PATH.WER[env] + dirname + "\\Report.wer"
+    headStr = "Report.wer"
+    head = None
+    if type == CONSTANT.IE:
+        head = [headStr, 3]
+    elif type == CONSTANT.OFFICE:
+        head = [headStr, 4]
+
+    for dirname in os.listdir(CONSTANT.WER[env]):
+        if dirname.rsplit('_', 2)[0] in reportArchive:
+            fullpath = CONSTANT.WER[env] + dirname + "\\Report.wer"
             f = open(fullpath, "rb")
             content = f.read().decode('utf-16')
             createdTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(os.path.getctime(fullpath)))
@@ -173,68 +402,96 @@ def getReportWER(env, prototype, _dirname, timeline=None):
                 if datetime.datetime.strptime(createdTime, "%Y-%m-%d %H:%M:%S") < timeline:
                     continue
             modifiedTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(os.path.getmtime(fullpath)))
-            items.append([yellowHead, modifiedTime, fullpath, createdTime, "", "", content])
+            items.append([head, modifiedTime, fullpath, createdTime, "", "", content])
     prototype += items
-
+'''
 def getPrefetchItems(prototype, included, timeline=None):
     items = []
     headStr = "Prefetch"
+    grayHead = [headStr, 0]
     redHead = [headStr, 1]
+    orangeHead = [headStr, 2]
     yellowHead = [headStr, 3]
     blueHead = [headStr, 5]
     purpleHead = [headStr, 7]
-    for i in os.listdir(PATH.PREFETCH):
-        if i.endswith(".pf"):
-            if os.path.getsize(PATH.PREFETCH + i) == 0:
-                print("[ - ] {}: Zero-byte Prefetch File".format(i))
+
+    limitedTime = None
+    if not timeline:
+        import glob
+        fileList = []
+        for target in included[0]:
+            fileList += glob.glob(CONSTANT.PREFETCH + "\\" + target + "*.pf")
+        if not fileList:
+            limitedTime = datetime.datetime.utcfromtimestamp(0)
+        min_ctime = os.path.getctime(fileList[0])
+        try:
+            for file in fileList[1:]:
+                file_ctime = os.path.getctime(file)
+                if file_ctime < min_ctime:
+                    min_ctime = file_ctime
+            limitedTime = datetime.datetime.fromtimestamp(min_ctime)
+        except:
+            limitedTime = datetime.datetime.fromtimestamp(os.path.getctime(fileList[0]))
+
+    for fname in os.listdir(CONSTANT.PREFETCH):
+        if fname.endswith(".pf"):
+            if os.path.getsize(CONSTANT.PREFETCH + fname) == 0:
+                print("[ - ] {}: Zero-byte Prefetch File".format(fname))
                 continue
             try:
-                p = Prefetch(PATH.PREFETCH + i)
+                p = Prefetch(CONSTANT.PREFETCH + fname)
             except Exception as e:
-                print("[ - ] {} could not be parsed".format(i))
+                print("[ - ] {} could not be parsed. {}".format(fname, e))
 
             pf_name = "{}-{}.pf".format(p.executableName, p.hash)
             createdTime = p.volumesInformationArray[0]["Creation Date"]
             createdTimeObj = datetime.datetime.strptime(createdTime, "%Y-%m-%d %H:%M:%S.%f")
-            if p.executableName == included[0]: # 특정 SW
-                # if limitedTime:
-                #     if createdTimeObj < limitedTime:
-                #         head[1] = 0
+            if p.executableName in included[0]: # 특정 SW
                 content = p.getContents()
                 items.append([redHead, createdTime, pf_name, p.executableName, "Create", content])
                 for timestamp in p.timestamps:
+                    head = redHead
                     if timeline:
-                        head = redHead if datetime.datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") <= timeline else blueHead
-                    else:
-                        head = blueHead
+                        if datetime.datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") > timeline:
+                            head = blueHead
                     items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
                 continue
-            elif p.executableName == included[1]: #WERFAULT
-                head = yellowHead
-            elif not timeline and p.executableName not in included:
-                continue
-            elif p.executableName in included[2:]:
-                content = p.getContents()
+            elif p.executableName in included[1]:
+                head = orangeHead
+            elif p.executableName in included[2]:
+                head = yellowHead    # WERFAULT
+            elif p.executableName in included[3]:
                 head = purpleHead
-                if createdTimeObj > timeline:
-                    items.append([head, createdTime, pf_name, p.executableName, "Create", content])
-                for timestamp in p.timestamps:
-                    if datetime.datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-                        continue
+            else:
+                head = grayHead
+            _limited = limitedTime if not timeline else timeline
+            content = p.getContents()
+            if createdTimeObj > _limited:
+                items.append([head, createdTime, pf_name, p.executableName, "Create", content])
+            for timestamp in p.timestamps:
+                if datetime.datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") > _limited:
                     items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
                 continue
-            else:
-                continue
-            content = p.getContents()
-            items.append([head, createdTime, pf_name, p.executableName, "Create", content])
-            for timestamp in p.timestamps:
-                items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
     prototype += items
+    '''
+    MS-Office
+    [빨] WINWORD.EXE, POWERPNT.EXE, EXCEL.EXE
+    [주] WMIPRVSE.EXE, EQNEDT32.EXE, DW20.EXE, DWWIN.EXE
+    [노] 타 프로세스 프리패치: WERFAULT.EXE
+    [보] Cmd, Powershell 프리패치
+    
+    IE
+    [빨] IE 프리패치: 생성, 실행 (웹 히스토리 첫 기록 이전)
+    [파] IE 프리패치: 실행만 (웹 히스토리 첫 기록 이후)
+    
+    공통
+    [회] 프리패치 - 첫 타임라인 이후 생성된 것만
+    '''
 
 def getJumplistItems(contents):
-    _list = contents
+    _list = contents.copy()
     for content in contents:
-        fullpath = PATH.JUMPLIST[0] + content[1] + ".automaticDestinations-ms"
+        fullpath = CONSTANT.JUMPLIST[0] + content[1] + ".automaticDestinations-ms"
         if not os.path.exists(fullpath):
             _list.remove(content)
             continue
@@ -279,71 +536,70 @@ def getJumplistItems(contents):
         })
     return _list
 
-def getWebArtifactItems(env, prefetchList, timeline=None):
+def getWebArtifactItems(env, type, prefetchList=None, timeline=None, prototype=None):
     import glob
     cwd = os.getcwd()
     fileList = glob.glob(cwd + "\\WebCacheV*.dat")
     fullpath = ''
     items = {}
     if not fileList:
-        dirname = PATH.IE_ARTIFACT_PATH[env]["History"]
+        dirname = CONSTANT.IE_ARTIFACT_PATH[env]["History"]
         fullpath = glob.glob(dirname + "WebCacheV*.dat")[0]
         logPath = cwd + '\\temp.txt'
         if os.path.exists(fullpath):
             _log = ''
-            command1 = 'tasklist | find /i '
             command2 = 'taskkill /f /im '
             try:
                 killed_rst1 = os.system(command2 + "taskhostw.exe")
                 killed_rst2 = os.system(command2 + "dllhost.exe")
             except Exception as e:
+                print(killed_rst1)
+                print(killed_rst2)
                 killed_rst1 = -1
                 killed_rst2 = -1
-            # os.system(command1 + '"taskhost" > ' + logPath)
-            # os.system(command1 + '"dllhost" >> ' + logPath)
-            # with open(logPath, "r+") as f:
-            #     prevTask = ''
-            #     killedList = []
-            #     for line in f.readlines():
-            #         if line == "\n" or line.startswith("background"):
-            #             continue
-            #         t = line.split()[0]
-            #         if prevTask == t: continue
-            #         killedList.append(t)
-            #         # i = 0
-            #         # for i in range(3):
-            #         #     if os.system(command2 + '"{}" >> {}'.format(t, logPath)) == 0:
-            #         #         break
-            #         #     i += 1
-            #         # if i > 0:
-            #         #     return False, '[Not terminated] "{}"'.format(t)
-            #         prevTask = t
-            # print(killedList)
-            # import shutil, psutil
-            # for proc in psutil.process_iter():
-            #     if proc.name in killedList:
-            #         proc.kill()
             import shutil
             try:
                 shutil.copy(fullpath, cwd + "\\WebCacheV01.dat")
             except Exception as e:
-                print(e)
+                if type == CONSTANT.OFFICE:
+                    prefetchList = "Please terminate any process using " + fullpath
                 return False, "Please terminate any process using " + fullpath
             fullpath = glob.glob(cwd + "\\WebCacheV*.dat")[0]
     else:
         fullpath = fileList[0]
-    # cookiesList = WebArtifact.getCookies(fullname)
-    # domList = WebArtifact.getDom(fullname)
-    history = WebArtifact.getHistory(fullpath, prefetchList, timeline)
-    caches = WebArtifact.getContent(fullpath, timeline)
-    # limitedTime = None if not history else datetime.datetime.strptime(history[0][1], "%Y-%m-%d %H:%M:%S.%f")
-    # download = WebArtifact.getDownloads(fullpath, prefetchList, limitedTime)
-    # return True, history + caches + download
-    return True, history + caches
+
+    if type == CONSTANT.IE:
+        history = WebArtifact.getHistory(fullpath, prefetchList, timeline)
+        caches = WebArtifact.getContent(fullpath, timeline, type)
+        return True, history + caches
+    elif type == CONSTANT.OFFICE:
+        prototype += WebArtifact.getContent(fullpath, timeline, type)
+
 
 def getAppCompatCache(prototype, prefetchList, timeline):
     rst = get_local_data(prefetchList, timeline)
     if rst:
         prototype += rst
 
-
+def getRecentFileCache(filepath):
+    contents = []
+    with open(filepath, "rb") as f:
+        # Offset
+        offset = 0x14
+        # File Size
+        file_size = os.stat(filepath)[6]
+        # Go to beginning of file.
+        f.seek(0)
+        # Read forward 0x14 (20).
+        f.seek(offset)
+        while (offset < file_size):
+            try:
+                strLen = int.from_bytes(f.read(4), byteorder='little')
+                if not strLen:
+                    break
+                fnlen = (strLen + 1) * 2
+                contents.append(f.read(fnlen).decode('unicode-escape').replace('\x00', ''))
+                file_size = offset + fnlen
+            except Exception as e:
+                return False, "{}".format(e)
+    return True, contents

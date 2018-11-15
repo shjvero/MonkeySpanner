@@ -1,5 +1,9 @@
 import os
 
+# os
+WIN7 = 'Windows7'
+WIN10 = 'Windows10'
+
 # Software Number
 ADOBE_READER = 1
 ADOBE_FLASH_PLAYER = 2
@@ -9,6 +13,15 @@ HWP = 5
 IE = 6
 OFFICE = 7
 LPE = 8
+
+# Artifact List
+PREFETCH_KEYWORD = "Prefetch"
+EVENTLOG_KEYWORD = "EventLog"
+WER_KEYWORD = "Report.wer"
+HISTORY_KEYWORD = "History"
+DOWNLOAD_KEYWORD = "Download"
+CACHE_KEYWORD = "Cache"
+REGISTRY_KEYWORD = "Registry"
 
 # Environment Variable
 LOCALAPPDATA = os.environ["LOCALAPPDATA"]   # C:\\Users\\[username]\\AppData\\Local
@@ -26,8 +39,8 @@ REGISTRY = {
 }
 PREFETCH = SYSTEMROOT + '\\Prefetch\\'
 WER = {
-    'Windows7': LOCALAPPDATA + "\\Microsoft\\Windows\\WER\\ReportArchive\\",
-    'Windows10': 'C:\\ProgramData\\Microsoft\\Windows\\WER\\ReportArchive\\'
+    WIN7: LOCALAPPDATA + "\\Microsoft\\Windows\\WER\\ReportArchive\\",
+    WIN10: 'C:\\ProgramData\\Microsoft\\Windows\\WER\\ReportArchive\\'
 }
 EVENTLOG = SYSTEMROOT + '\\System32\\Winevt\\logs\\'
 JUMPLIST = [
@@ -61,6 +74,7 @@ JUMPLIST_HASH = [
     ['Edge', '9d1f905ce5044aee'],                           # [23]
 ]
 RECENT = APPDATA + '\\Microsoft\\Windows\\Recent\\'
+APPCOMPAT = SYSTEMROOT + "\\AppCompat\\Programs\\"
 
 # Software Path
 FLASH_ARTIFACT_PATH = {         # Adobe Flash Player
@@ -69,7 +83,7 @@ HWP_ARTIFACT_PATH = {           # HWP
     'Recent': APPDATA + '\\HNC\\Office\\Recent',
 }
 IE_ARTIFACT_PATH = {            # IE
-    'Windows7': {
+    WIN7: {
         'History': LOCALAPPDATA + '\\Microsoft\\Windows\\WebCache\\',   # Target: WebCacheV*.dat
         'Cache': {
             'IE10': LOCALAPPDATA + '\\Microsoft\\Windows\\Temporary Internet Files\\Content.IE5\\',
@@ -82,7 +96,7 @@ IE_ARTIFACT_PATH = {            # IE
         },
         'SessionRestore': LOCALAPPDATA + '\\Microsoft\\Internet Explorer\\Recovery\\'
     },
-    'Windows10': {
+    WIN10: {
         'History': LOCALAPPDATA + '\\Microsoft\\Windows\\WebCache\\',   # Target: WebCacheV*.dat
         'Cache': {
             'IE10': LOCALAPPDATA + '\\Microsoft\\Windows\\Temporary Internet Files\\Content.IE5\\',
@@ -101,6 +115,7 @@ IE_ARTIFACT_PATH = {            # IE
 OFFICE_ARTIFACT_PATH = {        # MS-Office
     'Recent': APPDATA + '\\Microsoft\\Office\\Recent\\',
     'UnsavedFiles': LOCALAPPDATA + '\\Microsoft\\Office\\UnsavedFiles\\',
+    'Temp': APPDATA + "\\Microsoft\\", # Word, Excel, PowerPoint
     '2010': {
 
     },

@@ -19,7 +19,7 @@ class Main(QMainWindow):
             "Adobe Reader", "Adobe Flash Player", "Chrome", "Edge", "HWP",
             "Internet Explorer", "MS-Office", "Kernel(Local Privilege Escalation)"
         ]
-        self.OPTIONS = ['None', 'Prefetch', 'Event Log', 'Registry', 'Web History', 'Web Cache', 'WER'] #, 'Download'
+        self.OPTIONS = ['None', 'Prefetch', 'Event Log', 'Registry', 'History', 'WebCache', 'WER']
         self.selectionWidth = 220
         self.btnNumber = 0
         self.loadBtnWidth = 100
@@ -78,7 +78,6 @@ class Main(QMainWindow):
         # Set up Table Load Button
         self.loadBtn = QPushButton("GO!", self)
         self.loadBtn.setFixedSize(self.loadBtnWidth, self.topWidgetHeight)
-        self.loadBtn.setStyleSheet("background-color: darkslategray;")
         self.loadBtn.clicked.connect(self.completeSelection)
         self.loadBtn.setCursor(QCursor(Qt.PointingHandCursor))
 
@@ -105,9 +104,6 @@ class Main(QMainWindow):
         self.option6 = QCheckBox(self.OPTIONS[6])
         self.option6.stateChanged.connect(lambda: self.toggledChkBtn(self.option6))
         chkboxLayout.addWidget(self.option6)
-        # self.option7 = QCheckBox(self.OPTIONS[7])
-        # self.option7.stateChanged.connect(lambda: self.toggledChkBtn(self.option7))
-        # chkboxLayout.addWidget(self.option7)
 
         # Set up text box for Search
         self.search = QLineEdit(self)
@@ -116,10 +112,7 @@ class Main(QMainWindow):
         self.search.setPlaceholderText("Search")
         self.search.editingFinished.connect(self.enterPressed)
 
-        # Set up loading
         self.loadingWidget = LoadingWidget(self)
-
-        # Set up Table
         self.table = PrototypeTable(self, self.env)
 
         self.topLayout.addWidget(self.selection, alignment=Qt.AlignBottom)
@@ -144,6 +137,9 @@ class Main(QMainWindow):
         t.start()
 
     def loadData(self):
+        if self.table.prototype:
+            self.table.prototype.clear()
+            self.table.clearContents()
         self.table.load(self.selected, self.timeline)
         self.loadingWidget.resume()
         self.presentSelected = self.selected
@@ -159,97 +155,87 @@ class Main(QMainWindow):
         if self.presentSelected == 0: return
         if msg == self.OPTIONS[1]:
             if self.option1.isChecked():
-                self.btnNumber += 1
-                if self.btnNumber > 1:
-                    self.table.filtering(1, 2)
+                if self.btnNumber:
+                    self.table.filtering(1, PrototypeTable.ONLY_SHOW)
                 else:
-                    self.table.filtering(1)
+                    self.table.filtering(1, PrototypeTable.SIMPLE_SHOW)
+                self.btnNumber += 1
             else:
                 self.btnNumber -= 1
-                if self.btnNumber != 0:
-                    self.table.filtering(1, 1)
+                if self.btnNumber:
+                    self.table.filtering(1, PrototypeTable.ONLY_HIDE)
                 else:
                     self.table.filtering(0)
         elif msg == self.OPTIONS[2]:
             if self.option2.isChecked():
-                self.btnNumber += 1
-                if self.btnNumber > 1:
-                    self.table.filtering(2, 2)
+                if self.btnNumber:
+                    self.table.filtering(2, PrototypeTable.ONLY_SHOW)
                 else:
-                    self.table.filtering(2)
+                    self.table.filtering(2, PrototypeTable.SIMPLE_SHOW)
+                self.btnNumber += 1
             else:
                 self.btnNumber -= 1
-                if self.btnNumber != 0:
-                    self.table.filtering(2, 1)
+                if self.btnNumber:
+                    self.table.filtering(2, PrototypeTable.ONLY_HIDE)
                 else:
                     self.table.filtering(0)
         elif msg == self.OPTIONS[3]:
             if self.option3.isChecked():
-                self.btnNumber += 1
-                if self.btnNumber > 1:
-                    self.table.filtering(3, 2)
+                if self.btnNumber:
+                    self.table.filtering(3, PrototypeTable.ONLY_SHOW)
                 else:
-                    self.table.filtering(3)
+                    self.table.filtering(3, PrototypeTable.SIMPLE_SHOW)
+                self.btnNumber += 1
             else:
                 self.btnNumber -= 1
-                if self.btnNumber != 0:
-                    self.table.filtering(3, 1)
+                if self.btnNumber:
+                    self.table.filtering(3, PrototypeTable.ONLY_HIDE)
                 else:
                     self.table.filtering(0)
         elif msg == self.OPTIONS[4]:
             if self.option4.isChecked():
-                self.btnNumber += 1
-                if self.btnNumber > 1:
-                    self.table.filtering(4, 2)
+                if self.btnNumber:
+                    self.table.filtering(4, PrototypeTable.ONLY_SHOW)
                 else:
-                    self.table.filtering(4)
+                    self.table.filtering(4, PrototypeTable.SIMPLE_SHOW)
+                self.btnNumber += 1
             else:
                 self.btnNumber -= 1
-                if self.btnNumber != 0:
-                    self.table.filtering(4, 1)
+                if self.btnNumber:
+                    self.table.filtering(4, PrototypeTable.ONLY_HIDE)
                 else:
                     self.table.filtering(0)
         elif msg == self.OPTIONS[5]:
             if self.option5.isChecked():
-                self.btnNumber += 1
-                if self.btnNumber > 1:
-                    self.table.filtering(5, 2)
+                if self.btnNumber:
+                    self.table.filtering(5, PrototypeTable.ONLY_SHOW)
                 else:
-                    self.table.filtering(5)
+                    self.table.filtering(5, PrototypeTable.SIMPLE_SHOW)
+                self.btnNumber += 1
             else:
                 self.btnNumber -= 1
-                if self.btnNumber != 0:
-                    self.table.filtering(5, 1)
+                if self.btnNumber:
+                    self.table.filtering(5, PrototypeTable.ONLY_HIDE)
                 else:
                     self.table.filtering(0)
         elif msg == self.OPTIONS[6]:
             if self.option6.isChecked():
-                self.btnNumber += 1
-                if self.btnNumber > 1:
-                    self.table.filtering(6, 2)
+                if self.btnNumber:
+                    self.table.filtering(6, PrototypeTable.ONLY_SHOW)
                 else:
-                    self.table.filtering(6)
+                    self.table.filtering(6, PrototypeTable.SIMPLE_SHOW)
+                self.btnNumber += 1
             else:
                 self.btnNumber -= 1
-                if self.btnNumber != 0:
-                    self.table.filtering(6, 1)
+                if self.btnNumber:
+                    self.table.filtering(6, PrototypeTable.ONLY_HIDE)
                 else:
                     self.table.filtering(0)
-        # elif msg == self.OPTIONS[7]:
-        #     if self.option7.isChecked():
-        #         self.btnNumber += 1
-        #         if self.btnNumber > 1:
-        #             self.table.filtering(7, 2)
-        #         else:
-        #             self.table.filtering(7)
-        #     else:
-        #         self.btnNumber -= 1
-        #         if self.btnNumber != 0:
-        #             self.table.filtering(7, 1)
-        #         else:
-        #             self.table.filtering(0)
 
     def enterPressed(self):
         if self.isLoaded:
             return
-        self.table.search(self.search.text())
+        if self.btnNumber:
+            self.table.search(self.search.text(), True)
+        else:
+            self.table.search(self.search.text())

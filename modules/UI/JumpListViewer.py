@@ -47,7 +47,6 @@ class JumpListViewer(QWidget):
         # Set up Export Button
         self.exportBtn = QPushButton("Export as CSV", self)
         self.exportBtn.setFixedSize(self.listViewWidth, 40)
-        self.exportBtn.setStyleSheet("background-color: darkslategray;")
         self.exportBtn.clicked.connect(self.btnClicked)
         self.exportBtn.setCursor(QCursor(Qt.PointingHandCursor))
         
@@ -88,6 +87,7 @@ class JumpListViewer(QWidget):
 
     def selectedHash(self, i):
         self.selected = self.model.itemFromIndex(i).row()
+        print(self.hashList[self.selected])
         self.hashLabel.setText(self.hashList[self.selected][1])
         self.loadData(self.hashList[self.selected][2])
 
@@ -95,11 +95,12 @@ class JumpListViewer(QWidget):
         LinkFiles = logList["LinkFiles"]
         DestList = logList["DestList"]
         self.LinkFilesTable.clearContents()
-        self.LinkFilesTable.setRowCount(len(LinkFiles))
         self.DestListTable.clearContents()
-        self.DestListTable.setRowCount(len(DestList))
+        self.LinkFilesTable.setRowCount(0)
+        self.DestListTable.setRowCount(0)
         r = 0
         for item in LinkFiles:
+            self.LinkFilesTable.insertRow(r)
             for c in range(self.LinkFilesTable.columnCount()):
                 self.LinkFilesTable.setItem(r, c, QTableWidgetItem(item[c]))
             r += 1
@@ -107,13 +108,13 @@ class JumpListViewer(QWidget):
         self.LinkFilesTable.resizeColumnsToContents()
 
         for item in DestList:
+            self.DestListTable.insertRow(r)
             for c in range(self.DestListTable.columnCount()):
                 self.DestListTable.setItem(r, c, QTableWidgetItem(item[c]))
             r += 1
         self.DestListTable.resizeColumnsToContents()
 
     def btnClicked(self):
-        print(self.selected)
         if self.selected == -1:
             QMessageBox.question(self, "Help", "Please select in above list.", QMessageBox.Ok)
             return

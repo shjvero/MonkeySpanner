@@ -1,15 +1,13 @@
 import os
 from PyQt5.Qt import *
 import modules.IE.Prototype as PrototypeForIE
+import modules.Office.Prototype as PrototypeForOffice
+import modules.constant as CONSTANT
 
 class PrototypeTable(QTableWidget):
-    PREFETCH_KEYWORD = "Prefetch"
-    EVENTLOG_KEYWORD = "EventLog"
-    HISTORY_KEYWORD = "History"
-    DOWNLOAD_KEYWORD = "Download"
-    CACHE_KEYWORD = "Cache"
-    REGISTRY_KEYWORD = "Registry"
-    WER_KEYWORD = "Report.wer"
+    ONLY_HIDE = 1
+    ONLY_SHOW = 2
+    SIMPLE_SHOW = 3
 
     def __init__(self, parent, env):
         super().__init__()
@@ -28,21 +26,21 @@ class PrototypeTable(QTableWidget):
         ]
 
     def load(self, sw, timeline=None):
-        if sw == 1:
+        if sw == CONSTANT.ADOBE_READER:
             print("Adobe Reader")
-        elif sw == 2:
+        elif sw == CONSTANT.ADOBE_FLASH_PLAYER:
             print("Adobe Flash Player")
-        elif sw == 3:
+        elif sw == CONSTANT.CHROME:
             print("Chrome")
-        elif sw == 4:
+        elif sw == CONSTANT.EDGE:
             print("Edge")
-        elif sw == 5:
+        elif sw == CONSTANT.HWP:
             print("HWP")
-        elif sw == 6:
+        elif sw == CONSTANT.IE:
             result, stuff = PrototypeForIE.getPrototype(self.env)
             if not result:
                 msg = QMessageBox()
-                msg.setIcon(QMessageBox.Warning)
+                msg.setIcon(QMessageBox.Critical)
                 msg.setWindowTitle("Error")
                 msg.setText(stuff)
                 msg.setStandardButtons(QMessageBox.Ok)
@@ -51,9 +49,18 @@ class PrototypeTable(QTableWidget):
                 return
             self.prototype = stuff
             self.customHeaders = PrototypeForIE.getColumnHeader()
-        elif sw == 7:
-            print("Office")
-        elif sw == 8:
+        elif sw == CONSTANT.OFFICE:
+            office_msg = None
+            result, self.prototype = PrototypeForOffice.getPrototype(self.env, office_msg)
+            if office_msg:
+                msg = QMessageBox()
+                msg.setIcon(QMessageBox.Warning)
+                msg.setWindowTitle("Warning")
+                msg.setText(office_msg)
+                msg.setStandardButtons(QMessageBox.Ok)
+                msg.exec_()
+            self.customHeaders = PrototypeForOffice.getColumnHeader()
+        elif sw == CONSTANT.LPE:
             print("Local Privilege Escalation")
         else:
             print("기존 SW: {}".format(sw))
@@ -64,7 +71,6 @@ class PrototypeTable(QTableWidget):
         self.initUI()
 
     def initUI(self):
-        self.setContentsMargins(10, 0, 20, 0)
         self.setColumnCount(5)
         self.setHorizontalHeaderLabels(["", "", "", "", "", ""])
         self.setRowCount(len(self.prototype))
@@ -100,6 +106,7 @@ class PrototypeTable(QTableWidget):
 
         # Adjust column width
         self.resizeColumnsToContents()
+        self.resizeRowsToContents()
         header = self.horizontalHeader()
         self.setColumnWidth(0, 180)
         self.setColumnWidth(1, 600)
@@ -117,18 +124,23 @@ class PrototypeTable(QTableWidget):
         self.cellDoubleClicked.connect(self.showDetail)  # Double-Click
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
-    def search(self, keyword):
-        if keyword:
-            for i in range(len(self.prototype)):
-                self.showRow(i)
+    def search(self, keyword, btnChecked=False):
+        if not keyword:
+            if not btnChecked:
+                for i in range(len(self.prototype)):
+                    self.showRow(i)
+            return
         items = self.findItems(keyword, Qt.MatchContains)
-        includedRow = list(set([ self.row(item) for item in items ]))
+        includedRow = list(set([self.row(item) for item in items]))
         print(includedRow)
         for i in range(len(self.prototype)):
             if i not in includedRow:
                 self.hideRow(i)
             elif self.isRowHidden(i):
-                self.showRow(i)
+                if btnChecked:
+                    continue
+                else:
+                    self.showRow(i)
 
     def filtering(self, type, state=0):
         target = None
@@ -136,29 +148,26 @@ class PrototypeTable(QTableWidget):
             self.search("")
             return
         elif type == 1:
-            target = PrototypeTable.PREFETCH_KEYWORD
+            target = CONSTANT.PREFETCH_KEYWORD
         elif type == 2:
-            target = PrototypeTable.EVENTLOG_KEYWORD
+            target = CONSTANT.EVENTLOG_KEYWORD
         elif type == 3:
-            target = PrototypeTable.REGISTRY_KEYWORD
+            target = CONSTANT.REGISTRY_KEYWORD
         elif type == 4:
-            target = PrototypeTable.HISTORY_KEYWORD
+            target = CONSTANT.HISTORY_KEYWORD
         elif type == 5:
-            target = PrototypeTable.CACHE_KEYWORD
+            target = CONSTANT.CACHE_KEYWORD
         elif type == 6:
-            # target = PrototypeTable.DOWNLOAD_KEYWORD
-            target = PrototypeTable.WER_KEYWORD
-        # elif type == 7:
-        #     target = PrototypeTable.WER_KEYWORD
-        if state == 1: # only hide
+            target = CONSTANT.WER_KEYWORD
+        if state == PrototypeTable.ONLY_HIDE:
             for row in range(len(self.prototype)):
                 if self.prototype[row][0][0] == target:
                     self.hideRow(row)
-        elif state == 2: # only show
+        elif state == PrototypeTable.ONLY_SHOW:
             for row in range(len(self.prototype)):
                 if self.prototype[row][0][0] == target:
                     self.showRow(row)
-        else: # only target show
+        elif state == PrototypeTable.SIMPLE_SHOW:
             for row in range(len(self.prototype)):
                 if self.prototype[row][0][0] == target:
                     self.showRow(row)
@@ -172,15 +181,15 @@ class PrototypeTable(QTableWidget):
     def showDetail(self, row, column):
         viewerTitle = self.verticalHeaderItem(row).text()
         viewerContent = self.prototype[row][-1]
-        if viewerTitle == PrototypeTable.PREFETCH_KEYWORD:
+        if viewerTitle == CONSTANT.PREFETCH_KEYWORD:
             from modules.UI.PrefetchDetailViewer import PrefetchDetailViewer
             self.pdv = PrefetchDetailViewer()
             self.pdv.initUI(viewerTitle, viewerContent)
-        elif viewerTitle in [PrototypeTable.EVENTLOG_KEYWORD, PrototypeTable.WER_KEYWORD, PrototypeTable.REGISTRY_KEYWORD]:
+        elif viewerTitle in [CONSTANT.EVENTLOG_KEYWORD, CONSTANT.WER_KEYWORD, CONSTANT.REGISTRY_KEYWORD]:
             from modules.UI.TextViewer import TextViewer
             self.viewer = TextViewer()
             self.viewer.initUI(viewerTitle, viewerContent)
-        elif viewerTitle in [PrototypeTable.HISTORY_KEYWORD, PrototypeTable.CACHE_KEYWORD]: #, PrototypeTable.DOWNLOAD_KEYWORD
+        elif viewerTitle in [CONSTANT.HISTORY_KEYWORD, CONSTANT.CACHE_KEYWORD]:
             from modules.UI.WebArtifactDetailViewer import WebArtifactDetailViewer
             self.wadv = WebArtifactDetailViewer()
             self.wadv.initUI(viewerTitle, viewerContent)
@@ -199,4 +208,3 @@ class PrototypeTable(QTableWidget):
             else:
                 copiedStr = " ".join(currentQTableWidgetItem.text() for currentQTableWidgetItem in selected)
             os.system("echo {} | clip".format(copiedStr))
-            print(copiedStr)
