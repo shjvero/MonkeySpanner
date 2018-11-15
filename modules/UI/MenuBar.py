@@ -82,28 +82,31 @@ class MenuBar(QMenuBar):
         hashList = []
         if self.selected == CONSTANT.ADOBE_READER:
             print("Adobe Reader")
-            for i in range(16, 22):
+            for i in range(18, 24):
                 hashList.append(CONSTANT.JUMPLIST_HASH[i])
         elif self.selected == CONSTANT.ADOBE_FLASH_PLAYER:
             print("Adobe Flash Player in JumpListViewer")
             hashList.append(CONSTANT.JUMPLIST_HASH[14])
-        elif self.selected == CONSTANT.CHROME:
-            print("Chrome in JumpListViewer")
-            hashList.append(CONSTANT.JUMPLIST_HASH[22])
+        # elif self.selected == CONSTANT.CHROME:
+        #     print("Chrome in JumpListViewer")
+        #     hashList.append(CONSTANT.JUMPLIST_HASH[24])
         elif self.selected == CONSTANT.EDGE:
             print("Edge in JumpListViewer")
-            hashList.append(CONSTANT.JUMPLIST_HASH[23])
+            hashList.append(CONSTANT.JUMPLIST_HASH[25])
         elif self.selected == CONSTANT.HWP:
-            print("HWP in JumpListViewer")
-            hashList.append(CONSTANT.JUMPLIST_HASH[15])
+            QMessageBox.information(self, "Help", "Already provided", QMessageBox.Ok)
+            return
+            # hashList.append(CONSTANT.JUMPLIST_HASH[15])
+            # hashList.append(CONSTANT.JUMPLIST_HASH[16])
+            # hashList.append(CONSTANT.JUMPLIST_HASH[17])
         elif self.selected == CONSTANT.IE:
-            print("IE in JumpListViewer")
             hashList.append(CONSTANT.JUMPLIST_HASH[12])
             hashList.append(CONSTANT.JUMPLIST_HASH[13])
         elif self.selected == CONSTANT.OFFICE:
-            print("Office in JumpListViewer")
-            for i in range(12):
-                hashList.append(CONSTANT.JUMPLIST_HASH[i])
+            QMessageBox.information(self, "Help", "Already provided", QMessageBox.Ok)
+            return
+            # for i in range(12):
+            #     hashList.append(CONSTANT.JUMPLIST_HASH[i])
         elif self.selected == CONSTANT.LPE:
             print("LPE in JumpListViewer [None]")
         else:

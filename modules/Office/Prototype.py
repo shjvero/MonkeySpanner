@@ -5,8 +5,10 @@ def getColumnHeader():
         "Prefetch": ["Timeline", "File Name", "Executable Name", "Action", ""],         # 4 columns
         "EventLog": ["Logged Time", "Provider Name", "Event ID", "Level", "Data"],      # 5 columns
         "Cache": ["Accessed Time", "URL", "File Name", "Size", "Created Time"],         # 5 columns
-        "Report.wer": ["Modified Time", "Path", "Created Time", "Module", "Exception Code"],                # 3 columns
-        "Registry": ["Modified Time", "Execution Path", "Size", "Exec Flag", "Registry Key"]  # 4 columns
+        "Report.wer": ["Modified Time", "Path", "Module", "Exception Code", "Created Time"],    # 3 columns
+        "Registry": ["Modified Time", "Execution Path", "Size", "Exec Flag", "Registry Key"],   # 4 columns
+        "JumpList[L]": ["Modified Time", "File Path", "Drive Type", "Size", "Created Time"],    # 5 columns
+        "JumpList[D]": ["Last Recorded Time", "File Path", "File Name", "Access", "New (Timestamp)"],  # 5 columns
     }
 
 def getPrototype(env, office_msg=None):
@@ -50,8 +52,8 @@ def getPrototype(env, office_msg=None):
         limitedTime = None
 
     t_list.append(Thread(target=getOAlertsEvtx, args=(compared[0], prototype, limitedTime,)))
-    t_list.append(Thread(target=getApplicationEvtx, args=(compared[1], prototype, prefetchList, limitedTime, )))
-    t_list.append(Thread(target=getFalutHeapEvtx, args=(compared[2], prototype, CONSTANT.OFFICE, limitedTime,)))
+    t_list.append(Thread(target=getApplicationEvtx, args=(CONSTANT.OFFICE, compared[1], prototype, prefetchList, limitedTime, )))
+    t_list.append(Thread(target=getFalutHeapEvtx, args=(CONSTANT.OFFICE, compared[2], prototype, limitedTime,)))
 
     if env == CONSTANT.WIN7:
         compared.append({
@@ -63,6 +65,7 @@ def getPrototype(env, office_msg=None):
         })
         t_list.append(Thread(target=getWERDiagEvtxForWin7, args=(compared[3], prototype, limitedTime, )))
     t_list.append(Thread(target=getAppCompatCache, args=(prototype, prefetchList[3], limitedTime,)))
+    t_list.append(Thread(target=getJumplistItemsVerSummary, args=(CONSTANT.OFFICE, prototype, )))
     t_list.append(Thread(target=getWebArtifactItems, args=(env, CONSTANT.OFFICE, office_msg, limitedTime, prototype)))
     print(prefetchList[3])
     total = len(t_list)
@@ -78,7 +81,8 @@ def getPrototype(env, office_msg=None):
 
     '''
     [빨] MS-Office 프리패치: WINWORD.EXE, POWERPNT.EXE, EXCEL.EXE
-    [주] 오피스 프로세스 프리패치: WMIPRVSE.EXE, EQNEDT32.EXE, DW20.EXE, DWWIN.EXE
+    [주] 점프리스트
+    [주] 오피스 프로세스 프리패치: WMIPRVSE.EXE, EQNEDT32.EXE, DW20.EXE, DWWIN.EXE, FLTLDR.EXE
     [노] 이벤트로그: Microsoft-Office-Alerts.evtx EID:300
     [노] 이벤트로그: Application.evtx EID 1001, Windows Error Reporting
     [노] 이벤트로그: Microsoft-Windows-WER-Diagnostics EID 2
@@ -93,6 +97,5 @@ def getPrototype(env, office_msg=None):
     [회] 프리패치 - 첫 타임라인 이후 생성된 것만
     [회] 레지스트리 - 호환성 캐시
 
-    (PASS to Dialog) 점프리스트
     (PASS to Dialog) 호환성 아티팩트: recentfilecache.bcf (win7), amache.hve (win10)
     '''

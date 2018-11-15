@@ -20,7 +20,7 @@ class PrefetchDetailViewer(QWidget):
         '''
         self.content = viewerContent
         self.setWindowTitle(viewerTitle)
-        self.setMinimumHeight(self.height() + 100)
+        self.setMinimumHeight(self.height() + 200)
 
         self.layout = QFormLayout(self)
 

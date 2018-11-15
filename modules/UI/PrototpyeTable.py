@@ -2,6 +2,7 @@ import os
 from PyQt5.Qt import *
 import modules.IE.Prototype as PrototypeForIE
 import modules.Office.Prototype as PrototypeForOffice
+import modules.HWP.Prototype as PrototypeForHWP
 import modules.constant as CONSTANT
 
 class PrototypeTable(QTableWidget):
@@ -30,12 +31,13 @@ class PrototypeTable(QTableWidget):
             print("Adobe Reader")
         elif sw == CONSTANT.ADOBE_FLASH_PLAYER:
             print("Adobe Flash Player")
-        elif sw == CONSTANT.CHROME:
-            print("Chrome")
+        # elif sw == CONSTANT.CHROME:
+        #     print("Chrome")
         elif sw == CONSTANT.EDGE:
             print("Edge")
         elif sw == CONSTANT.HWP:
-            print("HWP")
+            self.prototype = PrototypeForHWP.getPrototype(self.env)
+            self.customHeaders = PrototypeForHWP.getColumnHeader()
         elif sw == CONSTANT.IE:
             result, stuff = PrototypeForIE.getPrototype(self.env)
             if not result:
@@ -159,6 +161,10 @@ class PrototypeTable(QTableWidget):
             target = CONSTANT.CACHE_KEYWORD
         elif type == 6:
             target = CONSTANT.WER_KEYWORD
+        elif type == 7:
+            target = CONSTANT.LNKFILE_KEYWORD
+        elif type == 8:
+            target = CONSTANT.DESTLIST_KEYWORD
         if state == PrototypeTable.ONLY_HIDE:
             for row in range(len(self.prototype)):
                 if self.prototype[row][0][0] == target:
@@ -193,6 +199,14 @@ class PrototypeTable(QTableWidget):
             from modules.UI.WebArtifactDetailViewer import WebArtifactDetailViewer
             self.wadv = WebArtifactDetailViewer()
             self.wadv.initUI(viewerTitle, viewerContent)
+        elif viewerTitle == CONSTANT.LNKFILE_KEYWORD:
+            from modules.UI.JumpListDetailViewer import JumpListDetailViewer
+            self.jldv = JumpListDetailViewer()
+            self.jldv.initUI(JumpListDetailViewer.LNK_FILE, viewerContent)
+        elif viewerTitle == CONSTANT.DESTLIST_KEYWORD:
+            from modules.UI.JumpListDetailViewer import JumpListDetailViewer
+            self.jldv = JumpListDetailViewer()
+            self.jldv.initUI(JumpListDetailViewer.DEST_LIST, viewerContent)
 
     def contextMenuEvent(self, event):
         menu = QMenu(self)

@@ -126,7 +126,7 @@ def getContent(filepath, timeline=None, type=CONSTANT.IE):
                 if type == CONSTANT.IE:
                     if extension in DOM_EXTENSION:
                         head = redHead
-                    elif extension in DOC_EXTENSION + ETC_EXTENSION:
+                    elif extension in DOC_EXTENSION or extension in ETC_EXTENSION:
                         head = navyHead
                     else:
                         continue

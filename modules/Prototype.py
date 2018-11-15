@@ -7,11 +7,15 @@ from libs.ParseRegistry.ShimCacheParser import get_local_data
 import libs.ParseEvtx.Evtx as evtx
 import libs.ParseWebArtifact.WebArtifact as WebArtifact
 
-def getApplicationEvtx(compared, prototype, checkedSW, timeline=None):
+def getApplicationEvtx(type, compared, prototype, checkedSW, timeline=None):
     items = []
     wer_info = []
     origin = checkedSW[0]
-    orangeHead = [CONSTANT.EVENTLOG_KEYWORD, 2]
+    head = None
+    if type == CONSTANT.IE:
+        head = [CONSTANT.EVENTLOG_KEYWORD, 2]
+    elif type in [CONSTANT.OFFICE, CONSTANT.HWP]:
+        head = [CONSTANT.EVENTLOG_KEYWORD, 3]
 
     fullPath = CONSTANT.EVENTLOG + compared['channel']
     checkedEID = compared['eid']
@@ -48,7 +52,7 @@ def getApplicationEvtx(compared, prototype, checkedSW, timeline=None):
                     elif systemTag[2].text == '4':
                         level = 'Information'
 
-                    items.append([orangeHead, loggedTime, providerName, eventID, level, etc, event.xml()])
+                    items.append([head, loggedTime, providerName, eventID, level, etc, event.xml()])
             except Exception as e:
                 print("Error: Application.evtx {}".format(e))
             continue
@@ -90,12 +94,12 @@ def getWERDiagEvtxForWin7(compared, prototype, timeline=None):
                 print("Error: {}".format(e))
     prototype += items
 
-def getFalutHeapEvtx(compared, prototype, type, timeline=None):
+def getFalutHeapEvtx(type, compared, prototype, timeline=None):
     items = []
     head = None
     if type == CONSTANT.IE:
         head = [CONSTANT.EVENTLOG_KEYWORD, 4]
-    elif type == CONSTANT.OFFICE:
+    elif type in [CONSTANT.OFFICE, CONSTANT.HWP]:
         head = [CONSTANT.EVENTLOG_KEYWORD, 3]
 
     fullPath = CONSTANT.EVENTLOG + compared['channel']
@@ -160,212 +164,9 @@ def getOAlertsEvtx(compared, prototype, timeline=None):
             except Exception as e:
                 print("Error: OAlert.evtx {}".format(e))
     prototype += items
-#
-# def getEventLogItemsForWin7(compared, prototype, origin=None, timeline=None):
-#     items = []
-#     headStr = "EventLog"
-#     orangeHead = [headStr, 2]
-#     yellowHead = [headStr, 3]
-#     greenHead = [headStr, 4]
-#     for fileName, category in compared.items():
-#         fullPath = CONSTANT.EVENTLOG + fileName
-#         checkedEID = category['eid']
-#         checkedProviders = category['providerName']
-#         with evtx.Evtx(fullPath) as log:
-#             if fileName.startswith("App"):
-#                 for event in log.records():
-#                     try:
-#                         systemTag = event.lxml()[0]
-#                         loggedTime = systemTag[5].get("SystemTime")
-#                         if not loggedTime: continue
-#                         providerName = systemTag[0].get("Name")
-#                         eventID = systemTag[1].text
-#                         if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
-#                             eventDataTag = event.lxml()[1]
-#                             if int(eventID) == 1000 and eventDataTag[0].text not in origin: continue
-#                             etc = eventDataTag[0].text
-#                             if timeline:
-#                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-#                                     continue
-#                             if systemTag[2].text == '1':
-#                                 level = 'Fatal'
-#                             elif systemTag[2].text == '2':
-#                                 level = 'Error'
-#                             elif systemTag[2].text == '3':
-#                                 level = 'Warning'
-#                             elif systemTag[2].text == '4':
-#                                 level = 'Information'
-#
-#                             items.append([orangeHead, loggedTime, providerName, eventID, level, etc, event.xml()])
-#                     except Exception as e:
-#                         print("Error: {}".format(e))
-#                         continue
-#             elif fileName.endswith("Fault-Tolerant-Heap%4Operational.evtx") or fileName.endswith("WER-Diag%4Operational.evtx"):
-#                 for event in log.records():
-#                     try:
-#                         systemTag = event.lxml()[0]
-#                         loggedTime = systemTag[7].get("SystemTime")
-#                         if not loggedTime: continue
-#                         providerName = systemTag[0].get("Name")
-#                         eventID = systemTag[1].text
-#                         head = []
-#                         if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
-#                             etc = ''
-#                             if fileName.endswith("Fault-Tolerant-Heap%4Operational.evtx"):
-#                                 etc = 'Heap Corruption'
-#                                 head = greenHead
-#                             elif fileName.endswith("WER-Diag%4Operational.evtx"):
-#                                 eventDataTag = event.lxml()[1]
-#                                 etc = eventDataTag.get("Name")
-#                                 head = yellowHead
-#
-#                             if timeline:
-#                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-#                                     continue
-#                             if systemTag[3].text == '1':
-#                                 level = 'Fatal'
-#                             elif systemTag[3].text == '2':
-#                                 level = 'Error'
-#                             elif systemTag[3].text == '3':
-#                                 level = 'Warning'
-#                             elif systemTag[3].text == '4':
-#                                 level = 'Information'
-#
-#                             items.append([head, loggedTime, providerName, eventID, level, etc, event.xml()])
-#                     except Exception as e:
-#                         print("Error: {}".format(e))
-#             elif fileName.startswith("OAlerts"):
-#                 for event in log.records():
-#                     try:
-#                         systemTag = event.lxml()[0]
-#                         loggedTime = systemTag[5].get("SystemTime")
-#                         if not loggedTime: continue
-#                         providerName = systemTag[0].get("Name")
-#                         eventID = systemTag[1].text
-#                         if int(eventID) in checkedEID:
-#                             if timeline:
-#                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-#                                     continue
-#                             if systemTag[2].text == '1':
-#                                 level = 'Fatal'
-#                             elif systemTag[2].text == '2':
-#                                 level = 'Error'
-#                             elif systemTag[2].text == '3':
-#                                 level = 'Warning'
-#                             elif systemTag[2].text == '4':
-#                                 level = 'Information'
-#                             eventDataTag = event.lxml()[1]
-#                             etc = eventDataTag[0].text
-#                             items.append([yellowHead, loggedTime, providerName, eventID, level, etc, event.xml()])
-#                     except Exception as e:
-#                         print("Error: {}".format(e))
-#     prototype += items
-#
-# def getEventLogItemsForWin10(compared, prototype, checkedSW=None, timeline=None):
-#     items = []
-#     headStr = "EventLog"
-#     orangeHead = [headStr, 2]
-#     yellowHead = [headStr, 3]
-#     greenHead = [headStr, 4]
-#     origin = checkedSW[0]
-#     reportArchive = []
-#     for fileName, category in compared.items():
-#         fullPath = CONSTANT.EVENTLOG + fileName
-#         checkedEID = category['eid']
-#         checkedProviders = category['providerName']
-#         with evtx.Evtx(fullPath) as log:
-#             if fileName.startswith("App"): # or fileName.startswith("System"):
-#                 for event in log.records():
-#                     try:
-#                         systemTag = event.lxml()[0]
-#                         loggedTime = systemTag[5].get("SystemTime")
-#                         if not loggedTime: continue
-#                         providerName = systemTag[0].get("Name")
-#                         eventID = systemTag[1].text
-#                         if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
-#                             etc = ''
-#                             # if fileName.startswith("App"):
-#                             eventDataTag = event.lxml()[1]
-#                             if int(eventID) == 1000:
-#                                 if eventDataTag[0].text not in origin: continue
-#                                 etc = eventDataTag[0].text
-#                             elif int(eventID) == 1001:
-#                                 appcrashList = checkedSW[0] + checkedSW[1]
-#                                 if eventDataTag[2].text != 'APPCRASH' or eventDataTag[5].text not in appcrashList: continue
-#                                 etc = eventDataTag[5].text
-#                                 reportArchive.append(eventDataTag[16].text)
-#                             # elif timeline:
-#                             if timeline:
-#                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-#                                     continue
-#                             if systemTag[2].text == '1':
-#                                 level = 'Fatal'
-#                             elif systemTag[2].text == '2':
-#                                 level = 'Error'
-#                             elif systemTag[2].text == '3':
-#                                 level = 'Warning'
-#                             elif systemTag[2].text == '4':
-#                                 level = 'Information'
-#
-#                             items.append([orangeHead, loggedTime, providerName, eventID, level, etc, event.xml()])
-#                     except Exception as e:
-#                         print("Error: {}".format(e))
-#                         continue
-#             elif fileName.endswith("Fault-Tolerant-Heap%4Operational.evtx"):
-#                 for event in log.records():
-#                     try:
-#                         systemTag = event.lxml()[0]
-#                         loggedTime = systemTag[7].get("SystemTime")
-#                         if not loggedTime: continue
-#                         providerName = systemTag[0].get("Name")
-#                         eventID = systemTag[1].text
-#                         if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
-#                             if timeline:
-#                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-#                                     continue
-#                             if systemTag[3].text == '1':
-#                                 level = 'Fatal'
-#                             elif systemTag[3].text == '2':
-#                                 level = 'Error'
-#                             elif systemTag[3].text == '3':
-#                                 level = 'Warning'
-#                             elif systemTag[3].text == '4':
-#                                 level = 'Information'
-#                             etc = 'Heap Corruption'
-#                             items.append([greenHead, loggedTime, providerName, eventID, level, etc, event.xml()])
-#                     except Exception as e:
-#                         print("Error: {}".format(e))
-#             elif fileName.startswith("OAlerts"):
-#                 for event in log.records():
-#                     try:
-#                         systemTag = event.lxml()[0]
-#                         loggedTime = systemTag[5].get("SystemTime")
-#                         if not loggedTime: continue
-#                         providerName = systemTag[0].get("Name")
-#                         eventID = systemTag[1].text
-#                         if int(eventID) in checkedEID:
-#                             if timeline:
-#                                 if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-#                                     continue
-#                             if systemTag[2].text == '1':
-#                                 level = 'Fatal'
-#                             elif systemTag[2].text == '2':
-#                                 level = 'Error'
-#                             elif systemTag[2].text == '3':
-#                                 level = 'Warning'
-#                             elif systemTag[2].text == '4':
-#                                 level = 'Information'
-#                             eventDataTag = event.lxml()[1]
-#                             etc = eventDataTag[0].text
-#                             items.append([yellowHead, loggedTime, providerName, eventID, level, etc, event.xml()])
-#                     except Exception as e:
-#                         print("Error: {}".format(e))
-#
-#         prototype += items
 
 def getReportWER(wer_info, prototype, type):
     import os
-    import time
     head = None
     if type == CONSTANT.IE:
         head = [CONSTANT.WER_KEYWORD, 3]
@@ -380,31 +181,26 @@ def getReportWER(wer_info, prototype, type):
             createdTime = datetime.datetime.fromtimestamp(os.path.getctime(fullpath))
             modifiedTime = datetime.datetime.fromtimestamp(os.path.getmtime(fullpath))
             prototype.append([head, "{}".format(modifiedTime), fullpath, data[1], data[2], "{}".format(createdTime), content])
+#
+# def getDirectlyReportWER(type, env, prototype, reportArchive):
+#     items = []
+#     headStr = "Report.wer"
+#     head = None
+#     if type == CONSTANT.HWP:
+#         head = [headStr, 5]
+#
+#     for dirname in os.listdir(CONSTANT.WER[env]):
+#         frontDirName = dirname.rsplit('_', 2)[0]
+#         if frontDirName.lower() in reportArchive:
+#             fullpath = CONSTANT.WER[env] + dirname + "\\Report.wer"
+#             f = open(fullpath, "rb")
+#             content = f.read().decode('utf-16')
+#             createdTime = datetime.datetime.fromtimestamp(os.path.getctime(fullpath))
+#             modifiedTime = datetime.datetime.fromtimestamp(os.path.getmtime(fullpath))
+#             items.append([head, "{}".format(modifiedTime), fullpath, "", "", "{}".format(createdTime), content])
+#     prototype += items
 
-'''
-def getReportWER(env, prototype, reportArchive, type, timeline=None,):
-    import time
-    items = []
-    headStr = "Report.wer"
-    head = None
-    if type == CONSTANT.IE:
-        head = [headStr, 3]
-    elif type == CONSTANT.OFFICE:
-        head = [headStr, 4]
 
-    for dirname in os.listdir(CONSTANT.WER[env]):
-        if dirname.rsplit('_', 2)[0] in reportArchive:
-            fullpath = CONSTANT.WER[env] + dirname + "\\Report.wer"
-            f = open(fullpath, "rb")
-            content = f.read().decode('utf-16')
-            createdTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(os.path.getctime(fullpath)))
-            if timeline:
-                if datetime.datetime.strptime(createdTime, "%Y-%m-%d %H:%M:%S") < timeline:
-                    continue
-            modifiedTime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(os.path.getmtime(fullpath)))
-            items.append([head, modifiedTime, fullpath, createdTime, "", "", content])
-    prototype += items
-'''
 def getPrefetchItems(prototype, included, timeline=None):
     items = []
     headStr = "Prefetch"
@@ -414,6 +210,12 @@ def getPrefetchItems(prototype, included, timeline=None):
     yellowHead = [headStr, 3]
     blueHead = [headStr, 5]
     purpleHead = [headStr, 7]
+
+    werfaultHead = yellowHead
+    loadedPFHead = orangeHead
+    if "HWP.EXE" in included[0]:
+        loadedPFHead = yellowHead
+        werfaultHead = blueHead
 
     limitedTime = None
     if not timeline:
@@ -457,9 +259,9 @@ def getPrefetchItems(prototype, included, timeline=None):
                     items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
                 continue
             elif p.executableName in included[1]:
-                head = orangeHead
+                head = loadedPFHead
             elif p.executableName in included[2]:
-                head = yellowHead    # WERFAULT
+                head = werfaultHead
             elif p.executableName in included[3]:
                 head = purpleHead
             else:
@@ -474,19 +276,84 @@ def getPrefetchItems(prototype, included, timeline=None):
                 continue
     prototype += items
     '''
+    IE
+    [빨] IEXPLORER.EXE: 생성, 실행 (웹 히스토리 첫 기록 이전)
+    [파] IEXPLORER.EXE: 실행만 (웹 히스토리 첫 기록 이후)
+    
     MS-Office
     [빨] WINWORD.EXE, POWERPNT.EXE, EXCEL.EXE
     [주] WMIPRVSE.EXE, EQNEDT32.EXE, DW20.EXE, DWWIN.EXE
     [노] 타 프로세스 프리패치: WERFAULT.EXE
     [보] Cmd, Powershell 프리패치
     
-    IE
-    [빨] IE 프리패치: 생성, 실행 (웹 히스토리 첫 기록 이전)
-    [파] IE 프리패치: 실행만 (웹 히스토리 첫 기록 이후)
+    HWP
+    [빨] HWP.EXE
+    [노] GBB.EXE, GSWIN32C.EXE
     
     공통
     [회] 프리패치 - 첫 타임라인 이후 생성된 것만
     '''
+
+
+def getJumplistItemsVerSummary(type, prototype):
+    contents = []
+    if type == CONSTANT.HWP:
+        contents.append(CONSTANT.JUMPLIST_HASH[15])
+        contents.append(CONSTANT.JUMPLIST_HASH[16])
+        contents.append(CONSTANT.JUMPLIST_HASH[17])
+    elif type == CONSTANT.OFFICE:
+        for i in range(12):
+            contents.append(CONSTANT.JUMPLIST_HASH[i])
+    _list = contents.copy()
+    items = []
+    LNKhead = [CONSTANT.LNKFILE_KEYWORD, 2]
+    DESThead = [CONSTANT.DESTLIST_KEYWORD, 2]
+    for content in contents:
+        fullpath = CONSTANT.JUMPLIST[0] + content[1] + ".automaticDestinations-ms"
+        if not os.path.exists(fullpath):
+            _list.remove(content)
+            continue
+        ole = olefile.OleFileIO(fullpath)
+
+        idx = _list.index(content)
+        for item in ole.listdir():
+            file = ole.openstream(item)
+            file_data = file.read()
+            header_value = file_data[:4]  # first four bytes value should be 76 bytes
+            try:
+                if header_value[0] == 76:  # first four bytes value should be 76 bytes
+                    lnk_header = lnk_file_header(file_data[:76])
+                    lnk_after_header = lnk_file_after_header(file_data)  # after 76 bytes to last 100 bytes
+                    items.append([
+                        LNKhead,
+                        lnk_header[0],          # Modified Time
+                        lnk_after_header[3],    # LocalBasePath
+                        "[LNK]" + lnk_after_header[0],  # Drive Type
+                        lnk_header[3],     # File Size
+                        lnk_header[2],  # Created Time
+                        [fullpath.rsplit("\\", 1)[-1], _list[idx][0], "LNK", lnk_header + lnk_after_header]
+                    ])
+                    # lnk_tracker_value = file_data[ole.get_size(item) - 100:ole.get_size(item) - 96]
+                    # if lnk_tracker_value[0] == 96:  # link tracker information 4 byte value = 96
+                    #     try:
+                    #         lnk_tracker = lnk_file_tracker_data(file_data[ole.get_size(item) - 100:])  # last 100 bytes
+                    #     except:
+                    #         pass
+                else:  # if first four byte value is not 76 then it is DestList stream
+                    DestLists = destlist_data(file_data[:ole.get_size(item)])
+                    for destList in DestLists:
+                        items.append([
+                            DESThead,
+                            destList[0],    # destlist_access_time
+                            destList[1],    # Data = FullPath
+                            destList[1].rsplit("\\", 1)[-1],    # FileName
+                            destList[3],    # destlist_entry_access_count
+                            destList[5],    # destlist_object_timestamp
+                            [fullpath.rsplit("\\", 1)[-1], _list[idx][0], "DestList",  destList]
+                        ])
+            except:
+                pass
+    prototype += items
 
 def getJumplistItems(contents):
     _list = contents.copy()
@@ -512,11 +379,11 @@ def getJumplistItems(contents):
                         lnk_header[1],
                         lnk_header[2],
                         lnk_after_header[3],
-                        str(lnk_header[3]),
+                        lnk_header[3],
                         item[0] + "(" + str(int(item[0], 16)) + ")",
                         lnk_after_header[0],
                         lnk_after_header[1],
-                        str(lnk_after_header[2]),
+                        lnk_after_header[2],
                     ])
                     lnk_tracker_value = file_data[ole.get_size(item) - 100:ole.get_size(item) - 96]
                     # print(lnk_tracker_value[0])
@@ -541,7 +408,6 @@ def getWebArtifactItems(env, type, prefetchList=None, timeline=None, prototype=N
     cwd = os.getcwd()
     fileList = glob.glob(cwd + "\\WebCacheV*.dat")
     fullpath = ''
-    items = {}
     if not fileList:
         dirname = CONSTANT.IE_ARTIFACT_PATH[env]["History"]
         fullpath = glob.glob(dirname + "WebCacheV*.dat")[0]
@@ -603,3 +469,25 @@ def getRecentFileCache(filepath):
             except Exception as e:
                 return False, "{}".format(e)
     return True, contents
+
+def getRecentFileItems(type, prototype, extension):
+    import glob
+    head = None
+    navyHead = ["Recent", 6]
+    if type == CONSTANT.OFFICE:
+        head = navyHead
+    elif type == CONSTANT.HWP:
+        head = navyHead
+
+    fileList = []
+    for ex in extension:
+        fileList += glob.glob(CONSTANT.RECENT + "*.{}".format(ex))
+
+    items = []
+    for fname in fileList:
+        accessedTime = datetime.datetime.fromtimestamp(os.path.getatime(fname))
+        modifiedTime = datetime.datetime.fromtimestamp(os.path.getmtime(fname))
+        createdTime = datetime.datetime.fromtimestamp(os.path.getctime(fname))
+        fileSize = os.path.getsize(fname)
+        items.append([head, "{}".format(accessedTime), fname, "{}".format(modifiedTime), fileSize, "{}".format(createdTime), "None"])
+    prototype += items

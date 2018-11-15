@@ -4,20 +4,17 @@
     <list default="true" id="23378966-e248-43e1-9817-746140378983" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/MainWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/ParseEvtx/Views.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseEvtx/Views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/ParsePrefetch/prefetch.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParsePrefetch/prefetch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/ParseRegistry/RegistryParse.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseRegistry/RegistryParse.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/Chrome/__init__.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/IE/Prototype.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/IE/Prototype.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/Office/Prototype.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/Office/Prototype.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/Prototype.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/Prototype.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/JumpListViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/JumpListViewer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/LoadingScreen.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/LoadingScreen.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/MenuBar.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/MenuBar.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/NTFSViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSViewer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/UI/PrefetchDetailViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/PrefetchDetailViewer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/TextViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/TextViewer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/UI/WebArtifactDetailViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/WebArtifactDetailViewer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/constant.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/constant.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,7 +27,7 @@
     <session id="-1788526241">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="65" />
+          <entry key="project.closed" value="66" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.11" value="2" />
           <entry key="project.open.time.12" value="1" />
@@ -45,9 +42,9 @@
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.6" value="10" />
           <entry key="project.open.time.7" value="21" />
-          <entry key="project.open.time.8" value="14" />
+          <entry key="project.open.time.8" value="15" />
           <entry key="project.open.time.9" value="8" />
-          <entry key="project.opened" value="66" />
+          <entry key="project.opened" value="67" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -55,7 +52,7 @@
           <entry key="gif" value="7" />
           <entry key="jpg" value="3" />
           <entry key="png" value="2" />
-          <entry key="py" value="408" />
+          <entry key="py" value="439" />
           <entry key="txt" value="23" />
         </counts>
       </usages-collector>
@@ -63,20 +60,20 @@
         <counts>
           <entry key="Image" value="12" />
           <entry key="PLAIN_TEXT" value="23" />
-          <entry key="Python" value="408" />
+          <entry key="Python" value="439" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="2427" />
+          <entry key="Python Console" value="2488" />
           <entry key="dummy" value="37" />
-          <entry key="py" value="139081" />
+          <entry key="py" value="144682" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="37" />
-          <entry key="Python" value="141508" />
+          <entry key="Python" value="147170" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -90,8 +87,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/IE/Prototype.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="159">
-              <caret line="90" column="4" lean-forward="true" selection-start-line="90" selection-start-column="4" selection-end-line="90" selection-end-column="4" />
+            <state relative-caret-position="156">
+              <caret line="63" column="26" lean-forward="true" selection-start-line="63" selection-start-column="26" selection-end-line="63" selection-end-column="26" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
@@ -99,35 +96,47 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/modules/Office/Prototype.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modules/UI/JumpListViewer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="444">
-              <caret line="94" lean-forward="true" selection-start-line="94" selection-end-line="94" />
+            <state relative-caret-position="175">
+              <caret line="89" selection-start-line="89" selection-end-line="89" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="51">
+              <caret line="80" column="53" lean-forward="true" selection-start-line="80" selection-start-column="53" selection-end-line="80" selection-end-column="53" />
               <folding>
-                <marker date="1542275496674" expanded="true" signature="55:60" ph="..." />
-                <marker date="1542275496674" expanded="true" signature="711:715" ph="..." />
+                <element signature="e#0#52#0" expanded="true" />
+                <marker date="1542305766324" expanded="true" signature="4994:5411" ph="..." />
+                <marker date="1542305766324" expanded="true" signature="5607:5612" ph="..." />
+                <marker date="1542305766324" expanded="true" signature="5705:5710" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/MainWindow.py">
+        <entry file="file://$PROJECT_DIR$/modules/HWP/Prototype.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="912">
-              <caret line="116" lean-forward="true" selection-start-line="116" selection-end-line="116" />
+            <state relative-caret-position="286">
+              <caret line="67" column="26" lean-forward="true" selection-start-line="67" selection-start-column="26" selection-end-line="67" selection-end-column="26" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/Prototype.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1634">
-              <caret line="54" column="16" lean-forward="true" selection-start-line="54" selection-start-column="16" selection-end-line="54" selection-end-column="16" />
+            <state relative-caret-position="308">
+              <caret line="403" column="16" lean-forward="true" selection-start-line="403" selection-start-column="16" selection-end-line="403" selection-end-column="16" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
+                <marker date="1542305878930" expanded="true" signature="20368:20373" ph="..." />
               </folding>
             </state>
           </provider>
@@ -144,12 +153,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Registry</find>
-      <find>included</find>
-      <find>PATH</find>
-      <find>PREFETCH</find>
-      <find>type</find>
-      <find>PrototypeFor</find>
       <find>_dirname</find>
       <find>Error</find>
       <find>format(e)</find>
@@ -168,12 +171,18 @@
       <find>Edit</find>
       <find>search</find>
       <find>enterPr</find>
-      <find>print</find>
       <find>Margin</find>
       <find>with</find>
       <find>open</find>
       <find>self._f</find>
       <find>print(</find>
+      <find>Report</find>
+      <find>getReport</find>
+      <find>destlist_access_time</find>
+      <find>destlist_object_timestamp</find>
+      <find>CONSTANT</find>
+      <find>after_header_list</find>
+      <find>print</find>
     </findStrings>
     <replaceStrings>
       <replace>items</replace>
@@ -214,8 +223,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/modules/UI/SubWindow.py" />
-        <option value="$PROJECT_DIR$/libs/IE/WebArtifact.py" />
         <option value="$PROJECT_DIR$/modules/UI/TableViewer.py" />
         <option value="$PROJECT_DIR$/libs/__init__.py" />
         <option value="$PROJECT_DIR$/modules/UI/MsgViewer.py" />
@@ -225,7 +232,6 @@
         <option value="$PROJECT_DIR$/repo/log.txt" />
         <option value="$PROJECT_DIR$/repo/target.txt" />
         <option value="$PROJECT_DIR$/modules/UI/MsgDialog.py" />
-        <option value="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/attribute_headers.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/attributes.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/boot_sector/boot_sector.py" />
@@ -239,8 +245,6 @@
         <option value="$PROJECT_DIR$/modules/UI/NTFSLogFileDialog.py" />
         <option value="$PROJECT_DIR$/modules/UI/__init__.py" />
         <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/modules/UI/WebArtifactDetailViewer.py" />
-        <option value="$PROJECT_DIR$/modules/UI/PrefetchDetailViewer.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSViewer.py" />
         <option value="$PROJECT_DIR$/libs/ParseBCF.py" />
@@ -249,22 +253,27 @@
         <option value="$PROJECT_DIR$/libs/ParseRegistry/RegistryParse.py" />
         <option value="$PROJECT_DIR$/libs/ParseRegistry/Amcache.py" />
         <option value="$PROJECT_DIR$/modules/UI/TextViewer.py" />
-        <option value="$PROJECT_DIR$/modules/constant.py" />
-        <option value="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" />
         <option value="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" />
         <option value="$PROJECT_DIR$/modules/UI/ListViewer.py" />
         <option value="$PROJECT_DIR$/libs/ParsePrefetch/prefetch.py" />
-        <option value="$PROJECT_DIR$/modules/IE/Prototype.py" />
-        <option value="$PROJECT_DIR$/modules/UI/JumpListViewer.py" />
-        <option value="$PROJECT_DIR$/modules/Prototype.py" />
-        <option value="$PROJECT_DIR$/modules/UI/MenuBar.py" />
-        <option value="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" />
         <option value="$PROJECT_DIR$/modules/UI/LoadingScreen.py" />
         <option value="$PROJECT_DIR$/libs/ParseEvtx/Evtx.py" />
         <option value="$PROJECT_DIR$/libs/ParseEvtx/Views.py" />
         <option value="$PROJECT_DIR$/libs/ParseEvtx/Nodes.py" />
-        <option value="$PROJECT_DIR$/MainWindow.py" />
+        <option value="$PROJECT_DIR$/modules/UI/PrefetchDetailViewer.py" />
+        <option value="$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py" />
+        <option value="$PROJECT_DIR$/modules/UI/WebArtifactDetailViewer.py" />
+        <option value="$PROJECT_DIR$/modules/constant.py" />
+        <option value="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" />
+        <option value="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" />
         <option value="$PROJECT_DIR$/modules/Office/Prototype.py" />
+        <option value="$PROJECT_DIR$/modules/UI/JumpListDetailViewer.py" />
+        <option value="$PROJECT_DIR$/MainWindow.py" />
+        <option value="$PROJECT_DIR$/modules/UI/JumpListViewer.py" />
+        <option value="$PROJECT_DIR$/modules/UI/MenuBar.py" />
+        <option value="$PROJECT_DIR$/modules/HWP/Prototype.py" />
+        <option value="$PROJECT_DIR$/modules/IE/Prototype.py" />
+        <option value="$PROJECT_DIR$/modules/Prototype.py" />
       </list>
     </option>
   </component>
@@ -280,7 +289,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -303,7 +311,7 @@
               <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
               <item name="Parser" type="462c0819:PsiDirectoryNode" />
               <item name="libs" type="462c0819:PsiDirectoryNode" />
-              <item name="ParseRegistry" type="462c0819:PsiDirectoryNode" />
+              <item name="ParseJumpList" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
@@ -338,6 +346,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -516,7 +525,7 @@
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="1320" height="784" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49683544" visible="true" weight="0.22063492" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49683544" visible="true" weight="0.23015873" />
       <window_info id="Structure" order="1" sideWeight="0.5031645" side_tool="true" weight="0.21111111" />
       <window_info id="Favorites" order="2" sideWeight="0.5016835" side_tool="true" weight="0.19689542" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.32973805" />
@@ -524,7 +533,7 @@
       <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.50079364" side_tool="true" weight="0.30508474" />
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" weight="0.36517718" />
-      <window_info anchor="bottom" id="Run" order="5" weight="0.385208" />
+      <window_info anchor="bottom" id="Run" order="5" weight="0.21417566" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32973805" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.3990755" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
@@ -532,7 +541,7 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" x="194" y="67" width="881" height="482" id="Python Console" order="3" type="FLOATING" weight="0.3515873" />
+      <window_info anchor="right" x="452" y="315" width="881" height="482" id="Python Console" order="3" type="FLOATING" weight="0.3515873" />
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4983165" visible="true" weight="0.21111111" />
@@ -568,23 +577,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/threading.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="863" selection-start-line="863" selection-end-line="863" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/TimelineSetDialog.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/mft/attribute_headers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="3" column="19" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/boot_sector/boot_sector.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
@@ -687,13 +679,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/WebArtifactDetailViewer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="45" column="43" selection-start-line="45" selection-start-column="43" selection-end-line="45" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
@@ -764,26 +749,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="361">
           <caret line="26" selection-start-line="26" selection-end-line="26" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/constant.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="18" column="29" selection-start-line="18" selection-start-column="29" selection-end-line="18" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1036">
-          <caret line="132" column="45" selection-start-line="132" selection-start-column="45" selection-end-line="132" selection-end-column="45" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -791,17 +756,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-95">
           <caret line="401" column="59" lean-forward="true" selection-start-line="401" selection-start-column="59" selection-end-line="401" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/PrefetchDetailViewer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" column="8" selection-start-line="5" selection-start-column="8" selection-end-line="5" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#27#0" expanded="true" />
-            <marker date="1542125440536" expanded="true" signature="177:214" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -822,42 +776,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/JumpListViewer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="101" column="30" lean-forward="true" selection-start-line="101" selection-start-column="30" selection-end-line="101" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="80" column="53" lean-forward="true" selection-start-line="80" selection-start-column="53" selection-end-line="80" selection-end-column="53" />
-          <folding>
-            <element signature="e#0#52#0" expanded="true" />
-            <marker date="1542273062964" expanded="true" signature="4787:5204" ph="..." />
-            <marker date="1542273062964" expanded="true" signature="5400:5405" ph="..." />
-            <marker date="1542273062964" expanded="true" signature="5498:5503" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/LoadingScreen.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1406">
           <caret line="74" lean-forward="true" selection-start-line="74" selection-end-line="74" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1083">
-          <caret line="69" column="30" selection-start-line="69" selection-start-column="30" selection-end-line="69" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -890,40 +814,136 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/Prototype.py">
+    <entry file="file://$PROJECT_DIR$/modules/UI/PrefetchDetailViewer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1634">
-          <caret line="54" column="16" lean-forward="true" selection-start-line="54" selection-start-column="16" selection-end-line="54" selection-end-column="16" />
+        <state relative-caret-position="-1627">
+          <caret line="22" column="47" selection-start-line="22" selection-start-column="47" selection-end-line="22" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+            <marker date="1542279553415" expanded="true" signature="177:214" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseWebArtifact/WebArtifact.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="65" column="24" lean-forward="true" selection-start-line="65" selection-start-column="24" selection-end-line="65" selection-end-column="24" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/IE/Prototype.py">
+    <entry file="file://$PROJECT_DIR$/modules/UI/WebArtifactDetailViewer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="90" column="4" lean-forward="true" selection-start-line="90" selection-start-column="4" selection-end-line="90" selection-end-column="4" />
+        <state relative-caret-position="425">
+          <caret line="70" selection-start-line="70" selection-end-line="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/constant.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="146">
+          <caret line="24" column="32" lean-forward="true" selection-start-line="24" selection-start-column="32" selection-end-line="24" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="208" column="75" lean-forward="true" selection-start-line="208" selection-start-column="75" selection-end-line="208" selection-end-column="75" />
           <folding>
-            <element signature="e#0#31#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/Office/Prototype.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="11" column="5" lean-forward="true" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
+          <folding>
+            <marker date="1542304564426" expanded="true" signature="55:60" ph="..." />
+            <marker date="1542304564426" expanded="true" signature="924:928" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/JumpListDetailViewer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="26" column="35" selection-start-line="26" selection-start-column="35" selection-end-line="26" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-842">
+          <caret line="129" column="4" selection-start-line="129" selection-start-column="4" selection-end-line="129" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MainWindow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="912">
-          <caret line="116" lean-forward="true" selection-start-line="116" selection-end-line="116" />
+        <state relative-caret-position="270">
+          <caret line="169" selection-start-line="169" selection-end-line="169" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/Office/Prototype.py">
+    <entry file="file://$PROJECT_DIR$/modules/UI/JumpListViewer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="444">
-          <caret line="94" lean-forward="true" selection-start-line="94" selection-end-line="94" />
+        <state relative-caret-position="175">
+          <caret line="89" selection-start-line="89" selection-end-line="89" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="80" column="53" lean-forward="true" selection-start-line="80" selection-start-column="53" selection-end-line="80" selection-end-column="53" />
           <folding>
-            <marker date="1542275496674" expanded="true" signature="55:60" ph="..." />
-            <marker date="1542275496674" expanded="true" signature="711:715" ph="..." />
+            <element signature="e#0#52#0" expanded="true" />
+            <marker date="1542305766324" expanded="true" signature="4994:5411" ph="..." />
+            <marker date="1542305766324" expanded="true" signature="5607:5612" ph="..." />
+            <marker date="1542305766324" expanded="true" signature="5705:5710" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/HWP/Prototype.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="67" column="26" lean-forward="true" selection-start-line="67" selection-start-column="26" selection-end-line="67" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/IE/Prototype.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="156">
+          <caret line="63" column="26" lean-forward="true" selection-start-line="63" selection-start-column="26" selection-end-line="63" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/Prototype.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="403" column="16" lean-forward="true" selection-start-line="403" selection-start-column="16" selection-end-line="403" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1542305878930" expanded="true" signature="20368:20373" ph="..." />
           </folding>
         </state>
       </provider>

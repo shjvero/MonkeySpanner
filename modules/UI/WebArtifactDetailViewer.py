@@ -28,7 +28,7 @@ class WebArtifactDetailViewer(QWidget):
         self.layout = QVBoxLayout(self)
 
         self.table = QTableWidget(self)
-        self.table.setMinimumSize(self.width()-100, 300)
+        self.table.setMinimumSize(self.width(), 400)
         self.table.setRowCount(len(self.category))
         self.table.setColumnCount(2)
         self.table.verticalHeader().setVisible(False)
@@ -68,9 +68,3 @@ class WebArtifactDetailViewer(QWidget):
             if os.system("echo {} | clip".format(self.content)) == 0:
                 print(self.content)
                 # 에러나는 이유는,, \n가 있어서 -- 어찌할건가?
-
-if __name__ == '__main__':
-    import sys
-    app = QApplication(sys.argv)
-    w = WebArtifactDetailViewer()
-    sys.exit(app.exec_())

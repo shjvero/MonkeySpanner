@@ -8,7 +8,7 @@ def getColumnHeader():
         "History": ["Accessed Time", "URL", "Modified Time", "", ""],					# 3 columns
         "Cache": ["Accessed Time", "URL", "File Name", "Size", "Created Time"],			# 5 columns
         "Download": ["Accessed Time", "URL", "File Name", "Size", "Download Path"],     # 5 columns
-        "Report.wer": ["Modified Time", "Path", "Created Time", "Module", "Exception Code"],                # 3 columns
+        "Report.wer": ["Modified Time", "Path", "Module", "Exception Code", "Created Time"],                # 3 columns
         "Registry": ["Modified Time", "Execution Path", "Size", "Exec Flag", "Registry Key"]       # 4 columns
     }
 
@@ -47,8 +47,8 @@ def getPrototype(env, timeline=None):
         prototype.sort(key=itemgetter(1))
         limitedTime = datetime.datetime.strptime(prototype[0][1], "%Y-%m-%d %H:%M:%S.%f")
 
-    t_list.append(Thread(target=getApplicationEvtx, args=(compared[0], prototype, prefetchList, limitedTime,)))
-    t_list.append(Thread(target=getFalutHeapEvtx, args=(compared[1], prototype, CONSTANT.IE, limitedTime,)))
+    t_list.append(Thread(target=getApplicationEvtx, args=(CONSTANT.IE, compared[0], prototype, prefetchList, limitedTime,)))
+    t_list.append(Thread(target=getFalutHeapEvtx, args=(CONSTANT.IE, compared[1], prototype, limitedTime,)))
 
     if env == CONSTANT.WIN7:
         compared.append({

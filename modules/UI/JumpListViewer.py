@@ -29,7 +29,7 @@ class JumpListViewer(QWidget):
         self.setLayout(self.windowLayout)
 
         # Set up Label
-        self.hashTitleLabel = QLabel("Hash: ", self)
+        self.hashTitleLabel = QLabel("AppID: ", self)
         self.hashLabel = QLabel(self)
         self.hashLabel.setFixedWidth(self.listViewWidth)
         self.hashLabel.setAlignment(Qt.AlignCenter)
@@ -87,7 +87,6 @@ class JumpListViewer(QWidget):
 
     def selectedHash(self, i):
         self.selected = self.model.itemFromIndex(i).row()
-        print(self.hashList[self.selected])
         self.hashLabel.setText(self.hashList[self.selected][1])
         self.loadData(self.hashList[self.selected][2])
 
@@ -123,7 +122,7 @@ class JumpListViewer(QWidget):
     def export(self):
         import os, csv
         # Export Link File List
-        msg = "Success ! - hsah: " + self.hashLabel.text()
+        msg = "Success ! - AppID: " + self.hashLabel.text()
         try:
             fileName = self.hashLabel.text() + "-LinkFiles.csv"
             newpath = os.getcwd() + "\\" + fileName

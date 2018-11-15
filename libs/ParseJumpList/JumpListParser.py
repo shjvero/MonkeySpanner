@@ -165,7 +165,7 @@ def lnk_file_header(header_data):
     header_list.append(lnk_header_write_time)
     header_list.append(lnk_header_access_time)
     header_list.append(lnk_header_creation_time)
-    header_list.append(lnk_header_file_size[0])
+    header_list.append(str(lnk_header_file_size[0]))
 
     return header_list
 
@@ -232,7 +232,7 @@ def lnk_file_after_header(lnk_file_data):
     lnk_volumelabel = lnk_file_data[lnk_volumeidoffset[0] + 94 + has_lnk_id_list_size[0]:lnk_volumeidoffset[0] + 94 + has_lnk_id_list_size[0] + offset1]
     Volume_Label = lnk_volumelabel.decode('ascii')
     after_header_list.append(Volume_Label)
-    after_header_list.append(lnk_driveserialnumber[0])
+    after_header_list.append(str(lnk_driveserialnumber[0]))
 
     if lnk_info_flags[0] == 1:
         size_of_localbasepath = lnk_info_size[0] - lnk_localbasepathoffset[0]

@@ -1,11 +1,13 @@
 import sys
-from PyQt5.QtCore import Qt
 
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon, QFont, QCursor
 from PyQt5.QtWidgets import *
+
 from modules.UI.MenuBar import MenuBar
 from modules.UI.PrototpyeTable import PrototypeTable
 from modules.UI.LoadingScreen import LoadingWidget
+import modules.constant as CONSTANT
 
 class Main(QMainWindow):
     def __init__(self):
@@ -16,10 +18,10 @@ class Main(QMainWindow):
         self.topWidgetHeight = 40
         self.selectionList = [
             "---- Select Software ----",
-            "Adobe Reader", "Adobe Flash Player", "Chrome", "Edge", "HWP",
+            "Adobe Reader", "Adobe Flash Player", "Edge", "HWP",
             "Internet Explorer", "MS-Office", "Kernel(Local Privilege Escalation)"
         ]
-        self.OPTIONS = ['None', 'Prefetch', 'Event Log', 'Registry', 'History', 'WebCache', 'WER']
+        self.OPTIONS = ['None', 'Prefetch', 'Event Log', 'Registry', 'History', 'WebCache', 'WER', 'JumpList[L]', 'JumpList[D]']
         self.selectionWidth = 220
         self.btnNumber = 0
         self.loadBtnWidth = 100
@@ -70,7 +72,7 @@ class Main(QMainWindow):
 
         # Set up combo box (Software Selection)
         self.selection = QComboBox(self)
-        self.selection.setFont(QFont("Times New Roman", 12))
+        self.selection.setFont(QFont('Arial', 12))
         self.selection.setFixedSize(self.selectionWidth, self.topWidgetHeight)
         self.selection.addItems(self.selectionList)
         self.selection.currentIndexChanged.connect(self.selectSoftware)
@@ -104,6 +106,12 @@ class Main(QMainWindow):
         self.option6 = QCheckBox(self.OPTIONS[6])
         self.option6.stateChanged.connect(lambda: self.toggledChkBtn(self.option6))
         chkboxLayout.addWidget(self.option6)
+        self.option7 = QCheckBox(self.OPTIONS[7])
+        self.option7.stateChanged.connect(lambda: self.toggledChkBtn(self.option7))
+        chkboxLayout.addWidget(self.option7)
+        self.option8 = QCheckBox(self.OPTIONS[8])
+        self.option8.stateChanged.connect(lambda: self.toggledChkBtn(self.option8))
+        chkboxLayout.addWidget(self.option8)
 
         # Set up text box for Search
         self.search = QLineEdit(self)
@@ -149,10 +157,27 @@ class Main(QMainWindow):
         self.bottomLayout.addWidget(self.table)
         self.table.show()
 
+        if self.presentSelected == CONSTANT.ADOBE_FLASH_PLAYER:
+            print()
+        elif self.presentSelected in [CONSTANT.IE, CONSTANT.EDGE]:
+            self.option4.setDisabled(False)
+            self.option5.setDisabled(False)
+            self.option7.setDisabled(True)
+            self.option8.setDisabled(True)
+        elif self.presentSelected in [CONSTANT.ADOBE_READER, CONSTANT.OFFICE]:
+            self.option4.setDisabled(True)
+            self.option5.setDisabled(False)
+            self.option7.setDisabled(False)
+            self.option8.setDisabled(False)
+        elif self.presentSelected == CONSTANT.HWP:
+            self.option4.setDisabled(True)
+            self.option5.setDisabled(True)
+
     def toggledChkBtn(self, b):
         msg = b.text()
         self.statusBar().showMessage(msg)
         if self.presentSelected == 0: return
+
         if msg == self.OPTIONS[1]:
             if self.option1.isChecked():
                 if self.btnNumber:
@@ -229,6 +254,32 @@ class Main(QMainWindow):
                 self.btnNumber -= 1
                 if self.btnNumber:
                     self.table.filtering(6, PrototypeTable.ONLY_HIDE)
+                else:
+                    self.table.filtering(0)
+        elif msg == self.OPTIONS[7]:
+            if self.option7.isChecked():
+                if self.btnNumber:
+                    self.table.filtering(7, PrototypeTable.ONLY_SHOW)
+                else:
+                    self.table.filtering(7, PrototypeTable.SIMPLE_SHOW)
+                self.btnNumber += 1
+            else:
+                self.btnNumber -= 1
+                if self.btnNumber:
+                    self.table.filtering(7, PrototypeTable.ONLY_HIDE)
+                else:
+                    self.table.filtering(0)
+        elif msg == self.OPTIONS[8]:
+            if self.option8.isChecked():
+                if self.btnNumber:
+                    self.table.filtering(8, PrototypeTable.ONLY_SHOW)
+                else:
+                    self.table.filtering(8, PrototypeTable.SIMPLE_SHOW)
+                self.btnNumber += 1
+            else:
+                self.btnNumber -= 1
+                if self.btnNumber:
+                    self.table.filtering(8, PrototypeTable.ONLY_HIDE)
                 else:
                     self.table.filtering(0)
 
