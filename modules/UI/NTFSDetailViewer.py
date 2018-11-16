@@ -1,12 +1,10 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QWidget, QTableWidget, QLabel, QApplication, QTableWidgetItem, QFormLayout, \
+from PyQt5.QtWidgets import QWidget, QTableWidget, QLabel, QTableWidgetItem, QFormLayout, \
     QAbstractItemView
 
-
 class NTFSDetailViewer(QWidget):
-    def __init__(self, contents):
+    def __init__(self):
         QWidget.__init__(self)
-        self.initUI(contents)
 
     def initUI(self, contents):
         self.setWindowTitle("NTFS Detail Viewer")
@@ -121,13 +119,13 @@ class NTFSDetailViewer(QWidget):
                 self.table4.item(row, 0).setTextAlignment(Qt.AlignCenter)
                 row += 1
             self.table4.setEditTriggers(QAbstractItemView.NoEditTriggers)
+            self.table4.horizontalHeader().setStretchLastSection(True)
         else:
             self.label4.setText("- LogFile Transaction Number:")
             self.table4 = QLabel("None")
             self.table4.setFixedHeight(60)
             self.table4.setFixedWidth(self.width())
             self.table4.setAlignment(Qt.AlignCenter)
-            self.table4.horizontalHeader().setStretchLastSection(True)
 
         self.layout.addRow(self.label1, self.label2)
         self.layout.addRow(self.table1, self.table2)

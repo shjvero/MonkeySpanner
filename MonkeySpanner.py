@@ -20,6 +20,7 @@ def uac_require():
         return False, "{}".format(e)
 
 if __name__ == "__main__":
+    '''
     app = QApplication(sys.argv)
     app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     w = Main()
@@ -27,7 +28,6 @@ if __name__ == "__main__":
         sys.exit(app.exec_())
     except Exception as e:
         print("Error in Main: {}".format(e))
-
     '''
     import ctypes
     if ctypes.windll.shell32.IsUserAnAdmin():
@@ -51,4 +51,3 @@ if __name__ == "__main__":
             msg.setStandardButtons(QMessageBox.Ok)
             msg.buttonClicked.connect(sys.exit)
             msg.exec_()
-    '''

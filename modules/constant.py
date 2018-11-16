@@ -53,7 +53,7 @@ TableHeader = {
     WER_KEYWORD: ["Modified Time", "Path", "Module", "Exception Code", "Created Time"],                 # 5 columns
     REGISTRY_KEYWORD: ["Modified Time", "Execution Path", "Size", "Exec Flag", "Registry Key"],         # 5 columns
     LNKFILE_KEYWORD: ["Modified Time", "File Path", "Drive Type", "Size", "Created Time"],              # 5 columns
-    DESTLIST_KEYWORD: ["Last Recorded Time", "File Path", "File Name", "Access", "New (Timestamp)"],    # 5 columns
+    DESTLIST_KEYWORD: ["Timestamp", "File Path", "File Name", "Access", "Last Recorded Time"],    # 5 columns
     EVENTLOG_KEYWORD: ["Logged Time", "Provider Name", "Event ID", "Level", "Data"],                    # 5 columns
     HISTORY_KEYWORD: ["Accessed Time", "URL", "Modified Time", "", ""],                                 # 3 columns
     CACHE_KEYWORD: ["Accessed Time", "URL", "File Name", "Size", "Created Time"],                       # 5 columns

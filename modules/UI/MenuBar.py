@@ -88,9 +88,6 @@ class MenuBar(QMenuBar):
         elif self.selected == CONSTANT.ADOBE_FLASH_PLAYER:
             print("Adobe Flash Player in JumpListViewer")
             hashList.append(CONSTANT.JUMPLIST_HASH[14])
-        # elif self.selected == CONSTANT.CHROME:
-        #     print("Chrome in JumpListViewer")
-        #     hashList.append(CONSTANT.JUMPLIST_HASH[24])
         elif self.selected == CONSTANT.EDGE:
             print("Edge in JumpListViewer")
             hashList.append(CONSTANT.JUMPLIST_HASH[25])

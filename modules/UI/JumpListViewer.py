@@ -11,7 +11,7 @@ class JumpListViewer(QWidget):
         self.listViewWidth = 180
         self.linkFilesHeaderItems = ["Modified Time", "Accessed Time", "Created Time", "LocalBasePath", "Size", "E.No.",
              "Drive Type", "VolumnName", "Serial No."]
-        self.destListHeaderItems = ["Last Recorded Access", "Data", "E.No.", "Access Count", "NetBIOSName", "New (Timestamp)",
+        self.destListHeaderItems = ["New (Timestamp)", "Data", "E.No.", "Access Count", "NetBIOSName", "Last Recorded Access",
              "New (MAC)", "Seq No.", "Birth (Timestamp)", "Birth (MAC)"]
         self.selected = -1
         self.initUI()

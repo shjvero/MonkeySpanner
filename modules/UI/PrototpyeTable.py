@@ -225,4 +225,8 @@ class PrototypeTable(QTableWidget):
                 copiedStr = selected[0].text()
             else:
                 copiedStr = " ".join(currentQTableWidgetItem.text() for currentQTableWidgetItem in selected)
-            os.system("echo {} | clip".format(copiedStr))
+            import subprocess
+            si = subprocess.STARTUPINFO()
+            si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            command = 'echo "{}" | clip'.format(copiedStr)
+            subprocess.call(command, startupinfo=si)

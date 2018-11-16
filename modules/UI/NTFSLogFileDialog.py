@@ -8,7 +8,6 @@ class NTFSLogFileDialog(QDialog, QObject):
     def __init__(self, parent=None):
         QDialog.__init__(self, parent)
         QObject.__init__(self)
-        # super().__init__()
         self.initUI()
 
     def initUI(self):
@@ -49,8 +48,14 @@ class NTFSLogFileDialog(QDialog, QObject):
         self.importLogFileBtn.setCursor(QCursor(Qt.PointingHandCursor))
 
         self.submitBtn = QPushButton("Submit", self)
-        # self.setFixedSize(200, 40)
+        self.submitBtn.setFixedSize(100, 40)
         self.submitBtn.setCursor(QCursor(Qt.PointingHandCursor))
+
+        # logging
+        self.loggingLabel = QLabel("Loading...", self)
+        self.loggingLabel.setFixedHeight(20)
+        self.loggingLabel.setAlignment(Qt.AlignBottom)
+        self.loggingLabel.hide()
 
         # Set up Progress Bar
         self.loadingBar = QProgressBar(self)
@@ -72,6 +77,7 @@ class NTFSLogFileDialog(QDialog, QObject):
         self.gridlayout.addWidget(self.logfilePathTextBox, 2, 1)
         self.gridlayout.addWidget(self.importLogFileBtn, 2, 2)
         self.layout.addWidget(self.submitBtn, alignment=Qt.AlignHCenter)
+        self.layout.addWidget(self.loggingLabel, alignment=Qt.AlignBottom | Qt.AlignHCenter)
         self.layout.addWidget(self.loadingBar)
 
         self.setWindowModality(Qt.WindowModal)
@@ -92,6 +98,7 @@ class NTFSLogFileDialog(QDialog, QObject):
             self.logfilePathTextBox.setText(fileName[0])
 
     def ready(self):
+        self.loggingLabel.show()
         self.loadingBar.show()
         self.barThread.start()
 
@@ -100,6 +107,3 @@ class NTFSLogFileDialog(QDialog, QObject):
             self.barThread.cnt = 100
             return
         self.barThread.toggle_status()
-
-    def clear(self):
-        self.complete.emit()

@@ -58,11 +58,10 @@ def getPrototype(env):
             }
         })
         t_list.append(Thread(target=getWERDiagEvtxForWin7, args=(compared[2], prototype, limitedTime,)))
-
     t_list.append(Thread(target=getApplicationEvtx, args=(CONSTANT.HWP, compared[0], prototype, prefetchList, limitedTime,)))
     t_list.append(Thread(target=getFalutHeapEvtx, args=(CONSTANT.HWP, compared[1], prototype, limitedTime,)))
-    # t_list.append(Thread(target=getJumplistItemsVerSummary, args=(CONSTANT.HWP, prototype,)))
-    # t_list.append(Thread(target=getAppCompatCache, args=(prototype, prefetchList[3], limitedTime,)))
+    t_list.append(Thread(target=getJumplistItemsVerSummary, args=(CONSTANT.HWP, prototype,)))
+    t_list.append(Thread(target=getAppCompatCache, args=(prototype, prefetchList[3], limitedTime,)))
     print(prefetchList[3])
     total = len(t_list)
 

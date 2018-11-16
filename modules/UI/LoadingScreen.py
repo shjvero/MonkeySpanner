@@ -1,11 +1,12 @@
 from PyQt5.QtGui import QMovie
 from PyQt5.QtWidgets import QWidget, QProgressBar, QLabel, QSizePolicy, QBoxLayout
-from PyQt5.QtCore import Qt, QThread, QWaitCondition, QMutex, pyqtSignal
+from PyQt5.QtCore import Qt, QThread, QWaitCondition, QMutex, pyqtSignal, QObject
 
 import qdarkstyle
 
 class LoadingBarThread(QThread):
     change_value = pyqtSignal(int)
+    complete = pyqtSignal()
 
     def __init__(self, parent):
         QThread.__init__(self)
@@ -30,7 +31,7 @@ class LoadingBarThread(QThread):
 
             if 100 == self.cnt:
                 self.cnt = 0
-                self.parent.clear()
+                self.complete.emit()
 
             self.cnt += 1
             self.change_value.emit(self.cnt)
@@ -47,9 +48,12 @@ class LoadingBarThread(QThread):
     def status(self):
         return self._status
 
-class LoadingWidget(QWidget):
+class LoadingWidget(QWidget, QObject):
+    complete = pyqtSignal()
+
     def __init__(self, parent):
         QWidget.__init__(self, parent)
+        QObject.__init__(self)
         self.setStyleSheet("background-color: #31353a;")
         self.setAutoFillBackground(True)
         self.gifPath = "img/loading.gif"
@@ -74,9 +78,8 @@ class LoadingWidget(QWidget):
 
         self.barThread = LoadingBarThread(self)
         self.barThread.change_value.connect(self.loadingBar.setValue)
+        self.barThread.complete.connect(self.clear)
         self.layout().setContentsMargins(0, 0, 0, 0)
-
-        self.hide()
 
     def start(self):
         self.loadingMovie.start()
@@ -93,4 +96,4 @@ class LoadingWidget(QWidget):
 
     def clear(self):
         self.loadingMovie.stop()
-        self.hide()
+        self.complete.emit()

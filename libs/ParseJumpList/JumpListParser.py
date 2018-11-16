@@ -121,9 +121,7 @@ def change(changehex):
 
 
 def convert_hex(gethex):
-    # print(gethex)
     gethex = gethex[:2] + "0" + gethex[3:]
-    # print(gethex)
     return int(gethex, 0)
 
 
@@ -345,7 +343,6 @@ def destlist_data(destlist_file_data):
     destlist_totalentries = destlist_file_data[4:8]  # Total number of current entries in jump list
     destlist_pinned_entries = destlist_file_data[8:12]  # Total number of pinned entries
     destlist_header_value = destlist_file_data[12:16]  # Some type of counter
-    # print(destlist_header_value[0])
     destlist_lastissue_entry = destlist_file_data[16:24]  # Last issued Entry ID number
     destlist_add_delete = destlist_file_data[
                           24:32]  # Number of add/delete actions – Increments as entries are added.  Also increments as individual entries are deleted.
@@ -390,41 +387,35 @@ def destlist_data(destlist_file_data):
     destlist_entryidnumber = struct.unpack("<L", destlist_file_data[120:124])  # Entry ID number
 
     destlist_some_test1 = struct.unpack("<Q", destlist_file_data[124:132])  # some test
-    # print("Some Test: ",destlist_some_test1[0])
 
     # Parse the last recorded access time stamp
     destlist_entry_last_access_time = struct.unpack("<Q", destlist_file_data[132:140])
     destlist_access_time = FromFiletime(destlist_entry_last_access_time[0])
 
     destlist_entrypin_status = struct.unpack("<L", destlist_file_data[140:144])  # Entry Pin status
-    # print(destlist_entrypin_status[0])
 
     destlist_some_test2 = struct.unpack("<L", destlist_file_data[144:148])  # Entry Pin status
-    # print(destlist_some_test2[0])
 
     destlist_entry_access_count = struct.unpack("<L", destlist_file_data[148:152])  # Access Count
-    # print("Access Count:",destlist_entry_access_count[0])
 
     destlist_some_test4 = struct.unpack("<Q", destlist_file_data[152:160])  # Entry Pin status
-    # print(destlist_some_test4[0])
 
     destlist_lengthstringdata = struct.unpack("<H", destlist_file_data[160:162])  # Length of Unicode string data
     # print(destlist_lengthstringdata[0])
 
     destlist_stringdata = destlist_file_data[162:162 + 2 * destlist_lengthstringdata[0]]  # Unocode string data
-    # print(destlist_stringdata)
     Data = destlist_stringdata.decode('utf-16')
 
     offset = 166 + 2 * destlist_lengthstringdata[0]
 
     destlist = []
     destlist.append([
-        destlist_access_time,
+        destlist_object_timestamp,
         Data,
         str(destlist_entryidnumber[0]),
         str(destlist_entry_access_count[0]),
         destlist_netbiosname,
-        destlist_object_timestamp,
+        destlist_access_time,
         new_mac,
         str(destlist_object_sequence[0]),
         birth_destlist_object_timestamp,
@@ -486,14 +477,13 @@ def destlist_data(destlist_file_data):
             destlist_stringdata = destlist_file_data[offset + 130:offset1]  # Unocode string data
             # print(destlist_stringdata)
             Data = destlist_stringdata.decode('utf-16')
-
             destlist.append([
-                destlist_access_time,
+                destlist_entry_object_timestamp,
                 Data,
                 str(destlist_entryidnumber[0]),
                 str(destlist_entry_access_count[0]),
                 destlist_netbiosname.decode(),
-                destlist_entry_object_timestamp,
+                destlist_access_time,
                 destlist_entry_object_mac,
                 str(destlist_entry_object_sequence[0]),
                 birth_destlist_entry_object_timestamp,

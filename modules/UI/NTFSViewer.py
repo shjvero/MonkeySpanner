@@ -40,11 +40,18 @@ class NTFSViewer(QWidget):
                                         'Target VCN']
 
     def ready(self):
+        self.ntfsDialog.importMFTBtn.setDisabled(True)
+        self.ntfsDialog.importUsnJrnlBtn.setDisabled(True)
+        self.ntfsDialog.importLogFileBtn.setDisabled(True)
+        self.ntfsDialog.submitBtn.setDisabled(True)
         _path = [
             self.ntfsDialog.mftPathTextBox.text(),
             self.ntfsDialog.usnjrnlPathTextBox.text(),
             self.ntfsDialog.logfilePathTextBox.text()
         ]
+        self.ntfsDialog.mftPathTextBox.setDisabled(True)
+        self.ntfsDialog.usnjrnlPathTextBox.setDisabled(True)
+        self.ntfsDialog.logfilePathTextBox.setDisabled(True)
         rst, msg = self.check(_path)
         if rst:
             self.initUI()
@@ -56,7 +63,7 @@ class NTFSViewer(QWidget):
                 QMessageBox.critical(self, "Error", "{}".format(e), QMessageBox.Ok)
                 self.ntfsDialog.accept()
                 return
-            self.ntfsDialog.complete.connect(self.showViewer)
+            self.ntfsDialog.barThread.complete.connect(self.showViewer)
         else:
             QMessageBox.critical(self, "Error", msg, QMessageBox.Ok)
             self.ntfsDialog.accept()
@@ -393,7 +400,8 @@ class NTFSViewer(QWidget):
 
     def showDetail(self, row, column):
         from modules.UI.NTFSDetailViewer import NTFSDetailViewer
-        self.ntfsDetailViewer = NTFSDetailViewer(self.details[row])
+        self.ntfsDetailViewer = NTFSDetailViewer()
+        self.ntfsDetailViewer.initUI(self.details[row])
 
 
     def exportUSN(self):
@@ -425,7 +433,10 @@ class NTFSViewer(QWidget):
                 copiedStr = selected[0].text()
             else:
                 copiedStr = " ".join(currentQTableWidgetItem.text() for currentQTableWidgetItem in selected)
-            os.system("echo {} | clip".format(copiedStr))
+            import subprocess
+            # si = subprocess.STARTUPINFO()
+            # si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            # subprocess.call("echo {} | clip".format(copiedStr), startupinfo=si)
         elif action == carveAction:
             self.carve()
 

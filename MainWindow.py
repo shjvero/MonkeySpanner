@@ -126,8 +126,10 @@ class Main(QMainWindow):
         self.search.setPlaceholderText("Search")
         self.search.editingFinished.connect(self.enterPressed)
 
-        self.loadingWidget = LoadingWidget(self)
         self.table = PrototypeTable(self, self.env)
+
+        self.loadingWidget = LoadingWidget(self)
+        self.loadingWidget.complete.connect(self.loadingFinished)
 
         self.topLayout.addWidget(self.selection, alignment=Qt.AlignBottom)
         self.topLayout.addWidget(self.loadBtn, alignment=Qt.AlignBottom)
@@ -156,12 +158,6 @@ class Main(QMainWindow):
             self.table.clearContents()
         self.table.load(self.selected, self.timeline)
         self.loadingWidget.resume()
-        self.presentSelected = self.selected
-        self.timeline = None
-        self.isLoaded = False
-        self.bottomLayout.removeWidget(self.loadingWidget)
-        self.bottomLayout.addWidget(self.table)
-        self.table.show()
 
         if self.presentSelected == CONSTANT.ADOBE_FLASH_PLAYER:
             print()
@@ -178,6 +174,17 @@ class Main(QMainWindow):
         elif self.presentSelected == CONSTANT.HWP:
             self.option4.setDisabled(True)
             self.option5.setDisabled(True)
+            self.option7.setDisabled(False)
+            self.option8.setDisabled(False)
+
+    def loadingFinished(self):
+        self.presentSelected = self.selected
+        self.timeline = None
+        self.isLoaded = False
+        self.loadingWidget.hide()
+        self.bottomLayout.removeWidget(self.loadingWidget)
+        self.bottomLayout.addWidget(self.table)
+        self.table.show()
 
     def toggledChkBtn(self, b):
         msg = b.text()

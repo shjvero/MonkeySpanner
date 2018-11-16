@@ -355,11 +355,11 @@ def getJumplistItemsVerSummary(type, prototype, timeline=None):
                     for destList in DestLists:
                         items.append([
                             DESThead,
-                            destList[0],  # destlist_access_time
+                            destList[0],  # destlist_object_timestamp
                             destList[1],  # Data = FullPath
                             destList[1].rsplit("\\", 1)[-1],  # FileName
                             destList[3],  # destlist_entry_access_count
-                            destList[5],  # destlist_object_timestamp
+                            destList[5],  # destlist_access_time
                             [fullpath.rsplit("\\", 1)[-1], _list[idx][0], "DestList", destList]
                         ])
             except:
@@ -410,15 +410,17 @@ def getJumplistItems(contents):
             except:
                 pass
         idx = _list.index(content)
+        from operator import itemgetter
         _list[idx].append({
-            "LinkFiles": LinkFiles,
-            "DestList": DestList
+            "LinkFiles": sorted(LinkFiles, key=itemgetter(0)),
+            "DestList": sorted(DestList, key=itemgetter(0)),
         })
     return _list
 
 
 def getWebArtifactItems(env, type, prefetchList=None, timeline=None, prototype=None):
     import glob
+    import subprocess
     cwd = os.getcwd()
     fileList = glob.glob(cwd + "\\WebCacheV*.dat")
     fullpath = ''
@@ -428,15 +430,11 @@ def getWebArtifactItems(env, type, prefetchList=None, timeline=None, prototype=N
         logPath = cwd + '\\temp.txt'
         if os.path.exists(fullpath):
             _log = ''
-            command2 = 'taskkill /f /im '
-            try:
-                killed_rst1 = os.system(command2 + "taskhostw.exe")
-                killed_rst2 = os.system(command2 + "dllhost.exe")
-            except Exception as e:
-                print(killed_rst1)
-                print(killed_rst2)
-                killed_rst1 = -1
-                killed_rst2 = -1
+            si = subprocess.STARTUPINFO()
+            si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+            subprocess.call('taskkill /f /im "taskhostw.exe"', startupinfo=si)
+            subprocess.call('taskkill /f /im "dllhost.exe"', startupinfo=si)
+
             import shutil
             try:
                 shutil.copy(fullpath, cwd + "\\WebCacheV01.dat")
