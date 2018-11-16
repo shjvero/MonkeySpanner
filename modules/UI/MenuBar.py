@@ -1,6 +1,8 @@
 from modules.UI.JumpListViewer import JumpListViewer
 from PyQt5.QtWidgets import *
 
+from modules.ArtifactAnalyzer import getRecentFileCache, getJumplistItems
+
 class MenuBar(QMenuBar):
     def __init__(self, parent=None):
         QMenuBar.__init__(self, parent)
@@ -76,7 +78,6 @@ class MenuBar(QMenuBar):
         self.parent().ntfsViewer = NTFSViewer()
 
     def showJumpListViewer(self):
-        from modules.Prototype import getJumplistItems
         import modules.constant as CONSTANT
         self.selected = self.parent().presentSelected
         hashList = []
@@ -94,19 +95,19 @@ class MenuBar(QMenuBar):
             print("Edge in JumpListViewer")
             hashList.append(CONSTANT.JUMPLIST_HASH[25])
         elif self.selected == CONSTANT.HWP:
-            QMessageBox.information(self, "Help", "Already provided", QMessageBox.Ok)
-            return
-            # hashList.append(CONSTANT.JUMPLIST_HASH[15])
-            # hashList.append(CONSTANT.JUMPLIST_HASH[16])
-            # hashList.append(CONSTANT.JUMPLIST_HASH[17])
+            # QMessageBox.information(self, "Help", "Already provided", QMessageBox.Ok)
+            # return
+            hashList.append(CONSTANT.JUMPLIST_HASH[15])
+            hashList.append(CONSTANT.JUMPLIST_HASH[16])
+            hashList.append(CONSTANT.JUMPLIST_HASH[17])
         elif self.selected == CONSTANT.IE:
             hashList.append(CONSTANT.JUMPLIST_HASH[12])
             hashList.append(CONSTANT.JUMPLIST_HASH[13])
         elif self.selected == CONSTANT.OFFICE:
-            QMessageBox.information(self, "Help", "Already provided", QMessageBox.Ok)
-            return
-            # for i in range(12):
-            #     hashList.append(CONSTANT.JUMPLIST_HASH[i])
+            # QMessageBox.information(self, "Help", "Already provided", QMessageBox.Ok)
+            # return
+            for i in range(12):
+                hashList.append(CONSTANT.JUMPLIST_HASH[i])
         elif self.selected == CONSTANT.LPE:
             print("LPE in JumpListViewer [None]")
         else:
@@ -123,7 +124,6 @@ class MenuBar(QMenuBar):
         self.parent().jumplistViewer = JumpListViewer(content)
 
     def showRecentFileBCF(self):
-        from modules.Prototype import getRecentFileCache
         from modules.UI.ListViewer import ListViewer
         fileName = QFileDialog.getOpenFileName(self)
         rst, contents = getRecentFileCache(fileName[0])

@@ -1,8 +1,11 @@
 import os
 from PyQt5.Qt import *
-import modules.IE.Prototype as PrototypeForIE
-import modules.Office.Prototype as PrototypeForOffice
-import modules.HWP.Prototype as PrototypeForHWP
+import modules.AnalyzerForHWP as HWP
+import modules.AnalyzerForIE as IE
+import modules.AnalyzerForOffice as Office
+import modules.AnalyzerForEdge as Edge
+import modules.AnalyzerForFlash as Flash
+import modules.AnalyzerForKernel as Kernel
 import modules.constant as CONSTANT
 
 class PrototypeTable(QTableWidget):
@@ -28,18 +31,19 @@ class PrototypeTable(QTableWidget):
 
     def load(self, sw, timeline=None):
         if sw == CONSTANT.ADOBE_READER:
-            print("Adobe Reader")
+            QMessageBox.information(self, "Help", "Preparing...[Adobe Reader]", QMessageBox.Ok)
+            return
         elif sw == CONSTANT.ADOBE_FLASH_PLAYER:
-            print("Adobe Flash Player")
-        # elif sw == CONSTANT.CHROME:
-        #     print("Chrome")
+            QMessageBox.information(self, "Help", "Preparing...[Adobe Flash Player]", QMessageBox.Ok)
+            return
         elif sw == CONSTANT.EDGE:
-            print("Edge")
+            QMessageBox.information(self, "Help", "Preparing...[Microsoft Edge]", QMessageBox.Ok)
+            return
         elif sw == CONSTANT.HWP:
-            self.prototype = PrototypeForHWP.getPrototype(self.env)
-            self.customHeaders = PrototypeForHWP.getColumnHeader()
+            self.prototype = HWP.getPrototype(self.env)
+            self.customHeaders = HWP.getColumnHeader()
         elif sw == CONSTANT.IE:
-            result, stuff = PrototypeForIE.getPrototype(self.env)
+            result, stuff = IE.getPrototype(self.env)
             if not result:
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Critical)
@@ -50,10 +54,10 @@ class PrototypeTable(QTableWidget):
                 msg.exec_()
                 return
             self.prototype = stuff
-            self.customHeaders = PrototypeForIE.getColumnHeader()
+            self.customHeaders = IE.getColumnHeader()
         elif sw == CONSTANT.OFFICE:
             office_msg = None
-            result, self.prototype = PrototypeForOffice.getPrototype(self.env, office_msg)
+            result, self.prototype = Office.getPrototype(self.env, office_msg)
             if office_msg:
                 msg = QMessageBox()
                 msg.setIcon(QMessageBox.Warning)
@@ -61,9 +65,10 @@ class PrototypeTable(QTableWidget):
                 msg.setText(office_msg)
                 msg.setStandardButtons(QMessageBox.Ok)
                 msg.exec_()
-            self.customHeaders = PrototypeForOffice.getColumnHeader()
+            self.customHeaders = Office.getColumnHeader()
         elif sw == CONSTANT.LPE:
-            print("Local Privilege Escalation")
+            QMessageBox.information(self, "Help", "Preparing...[Kerenl]", QMessageBox.Ok)
+            return
         else:
             print("기존 SW: {}".format(sw))
         if timeline:
@@ -134,7 +139,6 @@ class PrototypeTable(QTableWidget):
             return
         items = self.findItems(keyword, Qt.MatchContains)
         includedRow = list(set([self.row(item) for item in items]))
-        print(includedRow)
         for i in range(len(self.prototype)):
             if i not in includedRow:
                 self.hideRow(i)

@@ -180,10 +180,10 @@ class NTFSViewer(QWidget):
                 t.join()
         except Exception as e:
             raise Exception(e)
-        print("MFT total entry: {}".format(len(self.mft.entries)))
-        print("UsnJrnl total record: {}".format(self.usnjrnl_len))
-        print("LogFile total record: {}".format(self.logfile_len))
-        print("Transaction total: {}".format(len(self.logfile.transactions)))
+
+        alertStr = "MFT total entry: {0}\nUsnJrnl total record: {1}\nLogFile total record: {2}\nTransaction total: {3}"\
+            .format(len(self.mft.entries), self.usnjrnl_len, self.logfile_len, len(self.logfile.transactions))
+        QMessageBox.information(self, "Help", alertStr, QMessageBox.Ok)
         self.ntfsDialog.resume()
 
 
@@ -268,7 +268,6 @@ class NTFSViewer(QWidget):
                     self.logfileTable.setItem(log_row, 5, QTableWidgetItem(datetime.datetime.strftime(attr.file_access_time_datetime, "%Y-%m-%d %H:%M:%S.%f")))
                     self.logfileTable.item(log_row, 5).setTextAlignment(Qt.AlignCenter)
                 except Exception as e:
-                    print(e)
                     self.logfileTable.setItem(log_row, 3, QTableWidgetItem(""))
                     self.logfileTable.setItem(log_row, 4, QTableWidgetItem(""))
                     self.logfileTable.setItem(log_row, 5, QTableWidgetItem(""))
@@ -278,7 +277,6 @@ class NTFSViewer(QWidget):
                     self.logfileTable.setItem(log_row, 2, QTableWidgetItem(datetime.datetime.strftime(attr2.mft_altered_time_datetime, "%Y-%m-%d %H:%M:%S.%f")))
                     self.logfileTable.item(log_row, 2).setTextAlignment(Qt.AlignCenter)
                 except Exception as e:
-                    print(e)
                     self.logfileTable.setItem(log_row, 2, QTableWidgetItem(""))
                 self.logfileTable.setItem(log_row, 6, QTableWidgetItem(lsn_data.deriv_redo_operation_type))
                 self.logfileTable.setItem(log_row, 7, QTableWidgetItem(lsn_data.deriv_undo_operation_type))
@@ -296,7 +294,6 @@ class NTFSViewer(QWidget):
                 prev_undo = lsn_data.undo_operation
                 log_row += 1
 
-        print("log_row: {}".format(log_row))
         self.logfileTable.resizeColumnsToContents()
         self.logfileTable.setColumnWidth(2, 170)
         self.logfileTable.setColumnWidth(3, 200)
@@ -396,8 +393,6 @@ class NTFSViewer(QWidget):
 
     def showDetail(self, row, column):
         from modules.UI.NTFSDetailViewer import NTFSDetailViewer
-        print(self.details[row])
-        # self.parent().ntfsDetailViewer = NTFSDetailViewer(self.details[row])
         self.ntfsDetailViewer = NTFSDetailViewer(self.details[row])
 
 
@@ -435,4 +430,4 @@ class NTFSViewer(QWidget):
             self.carve()
 
     def carve(self):
-        print("carve")
+        QMessageBox.information(self, "Help", "Preparing...", QMessageBox.Ok)

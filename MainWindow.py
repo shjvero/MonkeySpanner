@@ -13,15 +13,19 @@ class Main(QMainWindow):
     def __init__(self):
         super().__init__()
         self.checkEnv()
+        self.OPTIONS = ['None',
+                        CONSTANT.PREFETCH_KEYWORD,
+                        CONSTANT.EVENTLOG_KEYWORD,
+                        CONSTANT.REGISTRY_KEYWORD,
+                        CONSTANT.HISTORY_KEYWORD,
+                        CONSTANT.CACHE_KEYWORD,
+                        CONSTANT.WER_KEYWORD,
+                        CONSTANT.LNKFILE_KEYWORD,
+                        CONSTANT.DESTLIST_KEYWORD
+                        ]
         self.w = self.width()
         self.h = self.height()
         self.topWidgetHeight = 40
-        self.selectionList = [
-            "---- Select Software ----",
-            "Adobe Reader", "Adobe Flash Player", "Edge", "HWP",
-            "Internet Explorer", "MS-Office", "Kernel(Local Privilege Escalation)"
-        ]
-        self.OPTIONS = ['None', 'Prefetch', 'Event Log', 'Registry', 'History', 'WebCache', 'WER', 'JumpList[L]', 'JumpList[D]']
         self.selectionWidth = 220
         self.btnNumber = 0
         self.loadBtnWidth = 100
@@ -44,7 +48,7 @@ class Main(QMainWindow):
             msg.buttonClicked.connect(sys.exit)
             msg.exec_()
         self.env = platform.system() + platform.release()
-        if self.env != "Windows7" and self.env != "Windows10":
+        if self.env != CONSTANT.WIN7 and self.env != CONSTANT.WIN10:
             msg = QMessageBox()
             msg.setIcon(QMessageBox.Critical)
             msg.setWindowTitle("Error")
@@ -55,8 +59,8 @@ class Main(QMainWindow):
 
     def initUI(self):
         # Set up default UI
-        self.setWindowTitle("Monkey Spanner")
-        self.setWindowIcon(QIcon("logo.ico"))
+        self.setWindowTitle(CONSTANT.TITLE)
+        self.setWindowIcon(QIcon(CONSTANT.ICON_PATH))
         self.setMenuBar(MenuBar(self))
         self.setStatusBar(QStatusBar())
 
@@ -72,13 +76,15 @@ class Main(QMainWindow):
 
         # Set up combo box (Software Selection)
         self.selection = QComboBox(self)
-        self.selection.setFont(QFont('Arial', 12))
+        self.selection.setFont(QFont('Arial', 10))
         self.selection.setFixedSize(self.selectionWidth, self.topWidgetHeight)
-        self.selection.addItems(self.selectionList)
+        self.selection.addItems(CONSTANT.SOFTWARE_SELECTION)
         self.selection.currentIndexChanged.connect(self.selectSoftware)
+        self.selection.setCursor(QCursor(Qt.PointingHandCursor))
 
         # Set up Table Load Button
         self.loadBtn = QPushButton("GO!", self)
+        # self.loadBtn.setStyleSheet("background-color: darkslategray")
         self.loadBtn.setFixedSize(self.loadBtnWidth, self.topWidgetHeight)
         self.loadBtn.clicked.connect(self.completeSelection)
         self.loadBtn.setCursor(QCursor(Qt.PointingHandCursor))

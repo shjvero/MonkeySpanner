@@ -2,6 +2,8 @@ from PyQt5.QtGui import QMovie
 from PyQt5.QtWidgets import QWidget, QProgressBar, QLabel, QSizePolicy, QBoxLayout
 from PyQt5.QtCore import Qt, QThread, QWaitCondition, QMutex, pyqtSignal
 
+import qdarkstyle
+
 class LoadingBarThread(QThread):
     change_value = pyqtSignal(int)
 
@@ -9,7 +11,6 @@ class LoadingBarThread(QThread):
         QThread.__init__(self)
         self.cond = QWaitCondition()
         self.mutex = QMutex()
-        self.cnt = 0
         self._status = True
         self.parent = parent
 
@@ -17,6 +18,7 @@ class LoadingBarThread(QThread):
         self.wait()
 
     def run(self):
+        self.cnt = 0
         while True:
             self.mutex.lock()
 
@@ -65,6 +67,7 @@ class LoadingWidget(QWidget):
         layout.addWidget(self.loadingImg)
 
         self.loadingBar = QProgressBar(self)
+        self.loadingBar.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
         self.loadingBar.setFixedHeight(10)
         self.loadingBar.setTextVisible(False)
         layout.addWidget(self.loadingBar)
@@ -81,7 +84,7 @@ class LoadingWidget(QWidget):
         self.show()
 
     def resume(self):
-        if self.barThread.cnt < 50:
+        if self.barThread.cnt <= 50:
             self.barThread.cnt = 100
             return
         self.barThread.toggle_status()

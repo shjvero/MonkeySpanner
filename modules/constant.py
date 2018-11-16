@@ -1,6 +1,9 @@
 import os
 
-# os
+TITLE = "MonkeySpanner"
+ICON_PATH = "logo.ico"
+
+# OS
 WIN7 = 'Windows7'
 WIN10 = 'Windows10'
 
@@ -13,16 +16,49 @@ IE = 5
 OFFICE = 6
 LPE = 7
 
+# Software Keyword
+ADOBE_READER_KEYWORD = "Adobe Reader"
+ADOBE_FLASH_PLAYER_KEYWORD = "Adobe Flash Player"
+EDGE_KEYWORD = "Microsoft Edge"
+HWP_KEYWORD = "Hancom Word Process"
+IE_KEYWORD = "Internet Explorer"
+OFFICE_KEYWORD = "MS-Office"
+LPE_KEYWORD = "Kernel(Local-Privilege-Escalation)"
+
+SOFTWARE_SELECTION = [
+    "---- Select Software ----",
+    ADOBE_READER_KEYWORD,
+    ADOBE_FLASH_PLAYER_KEYWORD,
+    EDGE_KEYWORD,
+    HWP_KEYWORD,
+    IE_KEYWORD,
+    OFFICE_KEYWORD,
+    LPE_KEYWORD,
+]
+
 # Artifact List
 PREFETCH_KEYWORD = "Prefetch"
 EVENTLOG_KEYWORD = "EventLog"
-WER_KEYWORD = "Report.wer"
+WER_KEYWORD = "ErrorReport"
 HISTORY_KEYWORD = "History"
-DOWNLOAD_KEYWORD = "Download"
-CACHE_KEYWORD = "Cache"
+# DOWNLOAD_KEYWORD = "Download"
+CACHE_KEYWORD = "WebCache"
 REGISTRY_KEYWORD = "Registry"
 LNKFILE_KEYWORD = "JumpList[L]"
 DESTLIST_KEYWORD = "JumpList[D]"
+
+# Table Header
+TableHeader = {
+    PREFETCH_KEYWORD: ["Timeline", "File Name", "Executable Name", "Action", ""],                       # 4 columns
+    WER_KEYWORD: ["Modified Time", "Path", "Module", "Exception Code", "Created Time"],                 # 5 columns
+    REGISTRY_KEYWORD: ["Modified Time", "Execution Path", "Size", "Exec Flag", "Registry Key"],         # 5 columns
+    LNKFILE_KEYWORD: ["Modified Time", "File Path", "Drive Type", "Size", "Created Time"],              # 5 columns
+    DESTLIST_KEYWORD: ["Last Recorded Time", "File Path", "File Name", "Access", "New (Timestamp)"],    # 5 columns
+    EVENTLOG_KEYWORD: ["Logged Time", "Provider Name", "Event ID", "Level", "Data"],                    # 5 columns
+    HISTORY_KEYWORD: ["Accessed Time", "URL", "Modified Time", "", ""],                                 # 3 columns
+    CACHE_KEYWORD: ["Accessed Time", "URL", "File Name", "Size", "Created Time"],                       # 5 columns
+    # "Download": ["Accessed Time", "URL", "File Name", "Size", "Download Path"],                       # 5 columns
+}
 
 # Environment Variable
 LOCALAPPDATA = os.environ["LOCALAPPDATA"]   # C:\\Users\\[username]\\AppData\\Local
@@ -78,6 +114,7 @@ JUMPLIST_HASH = [
     ['Chrome 9.0.597.84 / 12.0.742.100 / 13.0.785.215 / 26', '5d696d521de238c3'],     # [24]
     ['Edge', '9d1f905ce5044aee'],                           # [25]
 ]
+
 RECENT = APPDATA + '\\Microsoft\\Windows\\Recent\\'
 APPCOMPAT = SYSTEMROOT + "\\AppCompat\\Programs\\"
 
@@ -117,20 +154,4 @@ IE_ARTIFACT_PATH = {            # IE
         'SessionRestore': LOCALAPPDATA + '\\Microsoft\\Internet Explorer\\Recovery\\',
     }
 }
-OFFICE_ARTIFACT_PATH = {        # MS-Office
-    'Recent': APPDATA + '\\Microsoft\\Office\\Recent\\',
-    'UnsavedFiles': LOCALAPPDATA + '\\Microsoft\\Office\\UnsavedFiles\\',
-    'Temp': APPDATA + "\\Microsoft\\", # Word, Excel, PowerPoint
-    '2010': {
 
-    },
-    '2013': {
-
-    },
-    '2016': {
-
-    }
-}
-PDF_ARTIFACT_PATH = {           # PDF
-
-}

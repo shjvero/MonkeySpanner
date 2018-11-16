@@ -23,7 +23,10 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
     w = Main()
-    sys.exit(app.exec_())
+    try:
+        sys.exit(app.exec_())
+    except Exception as e:
+        print("Error in Main: {}".format(e))
 
     '''
     import ctypes

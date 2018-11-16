@@ -28,16 +28,17 @@ class WebArtifactDetailViewer(QWidget):
         self.layout = QVBoxLayout(self)
 
         self.table = QTableWidget(self)
-        self.table.setMinimumSize(self.width(), 400)
+        self.table.setMinimumSize(self.width(), 370)
         self.table.setRowCount(len(self.category))
         self.table.setColumnCount(2)
         self.table.verticalHeader().setVisible(False)
         self.table.horizontalHeader().setVisible(False)
-        self.table.horizontalHeader().setStretchLastSection(True)
         for i in range(len(self.category)):
             self.table.setItem(i, 0, QTableWidgetItem(self.category[i]))
         for i in range(len(contents)-1):
             self.table.setItem(i, 1, QTableWidgetItem(contents[i]))
+        self.table.horizontalHeader().setStretchLastSection(True)
+        self.table.verticalHeader().setStretchLastSection(True)
         self.table.verticalHeader().setDefaultSectionSize(28)
         self.table.verticalHeader().setMaximumSectionSize(28)
         self.table.setColumnWidth(0, 120)
