@@ -35,7 +35,6 @@ DATE_ISO = "%Y-%m-%d %H:%M:%S.%f"
 g_timeformat = DATE_ISO
 
 g_timeline = None
-g_prefetchList = []
 grayHead = ["Registry", 0]
 purpleHead = ["Registry", 7]
 # Shim Cache format used by Windows 6.1 (Win7 through Server 2008 R2)
@@ -205,7 +204,6 @@ def read_win10_entries(bin_data, ver_magic, creators_update=False):
 			else:
 				path = entry_data.read(path_len).decode('utf-16le', 'replace')
 
-				global g_prefetchList
 				from modules.constant import SYSTEMROOT, LOCALAPPDATA
 				if path[-3:].lower() == "exe":
 					head = grayHead
@@ -230,11 +228,6 @@ def read_win10_entries(bin_data, ver_magic, creators_update=False):
 
 			if row not in entry_list:
 				entry_list.append(row)
-				if path[-3:].lower() == "exe":
-					added = path.rsplit("\\", 1)[-1].upper()
-					if added not in g_prefetchList:
-						g_prefetchList.append(added)
-
 		return entry_list
 	except (RuntimeError, ValueError, NameError) as err:
 		print('[-] Error reading Shim Cache data: %s...' % err)
@@ -268,7 +261,6 @@ def read_nt6_entries(bin_data, entry):
 				print(e)
 			path = (bin_data.decode("unicode-escape")[entry.Offset:entry.Offset +
 							 entry.wLength])[8:].replace("\x00", "")
-			global g_prefetchList
 			from modules.constant import SYSTEMROOT, LOCALAPPDATA
 			if path[-3:].lower() == "exe":
 				head = grayHead
@@ -287,10 +279,6 @@ def read_nt6_entries(bin_data, entry):
 
 			if row not in entry_list:
 				entry_list.append(row)
-				if path[-3:].lower() == "exe":
-					added = path.rsplit("\\", 1)[-1].upper()
-					if added not in g_prefetchList:
-						g_prefetchList.append(added)
 		return entry_list
 
 	except (RuntimeError, ValueError, NameError) as err:
@@ -380,19 +368,17 @@ def read_from_hive(hive):
 			return out_list
 
 # Acquire the current system's Shim Cache data.
-def get_local_data(prefetchList, timeline=None):
+def get_local_data(timeline=None):
 	tmp_list = []
 	out_list = []
 	global g_verbose
 	global g_timeline
-	global g_prefetchList
 	try:
 		import winreg as reg
 	except ImportError as e:
 		print(e)
 		sys.exit(1)
 	g_timeline = timeline
-	g_prefetchList = prefetchList
 	hReg = reg.ConnectRegistry(None, reg.HKEY_LOCAL_MACHINE)
 	hSystem = reg.OpenKey(hReg, r'SYSTEM')
 	for i in range(1024):

@@ -16,8 +16,8 @@ def getPrototype(env):
     prefetchList = [
         ["HWP.EXE"],  # Red
         ["GBB.EXE", "GSWIN32C.EXE"],  # Orange
-        ["WERFAULT.EXE"],  # Yellow
-        # ["CMD.EXE", "POWERSHELL.EXE"],  # PURPLE
+        ["WERFAULT.EXE"],
+        ["CMD.EXE", "POWERSHELL.EXE"],  # PURPLE
         []
     ]
     target = prefetchList[0] + prefetchList[1]
@@ -42,7 +42,7 @@ def getPrototype(env):
 
     t_list = []
     prototype = []
-    getPrefetchItems(prototype, prefetchList)
+    getPrefetchItems(CONSTANT.HWP, prototype, prefetchList)
     if prototype:
         prototype.sort(key=itemgetter(1))
         limitedTime = datetime.datetime.strptime(prototype[0][1], "%Y-%m-%d %H:%M:%S.%f")
@@ -61,8 +61,7 @@ def getPrototype(env):
     t_list.append(Thread(target=getApplicationEvtx, args=(CONSTANT.HWP, compared[0], prototype, prefetchList, limitedTime,)))
     t_list.append(Thread(target=getFalutHeapEvtx, args=(CONSTANT.HWP, compared[1], prototype, limitedTime,)))
     t_list.append(Thread(target=getJumplistItemsVerSummary, args=(CONSTANT.HWP, prototype,)))
-    t_list.append(Thread(target=getAppCompatCache, args=(prototype, prefetchList[3], limitedTime,)))
-    print(prefetchList[3])
+    t_list.append(Thread(target=getAppCompatCache, args=(prototype, limitedTime,)))
     total = len(t_list)
 
     print("Total Thread: {}".format(total))
@@ -75,20 +74,19 @@ def getPrototype(env):
     return prototype
 
     '''
-    [ + ] 이벤트 로그 추가해서 수정 필요
-
     [빨] HWP 프리패치: HWP.EXE
-    [주] 점프리스트
-    [노] 연관 프로세스 프리패치: GBB.EXE, GSWIN32C.EXE
-    [초] 파일 시스템 삭제 파일(.ps)
+    [빨] 점프리스트
+    [주] 연관 프로세스 프리패치: GBB.EXE, GSWIN32C.EXE
+    [노] 이벤트 로그: Application.evtx EID 1000, 1001
+    [노] 이벤트 로그: WER-Diag%4Operational.evtx EID 2 -- win7만 
+    [초] 이벤트 로그: Fault...heap.evtx EID 1001
     [파] WER 프리패치: WERFAULT.EXE
-    [파] Report.wer
-    [남] 임시 파일 - 파일 시스템 로그 필요,,
+    [남] Report.wer
     [보] Cmd, Powershell 프리패치 - 첫 타임라인 이후 (생성, 실행 모두)
 
     [회] 프리패치 - 첫 타임라인 이후 생성된 것만
     [회] 레지스트리 - 호환성 캐시
-
-    (PASS to Dialog) 점프리스트
+    
+    (PASS to SubWindow) 파일 시스템 삭제 파일(.ps)
     (PASS to Dialog) 호환성 아티팩트: recentfilecache.bcf (win7), amache.hve (win10)
     '''

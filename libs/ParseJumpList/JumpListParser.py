@@ -409,18 +409,19 @@ def destlist_data(destlist_file_data):
     offset = 166 + 2 * destlist_lengthstringdata[0]
 
     destlist = []
-    destlist.append([
-        destlist_object_timestamp,
-        Data,
-        str(destlist_entryidnumber[0]),
-        str(destlist_entry_access_count[0]),
-        destlist_netbiosname,
-        destlist_access_time,
-        new_mac,
-        str(destlist_object_sequence[0]),
-        birth_destlist_object_timestamp,
-        birth_mac,
-    ])
+    if destlist_object_timestamp:
+        destlist.append([
+            destlist_object_timestamp,
+            Data,
+            str(destlist_entryidnumber[0]),
+            str(destlist_entry_access_count[0]),
+            destlist_netbiosname,
+            destlist_access_time,
+            new_mac,
+            str(destlist_object_sequence[0]),
+            birth_destlist_object_timestamp,
+            birth_mac,
+        ])
 
     for entry in range(destlist_totalentries[0] - 1):
 
@@ -477,18 +478,19 @@ def destlist_data(destlist_file_data):
             destlist_stringdata = destlist_file_data[offset + 130:offset1]  # Unocode string data
             # print(destlist_stringdata)
             Data = destlist_stringdata.decode('utf-16')
-            destlist.append([
-                destlist_entry_object_timestamp,
-                Data,
-                str(destlist_entryidnumber[0]),
-                str(destlist_entry_access_count[0]),
-                destlist_netbiosname.decode(),
-                destlist_access_time,
-                destlist_entry_object_mac,
-                str(destlist_entry_object_sequence[0]),
-                birth_destlist_entry_object_timestamp,
-                birth_destlist_entry_object_mac
-            ])
+            if destlist_entry_object_timestamp:
+                destlist.append([
+                    destlist_entry_object_timestamp,
+                    Data,
+                    str(destlist_entryidnumber[0]),
+                    str(destlist_entry_access_count[0]),
+                    destlist_netbiosname.decode(),
+                    destlist_access_time,
+                    destlist_entry_object_mac,
+                    str(destlist_entry_object_sequence[0]),
+                    birth_destlist_entry_object_timestamp,
+                    birth_destlist_entry_object_mac
+                ])
             offset = offset1 + 4
 
     return destlist

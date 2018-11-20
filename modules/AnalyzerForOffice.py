@@ -45,7 +45,7 @@ def getPrototype(env, office_msg=None):
     ]
     t_list = []
     prototype = []
-    getPrefetchItems(prototype, prefetchList)
+    getPrefetchItems(CONSTANT.OFFICE, prototype, prefetchList)
     if prototype:
         prototype.sort(key=itemgetter(1))
         limitedTime = datetime.datetime.strptime(prototype[0][1], "%Y-%m-%d %H:%M:%S.%f")
@@ -66,10 +66,9 @@ def getPrototype(env, office_msg=None):
             }
         })
         t_list.append(Thread(target=getWERDiagEvtxForWin7, args=(compared[3], prototype, limitedTime,)))
-    t_list.append(Thread(target=getAppCompatCache, args=(prototype, prefetchList[3], limitedTime,)))
+    t_list.append(Thread(target=getAppCompatCache, args=(prototype, limitedTime,)))
     t_list.append(Thread(target=getJumplistItemsVerSummary, args=(CONSTANT.OFFICE, prototype,)))
     t_list.append(Thread(target=getWebArtifactItems, args=(env, CONSTANT.OFFICE, office_msg, limitedTime, prototype)))
-    print(prefetchList[3])
     total = len(t_list)
 
     print("Total Thread: {}".format(total))
@@ -83,7 +82,7 @@ def getPrototype(env, office_msg=None):
 
     '''
     [빨] MS-Office 프리패치: WINWORD.EXE, POWERPNT.EXE, EXCEL.EXE
-    [주] 점프리스트
+    [빨] 점프리스트
     [주] 오피스 프로세스 프리패치: WMIPRVSE.EXE, EQNEDT32.EXE, DW20.EXE, DWWIN.EXE, FLTLDR.EXE
     [노] 이벤트로그: Microsoft-Office-Alerts.evtx EID:300
     [노] 이벤트로그: Application.evtx EID 1001, Windows Error Reporting

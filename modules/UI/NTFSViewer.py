@@ -1,5 +1,5 @@
 from PyQt5.QtGui import QCursor, QColor
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtWidgets import *
 from libs.ParseNTFS import MFT, LogFile, UsnJrnl, AttributeTypeEnum
 import datetime
@@ -14,13 +14,15 @@ class NTFSViewer(QWidget):
     DELETE_KEYWORD = "FILE_DELETE"
     EXTEND_KEYWORD = "DATA_EXTEND"
     OVERWRITE_KEYWORD = "DATA_OVERWRITE"
+    USNJRNL = 1
+    LOGFILE = 2
 
     def __init__(self):
         QWidget.__init__(self)
         from modules.UI.NTFSLogFileDialog import NTFSLogFileDialog
         self.ntfsDialog = NTFSLogFileDialog(self)
         self.ntfsDialog.submitBtn.clicked.connect(self.ready)
-        self.btnNum = 0
+        self.selectedBtnNum = 0
         self.usnjrnlTableHeaderItems = ['Timestamp',
                                         'USN',
                                         'File Name',
@@ -38,6 +40,12 @@ class NTFSViewer(QWidget):
                                         'Undo Operation',
                                         'Cluster Index',
                                         'Target VCN']
+        self.filteringText = {
+            "File Create": self.CREATE_KEYWORD,
+            "File Delete": self.DELETE_KEYWORD,
+            "Data Extend": self.EXTEND_KEYWORD,
+            "Data Overwrite": self.OVERWRITE_KEYWORD,
+        }
 
     def ready(self):
         self.ntfsDialog.importMFTBtn.setDisabled(True)
@@ -99,10 +107,10 @@ class NTFSViewer(QWidget):
         self.deleteChkBox = QCheckBox('File Delete', self)
         self.extendChkBox = QCheckBox('Data Extend', self)
         self.overwriteChkBox = QCheckBox("Data Overwrite", self)
-        self.createChkBox.stateChanged.connect(lambda: self.filtering(self.createChkBox))
-        self.deleteChkBox.stateChanged.connect(lambda: self.filtering(self.deleteChkBox))
-        self.extendChkBox.stateChanged.connect(lambda: self.filtering(self.extendChkBox))
-        self.overwriteChkBox.stateChanged.connect(lambda: self.filtering(self.overwriteChkBox))
+        self.createChkBox.stateChanged.connect(lambda: self.filter(self.createChkBox))
+        self.deleteChkBox.stateChanged.connect(lambda: self.filter(self.deleteChkBox))
+        self.extendChkBox.stateChanged.connect(lambda: self.filter(self.extendChkBox))
+        self.overwriteChkBox.stateChanged.connect(lambda: self.filter(self.overwriteChkBox))
         chkLayout.addWidget(self.createChkBox)
         chkLayout.addWidget(self.deleteChkBox)
         chkLayout.addWidget(self.extendChkBox)
@@ -125,8 +133,8 @@ class NTFSViewer(QWidget):
         self.search = QLineEdit(self)
         self.search.setFixedHeight(30)
         self.search.showMaximized()
-        self.search.setPlaceholderText("Search")
-        self.search.editingFinished.connect(self.enterPressed)
+        self.search.setPlaceholderText("Search...")
+        self.search.returnPressed.connect(self.enterPressed)
 
         # Set up UsnJrnl Table
         self.usnjrnlTable = QTableWidget()
@@ -185,6 +193,10 @@ class NTFSViewer(QWidget):
                 t.start()
             for t in tArr:
                 t.join()
+            self.exportThread1 = ExportThread(self.usnjrnl.records, NTFSViewer.USNJRNL)
+            self.exportThread1.exported.connect(self.exported)
+            self.exportThread2 = ExportThread(self.logfile.rcrd_records, NTFSViewer.LOGFILE)
+            self.exportThread2.exported.connect(self.exported)
         except Exception as e:
             raise Exception(e)
 
@@ -312,91 +324,88 @@ class NTFSViewer(QWidget):
 
     def enterPressed(self):
         keyword = self.search.text()
-        self.Search(keyword, NTFSViewer.SIMPLE_SHOW)
-
-
-    def Search(self, keyword, type=None):
-        table = self.logfileTable if self.ntfsTabs.currentIndex() else self.usnjrnlTable
-        if not keyword:
-            for i in range(len(self.details)):
-                if table.isRowHidden(i):
-                    table.showRow(i)
+        print(keyword)
+        print(self.ntfsTabs.currentIndex())
+        if self.ntfsTabs.currentIndex():
+            if not keyword:
+                for row in range(len(self.details)):
+                    if self.logfileTable.isRowHidden(row):
+                        self.logfileTable.showRow(row)
+                return
+            items = self.logfileTable.findItems(keyword, Qt.MatchContains)
+            includedRow = list(set([self.logfileTable.row(item) for item in items]))
+            for row in range(len(self.details)):
+                if row in includedRow:
+                    self.logfileTable.showRow(row)
+                else:
+                    self.logfileTable.hideRow(row)
         else:
-            items = table.findItems(keyword, Qt.MatchContains)
-            includedRow = list(set([table.row(item) for item in items]))
-            if type == NTFSViewer.ONLY_SHOW:
-                for i in range(len(self.details)):
-                    if i in includedRow:
-                        table.showRow(i)
-            elif type == NTFSViewer.ONLY_HIDE:
-                for i in range(len(self.details)):
-                    if i in includedRow:
-                        table.hideRow(i)
-            elif type == NTFSViewer.SIMPLE_SHOW:
-                for i in range(len(self.details)):
-                    if i not in includedRow:
-                        table.hideRow(i)
-                    elif table.isRowHidden(i):
-                        table.showRow(i)
+            if not keyword:
+                if self.selectedBtnNum == 0 or self.selectedBtnNum == 4:
+                    for i in range(len(self.details)):
+                        if self.usnjrnlTable.isRowHidden(i):
+                            self.usnjrnlTable.showRow(i)
+                else:
+                    checkedKeyword = []
+                    if self.createChkBox.isChecked():
+                        checkedKeyword.append(self.CREATE_KEYWORD)
+                    if self.deleteChkBox.isChecked():
+                        checkedKeyword.append(self.DELETE_KEYWORD)
+                    if self.overwriteChkBox.isChecked():
+                        checkedKeyword.append(self.OVERWRITE_KEYWORD)
+                    if self.extendChkBox.isChecked():
+                        checkedKeyword.append(self.EXTEND_KEYWORD)
+                    for i in range(len(self.details)):
+                        if self.details[i][1][3] in checkedKeyword:
+                            self.usnjrnlTable.showRow(i)
+                return
+            items = self.usnjrnlTable.findItems(keyword, Qt.MatchContains)
+            includedRow = list(set([self.usnjrnlTable.row(item) for item in items]))
+            print(includedRow)
+            for row in range(len(self.details)):
+                if self.usnjrnlTable.isRowHidden(row):
+                    continue
+                if row in includedRow:
+                    self.usnjrnlTable.showRow(row)
+                else:
+                    self.usnjrnlTable.hideRow(row)
 
-
-    def filtering(self, b):
-        msg = b.text()
+    def filter(self, b):
         if self.ntfsTabs.currentIndex():
             return
-        if msg == "File Create":
-            if self.createChkBox.isChecked():
-                if self.btnNum:
-                    self.Search(NTFSViewer.CREATE_KEYWORD, NTFSViewer.ONLY_SHOW)
-                else:
-                    self.Search(NTFSViewer.CREATE_KEYWORD, NTFSViewer.SIMPLE_SHOW)
-                self.btnNum += 1
+        keyword = self.filteringText[b.text()]
+        if b.isChecked():
+            filterType = self.ONLY_SHOW if self.selectedBtnNum else self.SIMPLE_SHOW
+            self.selectedBtnNum += 1
+        else:
+            self.selectedBtnNum -= 1
+            if self.selectedBtnNum:
+                filterType = self.ONLY_HIDE
             else:
-                self.btnNum -= 1
-                if self.btnNum:
-                    self.Search("", NTFSViewer.SIMPLE_SHOW)
-                else:
-                    self.Search(NTFSViewer.CREATE_KEYWORD, NTFSViewer.ONLY_HIDE)
-        elif msg == "File Delete":
-            if self.deleteChkBox.isChecked():
-                if self.btnNum:
-                    self.Search(NTFSViewer.DELETE_KEYWORD, NTFSViewer.ONLY_SHOW)
-                else:
-                    self.Search(NTFSViewer.DELETE_KEYWORD, NTFSViewer.SIMPLE_SHOW)
-                self.btnNum += 1
-            else:
-                self.btnNum -= 1
-                if self.btnNum:
-                    self.Search("", NTFSViewer.SIMPLE_SHOW)
-                else:
-                    self.Search(NTFSViewer.DELETE_KEYWORD, NTFSViewer.ONLY_HIDE)
-        elif msg == "Data Extend":
-            if self.extendChkBox.isChecked():
-                if self.btnNum:
-                    self.Search(NTFSViewer.EXTEND_KEYWORD, NTFSViewer.ONLY_SHOW)
-                else:
-                    self.Search(NTFSViewer.EXTEND_KEYWORD, NTFSViewer.SIMPLE_SHOW)
-                self.btnNum += 1
-            else:
-                self.btnNum -= 1
-                if self.btnNum:
-                    self.Search("", NTFSViewer.SIMPLE_SHOW)
-                else:
-                    self.Search("DATA_EXTEND", NTFSViewer.ONLY_HIDE)
-        elif msg == "Data Overwrite":
-            if self.extendChkBox.isChecked():
-                if self.btnNum:
-                    self.Search(NTFSViewer.OVERWRITE_KEYWORD, NTFSViewer.ONLY_SHOW)
-                else:
-                    self.Search(NTFSViewer.OVERWRITE_KEYWORD, NTFSViewer.SIMPLE_SHOW)
-                self.btnNum += 1
-            else:
-                self.btnNum -= 1
-                if self.btnNum:
-                    self.Search("", NTFSViewer.SIMPLE_SHOW)
-                else:
-                    self.Search(NTFSViewer.OVERWRITE_KEYWORD, NTFSViewer.ONLY_HIDE)
+                keyword = None
+                filterType = self.SIMPLE_SHOW
 
+        if filterType == self.ONLY_SHOW:
+            for row in range(len(self.details)):
+                if keyword in self.details[row][1][3]:
+                    self.usnjrnlTable.showRow(row)
+        elif filterType == self.ONLY_HIDE:
+            for row in range(len(self.details)):
+                if keyword in self.details[row][1][3]:
+                    self.usnjrnlTable.hideRow(row)
+        elif filterType == self.SIMPLE_SHOW:
+            if not keyword:
+                for row in range(len(self.details)):
+                    if self.usnjrnlTable.isRowHidden(row):
+                        self.usnjrnlTable.showRow(row)
+            else:
+                for row in range(len(self.details)):
+                    if self.usnjrnlTable.isRowHidden(row):
+                        continue
+                    if keyword in self.details[row][1][3]:
+                        self.usnjrnlTable.showRow(row)
+                    else:
+                        self.usnjrnlTable.hideRow(row)
 
     def showDetail(self, row, column):
         from modules.UI.NTFSDetailViewer import NTFSDetailViewer
@@ -405,22 +414,17 @@ class NTFSViewer(QWidget):
 
 
     def exportUSN(self):
-        import os, datetime
-        datetime_str = datetime.datetime.strftime(datetime.datetime.now(), "%Y%m%d%H%M%S%F")
-        new_path = "{}\\usnjrnl_{}.csv".format(os.getcwd(), datetime_str)
-        self.usnjrnl.export_csv(new_path)
-        QMessageBox.question(self, "Help", "Success! - Export $UsnJrnl as CSV", QMessageBox.Ok)
-
+        if self.exportThread1.isExporting: return
+        self.exportThread1.start()
 
     def exportLSN(self):
-        import os, datetime
-        datetime_str = datetime.datetime.strftime(datetime.datetime.now(), "%Y%m%d%H%M%S%F")
-        new_path = "{}\\logfile_{}.csv".format(os.getcwd(), datetime_str)
-        self.logfile.export_csv(new_path)
-        QMessageBox.question(self, "Help", "Success! - Export $LogFile as CSV", QMessageBox.Ok)
+        if self.exportThread2.isExporting: return
+        self.exportThread2.start()
+
+    def exported(self, msg):
+        QMessageBox.question(self, "Help", msg, QMessageBox.Ok)
 
     def contextMenuEvent(self, event):
-        import os
         menu = QMenu(self)
         copyAction = menu.addAction("Copy")
         if not self.ntfsTabs.currentIndex():
@@ -433,12 +437,51 @@ class NTFSViewer(QWidget):
                 copiedStr = selected[0].text()
             else:
                 copiedStr = " ".join(currentQTableWidgetItem.text() for currentQTableWidgetItem in selected)
-            import subprocess
-            # si = subprocess.STARTUPINFO()
-            # si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-            # subprocess.call("echo {} | clip".format(copiedStr), startupinfo=si)
+            import pyperclip
+            pyperclip.copy(copiedStr)
         elif action == carveAction:
             self.carve()
 
     def carve(self):
         QMessageBox.information(self, "Help", "Preparing...", QMessageBox.Ok)
+
+class ExportThread(QThread):
+    exported = pyqtSignal(str)
+
+    def __init__(self, records, type):
+        QThread.__init__(self)
+        self.isExporting = False
+        self.records = records
+        self.type = type
+
+    def run(self):
+        self.isExporting = True
+        import csv, os, datetime
+        datetime_str = datetime.datetime.strftime(datetime.datetime.now(), "%Y%m%d%H%M%S%F")
+        msg = ''
+        if self.type == NTFSViewer.USNJRNL:
+            output_file = "{}\\usnjrnl_{}.csv".format(os.getcwd(), datetime_str)
+            msg = "Success! - Export $UsnJrnl as CSV"
+            if len(self.records) == 0: return
+            first = self.records[0]
+            with open(output_file, 'w') as f:
+                csv_writer = csv.writer(f)
+                csv_writer.writerow(first.formatted_csv_column_headers())
+                for index in range(len(self.records)):
+                    record = self.records[index]
+                    csv_writer.writerow(record.formatted_csv())
+        elif self.type == NTFSViewer.LOGFILE:
+            output_file = "{}\\logfile_{}.csv".format(os.getcwd(), datetime_str)
+            msg = "Success! - Export $LogFile as CSV"
+            if not self.records: return
+            first_rcrd = self.records[0]
+            header = first_rcrd.formatted_csv_column_headers
+            header.extend(first_rcrd.lsn_header_csv_columns)
+            header.extend(first_rcrd.lsn_data_csv_columns)
+            with open(output_file, 'w') as f:
+                csv_writer = csv.writer(f)
+                csv_writer.writerow(header)
+                for rcrd in self.records:
+                    rcrd.export_csv(csv_writer)
+        self.isExporting = False
+        self.exported.emit(msg)

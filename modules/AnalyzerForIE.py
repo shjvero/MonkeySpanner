@@ -59,9 +59,8 @@ def getPrototype(env, timeline=None):
             }
         })
         t_list.append(Thread(target=getWERDiagEvtxForWin7, args=(compared[2], prototype, limitedTime,)))
-    t_list.append(Thread(target=getAppCompatCache, args=(prototype, prefetchList[3], limitedTime,)))
-    t_list.append(Thread(target=getPrefetchItems, args=(prototype, prefetchList, limitedTime,)))
-    print(prefetchList[3])
+    t_list.append(Thread(target=getAppCompatCache, args=(prototype, limitedTime,)))
+    t_list.append(Thread(target=getPrefetchItems, args=(CONSTANT.IE, prototype, prefetchList, limitedTime,)))
     total = len(t_list)
     print("Total Thread: {}".format(total))
     for i in range(total):
@@ -75,11 +74,10 @@ def getPrototype(env, timeline=None):
 
     '''
     [빨] 웹 히스토리
-    [빨] 웹 캐시: html, js 만 해당되는 경우
+    [빨] 웹 캐시: html, js, css 등 웹 문서 파일만
     [빨] IE 프리패치: 생성, 실행 (웹 히스토리 첫 기록 이전)
-    [주] System.evtx EID 7036, 첫번째 로그의 시간을 저장한다.
-    [주] Application.evtx EID 1000. (1번 저장 시간 이전은 제외)
-    [노] WER-Diag%4Operational.evtx EID 2 (1번 저장 시간 이전은 제외) -- win7만 
+    [주] Application.evtx EID 1000, 1001
+    [노] WER-Diag%4Operational.evtx EID 2 -- win7만 
     [노] WERFAULT 프리패치: 생성, 실행 모두
     [노] Report.wer: IE것만
     [초] Fault...heap.evtx EID 1001
@@ -87,7 +85,7 @@ def getPrototype(env, timeline=None):
     [남] 웹 히스토리: dll, doc, docx, hta, xls, woff, pdf (확장자 검사)
     [남] 웹 캐시: dll, doc, docx, hta, xls, woff, pdf (확장자 검사)
     [보] 웹 다운로드, 웹 히스토리(exe)
-    [보] 13번 과정에서 EXE 모두 추출 후 프리패치 파싱
+    [보] CMD, POWERSHELL 프리패치
 
     [회] 프리패치 - 첫 타임라인 이후 생성된 것만
     [회] 레지스트리 - 호환성 캐시

@@ -47,6 +47,28 @@ REGISTRY_KEYWORD = "Registry"
 LNKFILE_KEYWORD = "JumpList[L]"
 DESTLIST_KEYWORD = "JumpList[D]"
 
+ArtifactList = [
+    PREFETCH_KEYWORD,
+    EVENTLOG_KEYWORD,
+    WER_KEYWORD,
+    HISTORY_KEYWORD,
+    CACHE_KEYWORD,
+    REGISTRY_KEYWORD,
+    LNKFILE_KEYWORD,
+    DESTLIST_KEYWORD
+]
+
+ColorList = {
+    "Gray": 0,
+    "Red": 1,
+    "Orange": 2,
+    "Yellow": 3,
+    "Green": 4,
+    "Blue": 5,
+    "Navy": 6,
+    "Purple": 7
+}
+
 # Table Header
 TableHeader = {
     PREFETCH_KEYWORD: ["Timeline", "File Name", "Executable Name", "Action", ""],                       # 4 columns
@@ -112,7 +134,8 @@ JUMPLIST_HASH = [
     ['Adobe Reader X 10.1.0', 'ee462c3b81abb6f6'],          # [22]
     ['Acrobat Reader 15.x', 'de48a32edcbe79e4'],            # [23]
     ['Chrome 9.0.597.84 / 12.0.742.100 / 13.0.785.215 / 26', '5d696d521de238c3'],     # [24]
-    ['Edge', '9d1f905ce5044aee'],                           # [25]
+    ['Edge 42.17134.1.0', '9d1f905ce5044aee'],                           # [25]
+    ['Edge 44.17763.1.0', '90ca02effa84052f'],                           # [26]
 ]
 
 RECENT = APPDATA + '\\Microsoft\\Windows\\Recent\\'

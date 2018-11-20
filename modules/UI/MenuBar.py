@@ -18,7 +18,7 @@ class MenuBar(QMenuBar):
     def initUI(self):
         fileMenu = self.addMenu(self.menu[0])
         viewMenu = self.addMenu(self.menu[1])
-        settingMenu = self.addMenu(self.menu[2])
+        # settingMenu = self.addMenu(self.menu[2])
         helpMenu = self.addMenu(self.menu[3])
 
         # File
@@ -55,10 +55,10 @@ class MenuBar(QMenuBar):
         viewMenu.addAction(registryMenu)
 
         # Settings
-        reloadAction1 = QAction(self.action[2][0], self)
-        reloadAction1.setShortcut("F5")
-        registryMenu.triggered.connect(self.reload)
-        settingMenu.addAction(reloadAction1)
+        # reloadAction1 = QAction(self.action[2][0], self)
+        # reloadAction1.setShortcut("F5")
+        # registryMenu.triggered.connect(self.reload)
+        # settingMenu.addAction(reloadAction1)
 
         # timelineAction2 = QAction("Reload with Timeline", self)
         # timelineAction2.setShortcut("F6")
@@ -81,6 +81,7 @@ class MenuBar(QMenuBar):
         import modules.constant as CONSTANT
         self.selected = self.parent().presentSelected
         hashList = []
+        self.selected = CONSTANT.EDGE
         if self.selected == CONSTANT.ADOBE_READER:
             print("Adobe Reader")
             for i in range(18, 24):
@@ -89,11 +90,9 @@ class MenuBar(QMenuBar):
             print("Adobe Flash Player in JumpListViewer")
             hashList.append(CONSTANT.JUMPLIST_HASH[14])
         elif self.selected == CONSTANT.EDGE:
-            print("Edge in JumpListViewer")
             hashList.append(CONSTANT.JUMPLIST_HASH[25])
+            hashList.append(CONSTANT.JUMPLIST_HASH[26])
         elif self.selected == CONSTANT.HWP:
-            # QMessageBox.information(self, "Help", "Already provided", QMessageBox.Ok)
-            # return
             hashList.append(CONSTANT.JUMPLIST_HASH[15])
             hashList.append(CONSTANT.JUMPLIST_HASH[16])
             hashList.append(CONSTANT.JUMPLIST_HASH[17])
@@ -101,8 +100,6 @@ class MenuBar(QMenuBar):
             hashList.append(CONSTANT.JUMPLIST_HASH[12])
             hashList.append(CONSTANT.JUMPLIST_HASH[13])
         elif self.selected == CONSTANT.OFFICE:
-            # QMessageBox.information(self, "Help", "Already provided", QMessageBox.Ok)
-            # return
             for i in range(12):
                 hashList.append(CONSTANT.JUMPLIST_HASH[i])
         elif self.selected == CONSTANT.LPE:
@@ -111,6 +108,7 @@ class MenuBar(QMenuBar):
             QMessageBox.question(self, "Help", "Please select software.", QMessageBox.Ok)
             return
         content = getJumplistItems(hashList)
+        print(content)
         if not content:
             msg = "[Not Exists.]\n"
             for h in hashList:

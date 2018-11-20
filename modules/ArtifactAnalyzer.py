@@ -10,11 +10,14 @@ def getApplicationEvtx(type, compared, prototype, checkedSW, timeline=None):
     items = []
     wer_info = []
     origin = checkedSW[0]
-    head = None
-    if type == CONSTANT.IE:
-        head = [CONSTANT.EVENTLOG_KEYWORD, 2]
+    head1000 = head1001 = None
+    if type in [CONSTANT.IE]:
+        head1000 = head1001 = [CONSTANT.EVENTLOG_KEYWORD, 2]
+    elif type in [CONSTANT.EDGE]:
+        head1000 = [CONSTANT.EVENTLOG_KEYWORD, 2]
+        head1001 = [CONSTANT.EVENTLOG_KEYWORD, 5]
     elif type in [CONSTANT.OFFICE, CONSTANT.HWP]:
-        head = [CONSTANT.EVENTLOG_KEYWORD, 3]
+        head1000 = head1001 = [CONSTANT.EVENTLOG_KEYWORD, 3]
 
     fullPath = CONSTANT.EVENTLOG + compared['channel']
     checkedEID = compared['eid']
@@ -32,27 +35,29 @@ def getApplicationEvtx(type, compared, prototype, checkedSW, timeline=None):
                         if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
                             print(providerName + " skipped, because of timeline")
                             continue
+
+                    if systemTag[2].text == '4':
+                        level = 'Information'
+                    elif systemTag[2].text == '3':
+                        level = 'Warning'
+                    elif systemTag[2].text == '2':
+                        level = 'Error'
+                    elif systemTag[2].text == '1':
+                        level = 'Fatal'
+
                     etc = ''
                     eventDataTag = event.lxml()[1]
+
                     if int(eventID) == 1000:
                         if eventDataTag[0].text.upper() not in origin: continue
                         etc = eventDataTag[0].text  # idx - 0 (SW), 3 (Module), 6 (Exception Code)
+                        items.append([head1000, loggedTime, providerName, eventID, level, etc, event.xml()])
                     elif int(eventID) == 1001:
                         appcrashList = checkedSW[0] + checkedSW[1]
                         if eventDataTag[2].text != 'APPCRASH' or eventDataTag[5].text.upper() not in appcrashList: continue
                         etc = eventDataTag[5].text  # idx - 5 (SW), 8 (Module), 11 (Exception Code), 16 (PATH)
                         wer_info.append([eventDataTag[16].text, eventDataTag[8].text, eventDataTag[11].text])
-
-                    if systemTag[2].text == '1':
-                        level = 'Fatal'
-                    elif systemTag[2].text == '2':
-                        level = 'Error'
-                    elif systemTag[2].text == '3':
-                        level = 'Warning'
-                    elif systemTag[2].text == '4':
-                        level = 'Information'
-
-                    items.append([head, loggedTime, providerName, eventID, level, etc, event.xml()])
+                        items.append([head1001, loggedTime, providerName, eventID, level, etc, event.xml()])
             except Exception as e:
                 print("Error: Application.evtx {}".format(e))
             continue
@@ -99,9 +104,9 @@ def getWERDiagEvtxForWin7(compared, prototype, timeline=None):
 def getFalutHeapEvtx(type, compared, prototype, timeline=None):
     items = []
     head = None
-    if type == CONSTANT.IE:
+    if type in [CONSTANT.IE, CONSTANT.HWP]:
         head = [CONSTANT.EVENTLOG_KEYWORD, 4]
-    elif type in [CONSTANT.OFFICE, CONSTANT.HWP]:
+    elif type in [CONSTANT.OFFICE]:
         head = [CONSTANT.EVENTLOG_KEYWORD, 3]
 
     fullPath = CONSTANT.EVENTLOG + compared['channel']
@@ -176,6 +181,8 @@ def getReportWER(wer_info, prototype, type):
         head = [CONSTANT.WER_KEYWORD, 3]
     elif type == CONSTANT.OFFICE:
         head = [CONSTANT.WER_KEYWORD, 4]
+    elif type == [CONSTANT.HWP, CONSTANT.EDGE]:
+        head = [CONSTANT.WER_KEYWORD, 6]
 
     for data in wer_info:
         if os.path.exists(data[0]):
@@ -208,21 +215,32 @@ def getReportWER(wer_info, prototype, type):
 #     prototype += items
 
 
-def getPrefetchItems(prototype, included, timeline=None):
+def getPrefetchItems(type, prototype, included, timeline=None):
     items = []
     headStr = "Prefetch"
-    grayHead = [headStr, 0]
-    redHead = [headStr, 1]
-    orangeHead = [headStr, 2]
-    yellowHead = [headStr, 3]
-    blueHead = [headStr, 5]
-    purpleHead = [headStr, 7]
-
-    werfaultHead = yellowHead
-    loadedPFHead = orangeHead
-    if "HWP.EXE" in included[0]:
-        loadedPFHead = yellowHead
-        werfaultHead = blueHead
+    grayHead = [headStr, 0]             # [회] 프리패치 - 첫 타임라인 이후 생성된 것만
+    shellHead = [headStr, 7]            # [보] Cmd, Powershell 프리패치
+    if type == CONSTANT.IE:
+        originHead = [headStr, 1]       # [빨] IEXPLORER.EXE: 본 프리패치 생성, 실행 (웹 히스토리 첫 기록 이전)
+        werHead = [headStr, 3]          # [노] WERFAULT 프리패치: 생성, 실행 모두
+        reExecutionHead = [headStr, 5]  # [파] IEXPLORER.EXE: 본 프리패치 실행만 (웹 히스토리 첫 기록 이후)
+        shellHead = [headStr, 7]        # [보] Cmd, Powershell 프리패치
+    elif type == CONSTANT.OFFICE:
+        originHead = [headStr, 1]       # [빨] WINWORD.EXE, POWERPNT.EXE, EXCEL.EXE: 생성
+        reExecutionHead = [headStr, 1]  # [빨] WINWORD.EXE, POWERPNT.EXE, EXCEL.EXE: 생성
+        relatedHead = [headStr, 2]      # [주] WMIPRVSE.EXE, EQNEDT32.EXE, DW20.EXE, DWWIN.EXE: 관련 프로세스 프리패치
+        werHead = [headStr, 3]          # [노] WERFAULT 프리패치: 생성, 실행 모두
+    elif type == CONSTANT.HWP:
+        originHead = [headStr, 1]       # [빨] HWP.EXE: 생성
+        reExecutionHead = [headStr, 1]  # [빨] HWP.EXE: 실행
+        relatedHead = [headStr, 3]      # [주] GBB.EXE, GSWIN32C.EXE: 관련 프로세스 프리패치
+        werHead = [headStr, 5]          # [파] WER 프리패치: WERFAULT.EXE
+    elif type == CONSTANT.EDGE:
+        originHead = [headStr, 1]       # [빨] MICROSOFTEDGE.EXE: 생성
+        reExecutionHead = [headStr, 1]  # [빨] MICROSOFTEDGE.EXE: 실행
+        werHead = [headStr, 4]          # [초] WERFAULT 프리패치: 생성, 실행 모두(첫 기록 이전)
+        relatedHead = [headStr, 6]      # [남] MICROSOFTEDGECP.EXE, MICROSOFTEDGEBCHOST.EXE: 관련 프로세스 프리패치
+        # [노] SVCHOST 프리패치: 생성, 실행 모두(첫 기록 이전) -- 보류
 
     limitedTime = None
     if not timeline:
@@ -254,23 +272,27 @@ def getPrefetchItems(prototype, included, timeline=None):
 
             pf_name = "{}-{}.pf".format(p.executableName, p.hash)
             createdTime = p.volumesInformationArray[0]["Creation Date"]
-            createdTimeObj = datetime.datetime.strptime(createdTime, "%Y-%m-%d %H:%M:%S.%f")
+            try:
+                createdTimeObj = datetime.datetime.strptime(createdTime, "%Y-%m-%d %H:%M:%S.%f")
+            except Exception as e:
+                print(e)
+                continue
             if p.executableName in included[0]:  # 특정 SW
                 content = p.getContents()
-                items.append([redHead, createdTime, pf_name, p.executableName, "Create", content])
+                items.append([originHead, createdTime, pf_name, p.executableName, "Create", content])
                 for timestamp in p.timestamps:
-                    head = redHead
+                    head = originHead
                     if timeline:
                         if datetime.datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S.%f") > timeline:
-                            head = blueHead
+                            head = reExecutionHead
                     items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
                 continue
             elif p.executableName in included[1]:
-                head = loadedPFHead
+                head = relatedHead
             elif p.executableName in included[2]:
-                head = werfaultHead
+                head = werHead
             elif p.executableName in included[3]:
-                head = purpleHead
+                head = shellHead
             else:
                 head = grayHead
             _limited = limitedTime if not timeline else timeline
@@ -282,24 +304,6 @@ def getPrefetchItems(prototype, included, timeline=None):
                     items.append([head, timestamp, pf_name, p.executableName, "Execute", content])
                 continue
     prototype += items
-    '''
-    IE
-    [빨] IEXPLORER.EXE: 생성, 실행 (웹 히스토리 첫 기록 이전)
-    [파] IEXPLORER.EXE: 실행만 (웹 히스토리 첫 기록 이후)
-
-    MS-Office
-    [빨] WINWORD.EXE, POWERPNT.EXE, EXCEL.EXE
-    [주] WMIPRVSE.EXE, EQNEDT32.EXE, DW20.EXE, DWWIN.EXE
-    [노] 타 프로세스 프리패치: WERFAULT.EXE
-    [보] Cmd, Powershell 프리패치
-
-    HWP
-    [빨] HWP.EXE
-    [노] GBB.EXE, GSWIN32C.EXE
-
-    공통
-    [회] 프리패치 - 첫 타임라인 이후 생성된 것만
-    '''
 
 
 def getJumplistItemsVerSummary(type, prototype, timeline=None):
@@ -378,7 +382,6 @@ def getJumplistItems(contents):
         LinkFiles = []
         DestList = []
         ole = olefile.OleFileIO(fullpath)
-
         for item in ole.listdir():
             file = ole.openstream(item)
             file_data = file.read()
@@ -387,6 +390,7 @@ def getJumplistItems(contents):
                 if header_value[0] == 76:  # first four bytes value should be 76 bytes
                     lnk_header = lnk_file_header(file_data[:76])
                     lnk_after_header = lnk_file_after_header(file_data)  # after 76 bytes to last 100 bytes
+                    if not int(lnk_header[3]): continue
                     LinkFiles.append([
                         lnk_header[0],
                         lnk_header[1],
@@ -399,7 +403,6 @@ def getJumplistItems(contents):
                         lnk_after_header[2],
                     ])
                     lnk_tracker_value = file_data[ole.get_size(item) - 100:ole.get_size(item) - 96]
-                    # print(lnk_tracker_value[0])
                     if lnk_tracker_value[0] == 96:  # link tracker information 4 byte value = 96
                         try:
                             lnk_tracker = lnk_file_tracker_data(file_data[ole.get_size(item) - 100:])  # last 100 bytes
@@ -412,8 +415,8 @@ def getJumplistItems(contents):
         idx = _list.index(content)
         from operator import itemgetter
         _list[idx].append({
-            "LinkFiles": sorted(LinkFiles, key=itemgetter(0)),
-            "DestList": sorted(DestList, key=itemgetter(0)),
+            "LinkFiles": sorted(LinkFiles, key=itemgetter(0)) if LinkFiles else [],
+            "DestList": sorted(DestList, key=itemgetter(0)) if DestList else [],
         })
     return _list
 
@@ -454,8 +457,8 @@ def getWebArtifactItems(env, type, prefetchList=None, timeline=None, prototype=N
         prototype += WebArtifact.getContent(fullpath, timeline, type)
 
 
-def getAppCompatCache(prototype, prefetchList, timeline):
-    rst = get_local_data(prefetchList, timeline)
+def getAppCompatCache(prototype, timeline):
+    rst = get_local_data(timeline)
     if rst:
         prototype += rst
 

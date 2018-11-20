@@ -122,25 +122,6 @@ class LogFile:
         else:
             self.writeout_parsed(sys.stdout)
 
-    def export_csv(self, export_file = None):
-        if not self.rcrd_records:
-            return
-        first_rcrd = self.rcrd_records[0]
-        header = first_rcrd.formatted_csv_column_headers
-        header.extend(first_rcrd.lsn_header_csv_columns)
-        header.extend(first_rcrd.lsn_data_csv_columns)
-        if export_file:
-            with open(export_file, 'w') as f:
-                csv_writer = csv.writer(f)
-                csv_writer.writerow(header)
-                for rcrd in self.rcrd_records:
-                    rcrd.export_csv(csv_writer)
-        else:
-            csv_writer = csv.writer(sys.stdout)
-            csv_writer.writerow(header)
-            for rcrd in self.rcrd_records:
-                    rcrd.export_csv(csv_writer)
-
     def export_transactions(self, export_file=None):
         if not self.rcrd_records:
             return

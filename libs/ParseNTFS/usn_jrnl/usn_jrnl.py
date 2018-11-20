@@ -61,24 +61,6 @@ class UsnJrnl():
     def print_statistics(self):
         print('count:', len(self.records))
 
-    def export_csv(self, output_file=None):
-        if len(self.records) == 0:
-            return
-        first = self.records[0]
-        if output_file:
-            with open(output_file, 'w') as f:
-                csv_writer = csv.writer(f)
-                csv_writer.writerow(first.formatted_csv_column_headers())
-                for index in range(len(self.records)):
-                    record = self.records[index]
-                    csv_writer.writerow(record.formatted_csv())
-        else:
-            csv_writer = csv.writer(sys.stdout)
-            csv_writer.writerow(first.formatted_csv_column_headers())
-            for index in range(len(self.records)):
-                record = self.records[index]
-                csv_writer.writerow(record.formatted_csv())
-
     @property
     def grouped_by_entry(self):
         result = {}

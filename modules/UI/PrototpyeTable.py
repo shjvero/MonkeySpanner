@@ -37,8 +37,12 @@ class PrototypeTable(QTableWidget):
             QMessageBox.information(self, "Help", "Preparing...[Adobe Flash Player]", QMessageBox.Ok)
             return
         elif sw == CONSTANT.EDGE:
-            QMessageBox.information(self, "Help", "Preparing...[Microsoft Edge]", QMessageBox.Ok)
-            return
+            rst, stuff = Edge.getPrototype(self.env)
+            if not rst:
+                QMessageBox.information(self, "Help", stuff, QMessageBox.Ok)
+                return
+            self.prototype = stuff
+            self.customHeaders = Edge.getColumnHeader()
         elif sw == CONSTANT.HWP:
             self.prototype = HWP.getPrototype(self.env)
             self.customHeaders = HWP.getColumnHeader()
@@ -69,12 +73,11 @@ class PrototypeTable(QTableWidget):
         elif sw == CONSTANT.LPE:
             QMessageBox.information(self, "Help", "Preparing...[Kerenl]", QMessageBox.Ok)
             return
-        else:
-            print("기존 SW: {}".format(sw))
-        if timeline:
-            print("타임라인 설정 O")
-        else:
-            print("타임라인 설정 X")
+        #
+        # if timeline:
+        #     print("타임라인 설정 O")
+        # else:
+        #     print("타임라인 설정 X")
         self.initUI()
 
     def initUI(self):
@@ -131,58 +134,44 @@ class PrototypeTable(QTableWidget):
         self.cellDoubleClicked.connect(self.showDetail)  # Double-Click
         self.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
-    def search(self, keyword, btnChecked=False):
+    def search(self, keyword, checkedItems=None):
         if not keyword:
-            if not btnChecked:
-                for i in range(len(self.prototype)):
-                    self.showRow(i)
+            # 체크된 것들만 다시 로드
+            for row in range(len(self.prototype)):
+                if self.prototype[row][0][0] in checkedItems["Artifact"] and self.prototype[row][0][1] in checkedItems["Color"]:
+                    self.showRow(row)
             return
         items = self.findItems(keyword, Qt.MatchContains)
         includedRow = list(set([self.row(item) for item in items]))
-        for i in range(len(self.prototype)):
-            if i not in includedRow:
-                self.hideRow(i)
-            elif self.isRowHidden(i):
-                if btnChecked:
-                    continue
-                else:
-                    self.showRow(i)
+        for row in range(len(self.prototype)):
+            if self.isRowHidden(row):
+                continue
+            if row in includedRow:
+                self.showRow(row)
+            else:
+                self.hideRow(row)
 
-    def filtering(self, type, state=0):
-        target = None
-        if type == 0:
-            self.search("")
-            return
-        elif type == 1:
-            target = CONSTANT.PREFETCH_KEYWORD
-        elif type == 2:
-            target = CONSTANT.EVENTLOG_KEYWORD
-        elif type == 3:
-            target = CONSTANT.REGISTRY_KEYWORD
-        elif type == 4:
-            target = CONSTANT.HISTORY_KEYWORD
-        elif type == 5:
-            target = CONSTANT.CACHE_KEYWORD
-        elif type == 6:
-            target = CONSTANT.WER_KEYWORD
-        elif type == 7:
-            target = CONSTANT.LNKFILE_KEYWORD
-        elif type == 8:
-            target = CONSTANT.DESTLIST_KEYWORD
-        if state == PrototypeTable.ONLY_HIDE:
-            for row in range(len(self.prototype)):
-                if self.prototype[row][0][0] == target:
-                    self.hideRow(row)
-        elif state == PrototypeTable.ONLY_SHOW:
-            for row in range(len(self.prototype)):
-                if self.prototype[row][0][0] == target:
-                    self.showRow(row)
-        elif state == PrototypeTable.SIMPLE_SHOW:
-            for row in range(len(self.prototype)):
-                if self.prototype[row][0][0] == target:
-                    self.showRow(row)
-                else:
-                    self.hideRow(row)
+    def filter(self, checkedItem, p_int):
+        target = checkedItem.text(0)
+        if target in CONSTANT.ArtifactList:
+            if checkedItem.checkState(0) == Qt.Unchecked:
+                for row in range(len(self.prototype)):
+                    if self.prototype[row][0][0] == target:
+                        self.hideRow(row)
+            elif checkedItem.checkState(0) == Qt.Checked:
+                for row in range(len(self.prototype)):
+                    if self.prototype[row][0][0] == target:
+                        self.showRow(row)
+        elif target in CONSTANT.ColorList.keys():
+            target = CONSTANT.ColorList[target]
+            if checkedItem.checkState(0) == Qt.Unchecked:
+                for row in range(len(self.prototype)):
+                    if self.prototype[row][0][1] == target:
+                        self.hideRow(row)
+            elif checkedItem.checkState(0) == Qt.Checked:
+                for row in range(len(self.prototype)):
+                    if self.prototype[row][0][1] == target:
+                        self.showRow(row)
 
     def changeColumnHeader(self, row, column):
         _header = self.verticalHeaderItem(row).text()
@@ -225,8 +214,5 @@ class PrototypeTable(QTableWidget):
                 copiedStr = selected[0].text()
             else:
                 copiedStr = " ".join(currentQTableWidgetItem.text() for currentQTableWidgetItem in selected)
-            import subprocess
-            si = subprocess.STARTUPINFO()
-            si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-            command = 'echo "{}" | clip'.format(copiedStr)
-            subprocess.call(command, startupinfo=si)
+            import pyperclip
+            pyperclip.copy(copiedStr)

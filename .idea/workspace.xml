@@ -4,16 +4,17 @@
     <list default="true" id="23378966-e248-43e1-9817-746140378983" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/MainWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/MonkeySpanner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/ParseNTFS/logfile/logfile.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseNTFS/logfile/logfile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/ParseNTFS/usn_jrnl/usn_jrnl.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseNTFS/usn_jrnl/usn_jrnl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/AnalyzerForEdge.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/AnalyzerForEdge.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/AnalyzerForHWP.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/AnalyzerForHWP.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/AnalyzerForIE.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/AnalyzerForIE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/AnalyzerForOffice.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/AnalyzerForOffice.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/ArtifactAnalyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/ArtifactAnalyzer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/JumpListViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/JumpListViewer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/LoadingScreen.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/LoadingScreen.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/MenuBar.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/MenuBar.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/NTFSLogFileDialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSLogFileDialog.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/NTFSViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSViewer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/constant.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/constant.py" afterDir="false" />
@@ -28,8 +29,8 @@
     <session id="-1788526241">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="76" />
-          <entry key="project.open.time.10" value="1" />
+          <entry key="project.closed" value="80" />
+          <entry key="project.open.time.10" value="2" />
           <entry key="project.open.time.11" value="2" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.13" value="1" />
@@ -42,10 +43,10 @@
           <entry key="project.open.time.40" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.6" value="15" />
-          <entry key="project.open.time.7" value="23" />
+          <entry key="project.open.time.7" value="26" />
           <entry key="project.open.time.8" value="17" />
           <entry key="project.open.time.9" value="9" />
-          <entry key="project.opened" value="77" />
+          <entry key="project.opened" value="81" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -53,7 +54,7 @@
           <entry key="gif" value="7" />
           <entry key="jpg" value="3" />
           <entry key="png" value="2" />
-          <entry key="py" value="519" />
+          <entry key="py" value="573" />
           <entry key="txt" value="23" />
         </counts>
       </usages-collector>
@@ -61,20 +62,20 @@
         <counts>
           <entry key="Image" value="12" />
           <entry key="PLAIN_TEXT" value="23" />
-          <entry key="Python" value="519" />
+          <entry key="Python" value="573" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="2511" />
+          <entry key="Python Console" value="2536" />
           <entry key="dummy" value="69" />
-          <entry key="py" value="148338" />
+          <entry key="py" value="160998" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="69" />
-          <entry key="Python" value="150849" />
+          <entry key="Python" value="163534" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -88,8 +89,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MonkeySpanner.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="76">
-              <caret line="11" column="8" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+            <state relative-caret-position="381">
+              <caret line="35" selection-start-line="35" selection-end-line="35" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -100,21 +101,27 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MainWindow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="20" column="45" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="45" />
+            <state relative-caret-position="704">
+              <caret line="155" column="28" selection-start-line="155" selection-start-column="28" selection-end-line="155" selection-end-column="28" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
-                <marker date="1542397470687" expanded="true" signature="7410:7687" ph="..." />
+                <marker date="1542643464540" expanded="true" signature="4560:4564" ph="..." />
+                <marker date="1542643464540" expanded="true" signature="4584:4626" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/ArtifactAnalyzer.py">
+        <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7923">
-              <caret line="423" column="21" selection-start-line="423" selection-start-column="21" selection-end-line="423" selection-end-column="21" />
+            <state relative-caret-position="-18">
+              <caret line="150" column="17" selection-start-line="150" selection-start-column="17" selection-end-line="150" selection-end-column="17" />
+              <folding>
+                <element signature="e#0#9#0" expanded="true" />
+                <marker date="1542731476972" expanded="true" signature="7228:7229" ph="..." />
+                <marker date="1542731476972" expanded="true" signature="7228:7233" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -122,8 +129,29 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/UI/NTFSViewer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="252">
-              <caret line="189" lean-forward="true" selection-start-line="189" selection-end-line="189" />
+            <state relative-caret-position="229">
+              <caret line="386" lean-forward="true" selection-start-line="386" selection-end-line="386" />
+              <folding>
+                <element signature="e#0#39#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="304">
+              <caret line="136" selection-start-line="136" selection-end-line="136" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/modules/ArtifactAnalyzer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="247">
+              <caret line="241" column="33" selection-start-line="241" selection-start-column="33" selection-end-line="241" selection-end-column="33" />
             </state>
           </provider>
         </entry>
@@ -139,25 +167,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>enterPr</find>
-      <find>Margin</find>
-      <find>with</find>
-      <find>open</find>
-      <find>self._f</find>
-      <find>print(</find>
-      <find>Report</find>
-      <find>getReport</find>
-      <find>destlist_object_timestamp</find>
-      <find>CONSTANT</find>
-      <find>after_header_list</find>
-      <find>datetime</find>
-      <find>selectionList</find>
-      <find>topWidgetHeight</find>
-      <find>getReportWER</find>
-      <find>Message</find>
-      <find>Jumplist</find>
-      <find>modules.Proto</find>
-      <find>modules.Prot</find>
       <find>showDeta</find>
       <find>ready</find>
       <find>showDetail</find>
@@ -169,10 +178,27 @@
       <find>pyqtSignal</find>
       <find>complete</find>
       <find>copy</find>
+      <find>Cur</find>
+      <find>QCursor(Qt.PointingHandCursor)</find>
+      <find>2</find>
+      <find>1</find>
+      <find>clicked</find>
+      <find>clice</find>
+      <find>filtering</find>
+      <find>exportThread</find>
+      <find>export</find>
+      <find>global</find>
+      <find>g_prefetch</find>
+      <find>g_pre</find>
+      <find>checkedSW</find>
+      <find>chk</find>
+      <find>self.filter</find>
+      <find>def fil</find>
+      <find>enterPressed</find>
+      <find>search</find>
+      <find>def file</find>
     </findStrings>
     <replaceStrings>
-      <replace>items</replace>
-      <replace>COLOR</replace>
       <replace>toggledChkBtn</replace>
       <replace>chkboxLayout</replace>
       <replace>completeSelection</replace>
@@ -201,6 +227,8 @@
       <replace>swList</replace>
       <replace>origin</replace>
       <replace>compared</replace>
+      <replace>self.pointerCursor</replace>
+      <replace>self.selectedBtnNum</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -209,13 +237,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/attribute_headers.py" />
-        <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/attributes.py" />
-        <option value="$PROJECT_DIR$/libs/ParseNTFS/boot_sector/boot_sector.py" />
-        <option value="$PROJECT_DIR$/libs/ParseNTFS/logfile/rstr_record.py" />
-        <option value="$PROJECT_DIR$/libs/ParseNTFS/usn_jrnl/usn_jrnl.py" />
-        <option value="$PROJECT_DIR$/libs/ParseNTFS/logfile/rcrd_record.py" />
-        <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/mft.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/mft_entry.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSLogViewerMain.py" />
         <option value="$PROJECT_DIR$/NTFSLogViewerMain.py" />
@@ -226,7 +247,6 @@
         <option value="$PROJECT_DIR$/libs/ParseRegistry/RegistryParse.py" />
         <option value="$PROJECT_DIR$/libs/ParseRegistry/Amcache.py" />
         <option value="$PROJECT_DIR$/modules/UI/TextViewer.py" />
-        <option value="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" />
         <option value="$PROJECT_DIR$/modules/UI/ListViewer.py" />
         <option value="$PROJECT_DIR$/libs/ParsePrefetch/prefetch.py" />
         <option value="$PROJECT_DIR$/libs/ParseEvtx/Evtx.py" />
@@ -242,32 +262,39 @@
         <option value="$PROJECT_DIR$/modules/IE/Prototype.py" />
         <option value="$PROJECT_DIR$/modules/AnalyzerForFlash.py" />
         <option value="$PROJECT_DIR$/modules/AnalyzerForPDF.py" />
-        <option value="$PROJECT_DIR$/modules/AnalyzerForEdge.py" />
         <option value="$PROJECT_DIR$/modules/AnalyzerForKernel.py" />
-        <option value="$PROJECT_DIR$/modules/AnalyzerForOffice.py" />
         <option value="$PROJECT_DIR$/modules/UI/WebArtifactDetailViewer.py" />
-        <option value="$PROJECT_DIR$/modules/AnalyzerForIE.py" />
         <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" />
-        <option value="$PROJECT_DIR$/modules/constant.py" />
         <option value="$PROJECT_DIR$/modules/UI/JumpListViewer.py" />
-        <option value="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" />
-        <option value="$PROJECT_DIR$/modules/UI/MenuBar.py" />
-        <option value="$PROJECT_DIR$/modules/ArtifactAnalyzer.py" />
-        <option value="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" />
-        <option value="$PROJECT_DIR$/modules/AnalyzerForHWP.py" />
         <option value="$PROJECT_DIR$/modules/UI/LoadingScreen.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSLogFileDialog.py" />
+        <option value="$PROJECT_DIR$/MonkeySpanner.py" />
+        <option value="$PROJECT_DIR$/modules/test2.py" />
         <option value="$PROJECT_DIR$/MainWindow.py" />
+        <option value="$PROJECT_DIR$/modules/UI/FilteringWidget.py" />
+        <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/mft.py" />
+        <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/libs/ParseNTFS/logfile/logfile.py" />
+        <option value="$PROJECT_DIR$/libs/ParseNTFS/usn_jrnl/usn_jrnl.py" />
+        <option value="$PROJECT_DIR$/modules/constant.py" />
+        <option value="$PROJECT_DIR$/modules/UI/MenuBar.py" />
+        <option value="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" />
+        <option value="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" />
+        <option value="$PROJECT_DIR$/modules/AnalyzerForIE.py" />
+        <option value="$PROJECT_DIR$/modules/AnalyzerForHWP.py" />
+        <option value="$PROJECT_DIR$/modules/AnalyzerForOffice.py" />
+        <option value="$PROJECT_DIR$/modules/AnalyzerForEdge.py" />
+        <option value="$PROJECT_DIR$/modules/ArtifactAnalyzer.py" />
+        <option value="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" />
+        <option value="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSViewer.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="73" />
-    <option name="y" value="18" />
-    <option name="width" value="1284" />
-    <option name="height" value="728" />
+    <option name="x" value="55" />
+    <option name="width" value="666" />
+    <option name="height" value="775" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -281,6 +308,11 @@
             <path>
               <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
               <item name="Parser" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Parser" type="462c0819:PsiDirectoryNode" />
+              <item name="libs" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
@@ -329,49 +361,7 @@
     </option>
   </component>
   <component name="RunManager" selected="Python.MonkeySpanner">
-    <configuration name="ListViewer" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Parser" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modules/UI" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/modules/UI/ListViewer.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="MainWindow" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Parser" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MainWindow.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="MonkeySpanner" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="MonkeySpanner" type="PythonConfigurationType" factoryName="Python">
       <module name="Parser" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -392,28 +382,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="NTFSDetailViewer" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Parser" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modules/UI" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Parser" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -425,7 +394,28 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\asdzx\PycharmProjects\Parser\MonkeySpanner.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="test2" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Parser" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/modules" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/modules/test2.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -435,19 +425,14 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.MainWindow" />
-      <item itemvalue="Python.main" />
-      <item itemvalue="Python.ListViewer" />
-      <item itemvalue="Python.NTFSDetailViewer" />
       <item itemvalue="Python.MonkeySpanner" />
+      <item itemvalue="Python.test" />
+      <item itemvalue="Python.test2" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.MonkeySpanner" />
-        <item itemvalue="Python.main" />
-        <item itemvalue="Python.NTFSDetailViewer" />
-        <item itemvalue="Python.MainWindow" />
-        <item itemvalue="Python.ListViewer" />
+        <item itemvalue="Python.test" />
+        <item itemvalue="Python.test2" />
       </list>
     </recent_temporary>
   </component>
@@ -476,15 +461,15 @@
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="1320" height="784" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49683544" visible="true" weight="0.2595238" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49683544" visible="true" weight="0.20079365" />
       <window_info id="Structure" order="1" sideWeight="0.5031645" side_tool="true" weight="0.21111111" />
       <window_info id="Favorites" order="2" sideWeight="0.5016835" side_tool="true" weight="0.19689542" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.32973805" />
-      <window_info anchor="bottom" id="Terminal" order="1" sideWeight="0.49920633" weight="0.26153848" />
+      <window_info anchor="bottom" id="Terminal" order="1" sideWeight="0.49920633" weight="0.26040062" />
       <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.50079364" side_tool="true" weight="0.30508474" />
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" weight="0.36517718" />
-      <window_info anchor="bottom" id="Run" order="5" weight="0.33744222" />
+      <window_info anchor="bottom" id="Run" order="5" weight="0.27734977" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32973805" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.3990755" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
@@ -496,23 +481,24 @@
       <window_info anchor="right" x="452" y="315" width="881" height="482" id="Python Console" order="3" type="FLOATING" weight="0.3515873" />
     </layout>
     <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4983165" visible="true" weight="0.21111111" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49683544" visible="true" weight="0.26746032" />
+      <window_info id="Structure" order="1" sideWeight="0.5031645" side_tool="true" weight="0.21111111" />
       <window_info id="Favorites" order="2" sideWeight="0.5016835" side_tool="true" weight="0.19689542" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.32973805" />
-      <window_info anchor="bottom" id="Terminal" order="1" sideWeight="0.49920633" weight="0.2696456" />
+      <window_info anchor="bottom" id="Terminal" order="1" sideWeight="0.49920633" weight="0.26040062" />
       <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.50079364" side_tool="true" weight="0.30508474" />
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" weight="0.36517718" />
-      <window_info active="true" anchor="bottom" id="Run" order="5" visible="true" weight="0.35439137" />
+      <window_info active="true" anchor="bottom" id="Run" order="5" visible="true" weight="0.33744222" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32973805" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.3990755" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
+      <window_info anchor="bottom" id="Messages" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" x="194" y="67" width="881" height="482" id="Python Console" order="3" type="FLOATING" weight="0.3515873" />
+      <window_info anchor="right" x="452" y="315" width="881" height="482" id="Python Console" order="3" type="FLOATING" weight="0.3515873" />
     </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -529,46 +515,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/mft/mft_entry.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-52">
-          <caret line="30" column="28" selection-start-line="30" selection-start-column="20" selection-end-line="30" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/mft/mft.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="26" column="24" selection-start-line="26" selection-start-column="24" selection-end-line="26" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/img/logo.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/NTFSLogViewerMain.py" />
-    <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/PyInstaller/utils/win32/icon.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="189" column="20" selection-start-line="189" selection-start-column="20" selection-end-line="189" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" column="17" lean-forward="true" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/NTFSLogViewerMain.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" column="22" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParseBCF.py" />
     <entry file="file://$PROJECT_DIR$/libs/ParseBCF/ParseBCF.py" />
     <entry file="file://$PROJECT_DIR$/libs/ParseBCF/rfcparse.py" />
     <entry file="file://$PROJECT_DIR$/libs/ParseRegistry/RegistryParse.py">
@@ -613,24 +559,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-95">
-          <caret line="401" column="59" lean-forward="true" selection-start-line="401" selection-start-column="59" selection-end-line="401" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/ListViewer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="475">
           <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParsePrefetch/prefetch.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-304">
-          <caret line="260" selection-start-line="260" selection-end-line="260" />
         </state>
       </provider>
     </entry>
@@ -691,86 +623,10 @@
     <entry file="file://$PROJECT_DIR$/modules/AnalyzerForKernel.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForOffice.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-95">
-          <caret line="7" column="61" selection-start-line="7" selection-start-column="61" selection-end-line="7" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/WebArtifactDetailViewer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
           <caret line="59" column="19" lean-forward="true" selection-start-line="59" selection-start-column="19" selection-end-line="59" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/JumpListViewer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="13" column="53" selection-start-line="13" selection-start-column="53" selection-end-line="13" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/constant.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="55" column="24" lean-forward="true" selection-start-line="55" selection-start-column="24" selection-end-line="55" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2318">
-          <caret line="124" selection-start-line="124" selection-end-line="124" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4218">
-          <caret line="230" column="58" selection-start-line="230" selection-start-column="58" selection-end-line="230" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
-          <caret line="75" column="29" selection-start-line="75" selection-start-column="29" selection-end-line="75" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForEdge.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForFlash.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForHWP.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="547">
-          <caret line="64" column="20" selection-start-line="64" selection-start-column="20" selection-end-line="64" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForIE.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-66">
-          <caret line="50" column="108" selection-start-line="50" selection-start-column="108" selection-end-line="50" selection-end-column="108" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/LoadingScreen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="33" column="36" lean-forward="true" selection-start-line="33" selection-start-column="36" selection-end-line="33" selection-end-column="36" />
         </state>
       </provider>
     </entry>
@@ -781,38 +637,193 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/qdarkstyle/pyqt5_style_rc.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-27249" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/test2.py" />
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/1076628052/PyQt5/QtCore/Qt.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="137" column="21" selection-start-line="137" selection-start-column="20" selection-end-line="137" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParsePrefetch/prefetch.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="197" column="24" selection-start-line="197" selection-start-column="24" selection-end-line="197" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/mft/mft_entry.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="23" column="8" selection-start-line="23" selection-start-column="8" selection-end-line="23" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/mft/mft.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py" />
     <entry file="file://$PROJECT_DIR$/MonkeySpanner.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="11" column="8" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+        <state relative-caret-position="381">
+          <caret line="35" selection-start-line="35" selection-end-line="35" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MainWindow.py">
+    <entry file="file://$PROJECT_DIR$/modules/UI/LoadingScreen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="20" column="45" selection-start-line="20" selection-start-column="45" selection-end-line="20" selection-end-column="45" />
+        <state relative-caret-position="133">
+          <caret line="11" column="30" selection-start-line="11" selection-start-column="30" selection-end-line="11" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/usn_jrnl/usn_jrnl.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-360">
+          <caret line="63" selection-start-line="63" selection-end-line="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseNTFS/logfile/logfile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="123" selection-start-line="123" selection-end-line="123" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/FilteringWidget.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="551">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
-            <marker date="1542397470687" expanded="true" signature="7410:7687" ph="..." />
+            <element signature="e#0#56#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/modules/constant.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="133" column="66" lean-forward="true" selection-start-line="133" selection-start-column="66" selection-end-line="133" selection-end-column="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="84" column="37" lean-forward="true" selection-start-line="84" selection-start-column="37" selection-end-line="84" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/JumpListViewer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1558">
+          <caret line="13" column="53" selection-start-line="13" selection-start-column="53" selection-end-line="13" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="479" column="55" lean-forward="true" selection-start-line="479" selection-start-column="55" selection-end-line="479" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="37" selection-start-line="37" selection-end-line="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForIE.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="63" selection-start-line="63" selection-end-line="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForHWP.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="64" selection-start-line="64" selection-end-line="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForOffice.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="71" selection-start-line="71" selection-end-line="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForFlash.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/modules/ArtifactAnalyzer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7923">
-          <caret line="423" column="21" selection-start-line="423" selection-start-column="21" selection-end-line="423" selection-end-column="21" />
+        <state relative-caret-position="247">
+          <caret line="241" column="33" selection-start-line="241" selection-start-column="33" selection-end-line="241" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForEdge.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="52" selection-start-line="52" selection-end-line="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-18">
+          <caret line="150" column="17" selection-start-line="150" selection-start-column="17" selection-end-line="150" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <marker date="1542731476972" expanded="true" signature="7228:7229" ph="..." />
+            <marker date="1542731476972" expanded="true" signature="7228:7233" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MainWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="704">
+          <caret line="155" column="28" selection-start-line="155" selection-start-column="28" selection-end-line="155" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+            <marker date="1542643464540" expanded="true" signature="4560:4564" ph="..." />
+            <marker date="1542643464540" expanded="true" signature="4584:4626" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="136" selection-start-line="136" selection-end-line="136" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/NTFSViewer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="189" lean-forward="true" selection-start-line="189" selection-end-line="189" />
+        <state relative-caret-position="229">
+          <caret line="386" lean-forward="true" selection-start-line="386" selection-end-line="386" />
+          <folding>
+            <element signature="e#0#39#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
