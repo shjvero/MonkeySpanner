@@ -2,22 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="23378966-e248-43e1-9817-746140378983" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/MainWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/ParseNTFS/logfile/logfile.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseNTFS/logfile/logfile.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/ParseNTFS/usn_jrnl/usn_jrnl.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseNTFS/usn_jrnl/usn_jrnl.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/AnalyzerForEdge.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/AnalyzerForEdge.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/AnalyzerForHWP.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/AnalyzerForHWP.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/AnalyzerForIE.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/AnalyzerForIE.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/AnalyzerForOffice.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/AnalyzerForOffice.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/ArtifactAnalyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/ArtifactAnalyzer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/MenuBar.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/MenuBar.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/UI/NTFSViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSViewer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/constant.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/constant.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -43,10 +30,10 @@
           <entry key="project.open.time.40" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.6" value="15" />
-          <entry key="project.open.time.7" value="26" />
+          <entry key="project.open.time.7" value="27" />
           <entry key="project.open.time.8" value="17" />
           <entry key="project.open.time.9" value="9" />
-          <entry key="project.opened" value="81" />
+          <entry key="project.opened" value="82" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -54,7 +41,7 @@
           <entry key="gif" value="7" />
           <entry key="jpg" value="3" />
           <entry key="png" value="2" />
-          <entry key="py" value="573" />
+          <entry key="py" value="574" />
           <entry key="txt" value="23" />
         </counts>
       </usages-collector>
@@ -62,20 +49,20 @@
         <counts>
           <entry key="Image" value="12" />
           <entry key="PLAIN_TEXT" value="23" />
-          <entry key="Python" value="573" />
+          <entry key="Python" value="574" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="2536" />
           <entry key="dummy" value="69" />
-          <entry key="py" value="160998" />
+          <entry key="py" value="161153" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="69" />
-          <entry key="Python" value="163534" />
+          <entry key="Python" value="163689" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -89,7 +76,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MonkeySpanner.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="381">
+            <state relative-caret-position="532">
               <caret line="35" selection-start-line="35" selection-end-line="35" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
@@ -101,7 +88,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MainWindow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="704">
+            <state relative-caret-position="2755">
               <caret line="155" column="28" selection-start-line="155" selection-start-column="28" selection-end-line="155" selection-end-column="28" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -115,7 +102,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-18">
+            <state relative-caret-position="2698">
               <caret line="150" column="17" selection-start-line="150" selection-start-column="17" selection-end-line="150" selection-end-column="17" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
@@ -129,20 +116,21 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/UI/NTFSViewer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="386" lean-forward="true" selection-start-line="386" selection-end-line="386" />
+            <state relative-caret-position="438">
+              <caret line="180" column="12" lean-forward="true" selection-start-line="180" selection-start-column="12" selection-end-line="180" selection-end-column="12" />
               <folding>
                 <element signature="e#0#39#0" expanded="true" />
+                <marker date="1542902589806" expanded="true" signature="7474:7599" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py">
+        <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
-              <caret line="136" selection-start-line="136" selection-end-line="136" />
+            <state relative-caret-position="266">
+              <caret line="83" selection-start-line="83" selection-end-line="83" />
             </state>
           </provider>
         </entry>
@@ -150,7 +138,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/modules/ArtifactAnalyzer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
+            <state relative-caret-position="4465">
               <caret line="241" column="33" selection-start-line="241" selection-start-column="33" selection-end-line="241" selection-end-column="33" />
             </state>
           </provider>
@@ -277,7 +265,6 @@
         <option value="$PROJECT_DIR$/libs/ParseNTFS/logfile/logfile.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/usn_jrnl/usn_jrnl.py" />
         <option value="$PROJECT_DIR$/modules/constant.py" />
-        <option value="$PROJECT_DIR$/modules/UI/MenuBar.py" />
         <option value="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" />
         <option value="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" />
         <option value="$PROJECT_DIR$/modules/AnalyzerForIE.py" />
@@ -286,6 +273,7 @@
         <option value="$PROJECT_DIR$/modules/AnalyzerForEdge.py" />
         <option value="$PROJECT_DIR$/modules/ArtifactAnalyzer.py" />
         <option value="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" />
+        <option value="$PROJECT_DIR$/modules/UI/MenuBar.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSViewer.py" />
       </list>
@@ -302,6 +290,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -329,7 +318,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -460,8 +448,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="1320" height="784" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49683544" visible="true" weight="0.20079365" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49683544" visible="true" weight="0.20396826" />
       <window_info id="Structure" order="1" sideWeight="0.5031645" side_tool="true" weight="0.21111111" />
       <window_info id="Favorites" order="2" sideWeight="0.5016835" side_tool="true" weight="0.19689542" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.32973805" />
@@ -469,7 +458,7 @@
       <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.50079364" side_tool="true" weight="0.30508474" />
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" weight="0.36517718" />
-      <window_info anchor="bottom" id="Run" order="5" weight="0.27734977" />
+      <window_info active="true" anchor="bottom" id="Run" order="5" visible="true" weight="0.078582436" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32973805" />
       <window_info anchor="bottom" id="Debug" order="7" weight="0.3990755" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
@@ -672,16 +661,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test.py" />
-    <entry file="file://$PROJECT_DIR$/MonkeySpanner.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="381">
-          <caret line="35" selection-start-line="35" selection-end-line="35" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/LoadingScreen.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
@@ -707,9 +686,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="551">
           <caret line="31" selection-start-line="31" selection-end-line="31" />
-          <folding>
-            <element signature="e#0#56#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -717,13 +693,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
           <caret line="133" column="66" lean-forward="true" selection-start-line="133" selection-start-column="66" selection-end-line="133" selection-end-column="66" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="84" column="37" lean-forward="true" selection-start-line="84" selection-start-column="37" selection-end-line="84" selection-end-column="37" />
         </state>
       </provider>
     </entry>
@@ -772,13 +741,6 @@
     <entry file="file://$PROJECT_DIR$/modules/AnalyzerForFlash.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/ArtifactAnalyzer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="241" column="33" selection-start-line="241" selection-start-column="33" selection-end-line="241" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/AnalyzerForEdge.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
@@ -786,21 +748,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
+    <entry file="file://$PROJECT_DIR$/MonkeySpanner.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-18">
-          <caret line="150" column="17" selection-start-line="150" selection-start-column="17" selection-end-line="150" selection-end-column="17" />
+        <state relative-caret-position="532">
+          <caret line="35" selection-start-line="35" selection-end-line="35" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
-            <marker date="1542731476972" expanded="true" signature="7228:7229" ph="..." />
-            <marker date="1542731476972" expanded="true" signature="7228:7233" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/MainWindow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="704">
+        <state relative-caret-position="2755">
           <caret line="155" column="28" selection-start-line="155" selection-start-column="28" selection-end-line="155" selection-end-column="28" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -810,19 +770,46 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/PrototpyeTable.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2698">
+          <caret line="150" column="17" selection-start-line="150" selection-start-column="17" selection-end-line="150" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+            <marker date="1542731476972" expanded="true" signature="7228:7229" ph="..." />
+            <marker date="1542731476972" expanded="true" signature="7228:7233" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/ArtifactAnalyzer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4465">
+          <caret line="241" column="33" selection-start-line="241" selection-start-column="33" selection-end-line="241" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="136" selection-start-line="136" selection-end-line="136" />
+        <state relative-caret-position="-380">
+          <caret line="27" column="61" selection-start-line="27" selection-start-column="61" selection-end-line="27" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/MenuBar.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="83" selection-start-line="83" selection-end-line="83" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/NTFSViewer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="386" lean-forward="true" selection-start-line="386" selection-end-line="386" />
+        <state relative-caret-position="438">
+          <caret line="180" column="12" lean-forward="true" selection-start-line="180" selection-start-column="12" selection-end-line="180" selection-end-column="12" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
+            <marker date="1542902589806" expanded="true" signature="7474:7599" ph="..." />
           </folding>
         </state>
       </provider>

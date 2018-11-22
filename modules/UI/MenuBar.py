@@ -81,7 +81,6 @@ class MenuBar(QMenuBar):
         import modules.constant as CONSTANT
         self.selected = self.parent().presentSelected
         hashList = []
-        self.selected = CONSTANT.EDGE
         if self.selected == CONSTANT.ADOBE_READER:
             print("Adobe Reader")
             for i in range(18, 24):

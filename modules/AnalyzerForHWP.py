@@ -20,8 +20,6 @@ def getPrototype(env):
         ["CMD.EXE", "POWERSHELL.EXE"],  # PURPLE
         []
     ]
-    target = prefetchList[0] + prefetchList[1]
-
     compared = [
         {
             'channel': "Application.evtx",
@@ -64,12 +62,12 @@ def getPrototype(env):
     t_list.append(Thread(target=getAppCompatCache, args=(prototype, limitedTime,)))
     total = len(t_list)
 
-    print("Total Thread: {}".format(total))
+    # print("Total Thread: {}".format(total))
     for i in range(total):
         t_list[i].start()
     for i in range(total):
         t_list[i].join()
-    print(len(prototype))
+    # print(len(prototype))
     prototype.sort(key=itemgetter(1))
     return prototype
 

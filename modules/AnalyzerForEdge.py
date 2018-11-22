@@ -55,15 +55,14 @@ def getPrototype(env, timeline=None):
 
     t_list.append(Thread(target=getAppCompatCache, args=(prototype, limitedTime,)))
     t_list.append(Thread(target=getPrefetchItems, args=(CONSTANT.EDGE, prototype, prefetchList, limitedTime,)))
-    print(prefetchList[3])
     total = len(t_list)
-    print("Total Thread: {}".format(total))
+    # print("Total Thread: {}".format(total))
     for i in range(total):
         t_list[i].start()
     for i in range(total):
         t_list[i].join()
 
-    print(len(prototype))
+    # print(len(prototype))
     prototype.sort(key=itemgetter(1))
     return True, prototype
 

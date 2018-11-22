@@ -71,12 +71,12 @@ def getPrototype(env, office_msg=None):
     t_list.append(Thread(target=getWebArtifactItems, args=(env, CONSTANT.OFFICE, office_msg, limitedTime, prototype)))
     total = len(t_list)
 
-    print("Total Thread: {}".format(total))
+    # print("Total Thread: {}".format(total))
     for i in range(total):
         t_list[i].start()
     for i in range(total):
         t_list[i].join()
-    print(len(prototype))
+    # print(len(prototype))
     prototype.sort(key=itemgetter(1))
     return True, prototype
 

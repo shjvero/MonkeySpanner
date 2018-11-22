@@ -161,6 +161,7 @@ class NTFSViewer(QWidget):
         self.ntfsTabs = QTabWidget()
         self.ntfsTabs.addTab(self.usnjrnlTable, "$UsnJrnl")
         self.ntfsTabs.addTab(self.logfileTable, "$LogFile")
+        self.ntfsTabs.currentChanged.connect(self.tabChanged)
 
         self.optionsLayout.addWidget(self.groupBox)
         self.optionsLayout.addWidget(self.exportUSNBtn, alignment=Qt.AlignBottom)
@@ -168,6 +169,12 @@ class NTFSViewer(QWidget):
         self.windowLayout.addWidget(self.search)
         self.windowLayout.addWidget(self.ntfsTabs)
         self.setLayout(self.windowLayout)
+
+    def tabChanged(self, idx):
+        if idx:
+            self.groupBox.setDisabled(True)
+        else:
+            self.groupBox.setDisabled(False)
 
     def load(self):
         tArr = []
@@ -324,8 +331,6 @@ class NTFSViewer(QWidget):
 
     def enterPressed(self):
         keyword = self.search.text()
-        print(keyword)
-        print(self.ntfsTabs.currentIndex())
         if self.ntfsTabs.currentIndex():
             if not keyword:
                 for row in range(len(self.details)):
@@ -333,8 +338,8 @@ class NTFSViewer(QWidget):
                         self.logfileTable.showRow(row)
                 return
             items = self.logfileTable.findItems(keyword, Qt.MatchContains)
-            includedRow = list(set([self.logfileTable.row(item) for item in items]))
-            for row in range(len(self.details)):
+            includedRow = [self.logfileTable.row(item) for item in items]
+            for row in range(len(self.logfileTable.rowCount())):
                 if row in includedRow:
                     self.logfileTable.showRow(row)
                 else:
@@ -361,7 +366,6 @@ class NTFSViewer(QWidget):
                 return
             items = self.usnjrnlTable.findItems(keyword, Qt.MatchContains)
             includedRow = list(set([self.usnjrnlTable.row(item) for item in items]))
-            print(includedRow)
             for row in range(len(self.details)):
                 if self.usnjrnlTable.isRowHidden(row):
                     continue
