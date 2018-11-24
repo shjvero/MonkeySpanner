@@ -142,4 +142,5 @@ class MenuBar(QMenuBar):
         QMessageBox.question(self, "Help", "Preparing...", QMessageBox.Ok)
 
     def showAbout(self):
-        QMessageBox.question(self, "Help", "Preparing...", QMessageBox.Ok)
+        from modules.UI.AboutWidget import AboutWidget
+        self.aboutWidget = AboutWidget()

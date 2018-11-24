@@ -1,8 +1,8 @@
 from binascii import hexlify
 from collections import OrderedDict
 
-from libs.ParseNTFS import reverse, reverse_hexlify, reverse_hexlify_int, filetime_to_datetime, FileAttributesFlag, writeout_as_xxd
-from .common import _WIDTH, _INDENT, _BIG_BAR, _SMALL_BAR, _INDENTED_SMALL_BAR, AttributeTypeEnumConverter, AttributeTypeEnum
+from libs.ParseNTFS import filetime_to_datetime, FileAttributesFlag
+from .common import _INDENT, _INDENTED_SMALL_BAR, AttributeTypeEnumConverter, AttributeTypeEnum
 
 class Attribute():
     def __init__(self, header=None, data=None, enum=None):
@@ -22,61 +22,9 @@ class Attribute():
     def all_fields_described(self):
         return ()
 
-    def extra_pairs(self):
-        return ()
-
     @property
     def content_data_hex(self):
         return hexlify(self.content_data)
-
-    def writeout_parsed(self, out):
-        # Top
-        out.write('%s: %s, Typenr.: %s / %s, Name: "%s", %s\n' % ('Attribute',
-                                                            self.header.enum.value,
-                                                            hex(self.header.type),
-                                                            self.header.type,
-                                                            self.header.name,
-                                                            'Resident' if self.header.is_resident else 'Non-resident'))
-        out.write(_SMALL_BAR)
-
-        # Header
-        self.header.writeout_parsed(out)
-
-        # Attribute content. To be overwritten in subclasses
-        if self.header.is_resident:
-            out.write(_INDENTED_SMALL_BAR)
-            self.writeout_content_parsed(out)
-
-        # Hook into the writing function for subclasses to overwrite
-        self.writeout_additional(out)
-
-        # Bottom
-        out.write(_BIG_BAR)
-
-    def writeout_content_parsed(self, out):
-        if len(self.all_fields_described()) == 0 and len(self.extra_pairs()) == 0:
-            out.write('%s%s\n' % (_INDENT, 'Content part not implemented yet\n'))
-            writeout_as_xxd(self.content_data, out)
-        else:
-            for (description, low, high), value, value_raw in self.all_fields_described():
-                out.write('%s%-30s | %-5s | %-18s | %s\n' % (
-                    _INDENT,
-                    description,
-                    str(low) + '-' + str(high),
-                    value,
-                    hexlify(value_raw)))
-
-            if len(self.extra_pairs()) > 0 and len(self.all_fields_described()) > 0:
-                out.write('\n')
-
-            for key, value in self.extra_pairs():
-                out.write('%s%-50s %s\n' % (
-                    _INDENT,
-                    key + ':',
-                    value))
-
-    def writeout_additional(self, out):
-        pass
 
 
 class StandardInformation(Attribute):
@@ -100,154 +48,92 @@ class StandardInformation(Attribute):
                             self.header.content_offset + self.header.content_size]
         self.flags_set = FileAttributesFlag(self.flags)
 
-    ####################################################################################################################
-    # Raw values
-
-    @property
-    def creation_time_raw(self):
-        return self.content_data[0:8]
-
-    @property
-    def file_altered_time_raw(self):
-        return self.content_data[8:16]
-
-    @property
-    def mft_altered_time_raw(self):
-        return self.content_data[16:24]
-
-    @property
-    def file_accessed_time_raw(self):
-        return self.content_data[24:32]
-
-    @property
-    def flags_raw(self):
-        return self.content_data[32:36]
-
-    @property
-    def maximum_number_of_versions_raw(self):
-        return self.content_data[36:40]
-
-    @property
-    def version_number_raw(self):
-        return self.content_data[40:44]
-
-    @property
-    def class_id_raw(self):
-        return self.content_data[44:48]
-
-    @property
-    def owner_id_raw(self):
-        return self.content_data[48:52]
-
-    @property
-    def security_id_raw(self):
-        return self.content_data[52:56]
-
-    @property
-    def quota_charged_raw(self):
-        return self.content_data[56:64]
-
-    @property
-    def usn_raw(self):
-        return self.content_data[64:72]
-
-
-    ####################################################################################################################
-    # Interpreted values
-
     @property
     def creation_time(self):
-        return reverse_hexlify_int(self.creation_time_raw)
+        return "{}".format(self.creation_time_datetime)
 
     @property
     def file_altered_time(self):
-        return reverse_hexlify_int(self.file_altered_time_raw)
+        return "{}".format(self.file_altered_time_datetime)
 
     @property
     def mft_altered_time(self):
-        return reverse_hexlify_int(self.mft_altered_time_raw)
+        return "{}".format(self.mft_altered_time_datetime)
 
     @property
     def file_accessed_time(self):
-        return reverse_hexlify_int(self.file_accessed_time_raw)
+        return "{}".format(self.file_accessed_time_datetime)
 
     @property
     def flags(self):
-        return reverse_hexlify_int(self.flags_raw)
+        return int.from_bytes(self.content_data[32:36], byteorder='little')
 
     @property
     def maximum_number_of_versions(self):
-        return reverse_hexlify_int(self.maximum_number_of_versions_raw)
+        return int.from_bytes(self.content_data[36:40], byteorder='little')
 
     @property
     def version_number(self):
-        return reverse_hexlify_int(self.version_number_raw)
+        return int.from_bytes(self.content_data[40:44], byteorder='little')
 
     @property
     def class_id(self):
-        return reverse_hexlify_int(self.class_id_raw)
+        return int.from_bytes(self.content_data[44:48], byteorder='little')
 
     @property
     def owner_id(self):
-        return reverse_hexlify_int(self.owner_id_raw)
+        return int.from_bytes(self.content_data[48:52], byteorder='little')
 
     @property
     def security_id(self):
-        return reverse_hexlify_int(self.security_id_raw)
+        return int.from_bytes(self.content_data[52:56], byteorder='little')
 
     @property
     def quota_charged(self):
-        return reverse_hexlify_int(self.quota_charged_raw)
+        return int.from_bytes(self.content_data[56:64], byteorder='little')
 
     @property
     def usn(self):
-        return reverse_hexlify_int(self.usn_raw)
-
-
-    ####################################################################################################################
-    # Derived values
+        return int.from_bytes(self.content_data[64:72], byteorder='little')
 
     @property
     def creation_time_datetime(self):
         if not hasattr(self, '_creation_time_datetime'):
-            self._creation_time_datetime = filetime_to_datetime(self.creation_time_raw)
+            self._creation_time_datetime = filetime_to_datetime(self.content_data[0:8])
         return self._creation_time_datetime
 
     @property
     def file_altered_time_datetime(self):
         if not hasattr(self, '_file_altered_time_datetime'):
-            self._file_altered_time_datetime = filetime_to_datetime(self.file_altered_time_raw)
+            self._file_altered_time_datetime = filetime_to_datetime(self.content_data[8:16])
         return self._file_altered_time_datetime
 
     @property
     def mft_altered_time_datetime(self):
         if not hasattr(self, '_mft_altered_time_datetime'):
-            self._mft_altered_time_datetime = filetime_to_datetime(self.mft_altered_time_raw)
+            self._mft_altered_time_datetime = filetime_to_datetime(self.content_data[16:24])
         return self._mft_altered_time_datetime
 
     @property
     def file_accessed_time_datetime(self):
         if not hasattr(self, '_file_accessed_time_datetime'):
-            self._file_accessed_time_datetime = filetime_to_datetime(self.file_accessed_time_raw)
+            self._file_accessed_time_datetime = filetime_to_datetime(self.content_data[24:32])
         return self._file_accessed_time_datetime
 
     @property
     def flags_string(self):
         return '|'.join(self.flags_set.reason_list())
 
-    ####################################################################################################################
-    # Printing
-
     def all_fields_described(self):
         base_tuple = (
-            (StandardInformation.CREATION_TIME, self.creation_time, self.creation_time_raw),
-            (StandardInformation.FILE_ALTERED_TIME, self.file_altered_time, self.file_altered_time_raw),
-            (StandardInformation.MFT_ALTERED_TIME, self.mft_altered_time, self.mft_altered_time_raw),
-            (StandardInformation.FILE_ACCESSED_TIME,self.file_accessed_time, self.file_accessed_time_raw),
-            (StandardInformation.FLAGS, self.flags, self.flags_raw),
-            (StandardInformation.MAXIMUM_NUMBER_OF_VERSIONS, self.maximum_number_of_versions, self.maximum_number_of_versions_raw),
-            (StandardInformation.VERSION_NUMBER, self.version_number, self.version_number_raw),
-            (StandardInformation.CLASS_ID, self.class_id, self.class_id_raw)
+            (StandardInformation.CREATION_TIME, self.creation_time),
+            (StandardInformation.FILE_ALTERED_TIME, self.file_altered_time),
+            (StandardInformation.MFT_ALTERED_TIME, self.mft_altered_time),
+            (StandardInformation.FILE_ACCESSED_TIME,self.file_accessed_time),
+            (StandardInformation.FLAGS, self.flags),
+            (StandardInformation.MAXIMUM_NUMBER_OF_VERSIONS, self.maximum_number_of_versions),
+            (StandardInformation.VERSION_NUMBER, self.version_number),
+            (StandardInformation.CLASS_ID, self.class_id)
         )
 
         if len(self.content_data) == 48:
@@ -261,14 +147,6 @@ class StandardInformation(Attribute):
             )
         else:
             raise Exception('StandardInformation is of length ' + str(len(self.content_data)) + ', case unaccounted for')
-
-    def extra_pairs(self):
-        return (
-            ('creation time datetime', self.creation_time_datetime),
-            ('file altered time datetime', self.file_altered_time_datetime),
-            ('mft altered time datetime', self.mft_altered_time_datetime),
-            ('file accessed time datetime', self.file_accessed_time_datetime)
-        )
 
     @staticmethod
     def format_csv_column_headers():
@@ -289,10 +167,10 @@ class StandardInformation(Attribute):
 
     def format_csv(self):
         return [
-            self.creation_time_datetime,
-            self.file_altered_time_datetime,
-            self.mft_altered_time_datetime,
-            self.file_accessed_time_datetime,
+            self.creation_time,
+            self.file_altered_time,
+            self.mft_altered_time,
+            self.file_accessed_time,
             self.flags_string,
             self.maximum_number_of_versions,
             self.version_number,
@@ -307,18 +185,6 @@ class StandardInformation(Attribute):
 class AttributeList(Attribute):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    ####################################################################################################################
-    # Raw values
-
-    ####################################################################################################################
-    # Interpreted values
-
-    ####################################################################################################################
-    # Derived values
-
-    ####################################################################################################################
-    # Printing
 
 
 class FileName(Attribute):
@@ -342,124 +208,67 @@ class FileName(Attribute):
                             self.header.content_offset + self.header.content_size]
         self.flags_set = FileAttributesFlag(self.flags)
 
-    ####################################################################################################################
-    # Raw values
-
-    @property
-    def parent_directory_file_reference_raw(self):
-        return self.content_data[0:8]
-
-    @property
-    def file_creation_time_raw(self):
-        return self.content_data[8:16]
-
-    @property
-    def file_modification_time_raw(self):
-        return self.content_data[16:24]
-
-    @property
-    def mft_modification_time_raw(self):
-        return self.content_data[24:32]
-
-    @property
-    def file_access_time_raw(self):
-        return self.content_data[32:40]
-
-    @property
-    def file_allocated_size_raw(self):
-        return self.content_data[40:48]
-
-    @property
-    def file_real_size_raw(self):
-        return self.content_data[48:56]
-
-    @property
-    def flags_raw(self):
-        return self.content_data[56:60]
-
-    @property
-    def reparse_value_raw(self):
-        return self.content_data[60:64]
-
-    @property
-    def name_length_raw(self):
-        return self.content_data[64:65]
-
-    @property
-    def namespace_raw(self):
-        return self.content_data[65:66]
-
-    @property
-    def name_raw(self):
-        return self.content_data[66:66+self.name_length*2]
-
-    ####################################################################################################################
-    # Interpreted values
-
     @property
     def parent_directory_file_reference(self):
-        return hexlify(self.parent_directory_file_reference_raw).decode()
+        return hexlify(self.content_data[0:8]).decode()
 
     @property
     def file_creation_time(self):
-        return reverse_hexlify_int(self.file_creation_time_raw)
+        return "{}".format(self.file_creation_time_datetime)
 
     @property
     def file_modification_time(self):
-        return reverse_hexlify_int(self.file_modification_time_raw)
+        return "{}".format(self.file_modification_time_datetime)
 
     @property
     def mft_modification_time(self):
-        return reverse_hexlify_int(self.mft_modification_time_raw)
+        return "{}".format(self.mft_modification_time_datetime)
 
     @property
     def file_access_time(self):
-        return reverse_hexlify_int(self.file_access_time_raw)
+        return "{}".format(self.file_access_time_datetime)
 
     @property
     def file_allocated_size(self):
-        return reverse_hexlify_int(self.file_allocated_size_raw)
+        return int.from_bytes(self.content_data[40:48], byteorder='little')
 
     @property
     def file_real_size(self):
-        return reverse_hexlify_int(self.file_allocated_size_raw)
+        return int.from_bytes(self.content_data[48:56], byteorder='little')
 
     @property
     def flags(self):
-        return reverse_hexlify_int(self.flags_raw)
+        return int.from_bytes(self.content_data[56:60], byteorder='little')
 
     @property
     def reparse_value(self):
-        return reverse_hexlify_int(self.reparse_value_raw)
+        return int.from_bytes(self.content_data[60:64], byteorder='little')
 
     @property
     def name_length(self):
-        return reverse_hexlify_int(self.name_length_raw)
+        return int.from_bytes(self.content_data[64:65], byteorder='little')
 
     @property
     def namespace(self):
-        return reverse_hexlify_int(self.namespace_raw)
+        return int.from_bytes(self.content_data[65:66], byteorder='little')
 
     @property
     def name(self):
-        return self.name_raw.decode('utf-16')
-
-    ####################################################################################################################
-    # Derived values
+        return self.content_data[66:66+self.name_length*2].decode('utf-16')
 
     @property
     def parent_directory_file_reference_sequence_number(self):
-        return reverse_hexlify_int(self.parent_directory_file_reference_raw[6:8])
+        return int.from_bytes(self.content_data[6:8], byteorder='little')
 
     @property
     def parent_directory_file_reference_mft_entry(self):
-        return reverse_hexlify_int(self.parent_directory_file_reference_raw[0:6])
+        return int.from_bytes(self.content_data[0:6], byteorder='little')
 
     @property
     def file_creation_time_datetime(self):
         try:
             if not hasattr(self, '_file_creation_time_datetime'):
-                self._file_creation_time_datetime = filetime_to_datetime(self.file_creation_time_raw)
+                self._file_creation_time_datetime = filetime_to_datetime(self.content_data[8:16])
             return self._file_creation_time_datetime
         except ValueError:
             return None
@@ -468,7 +277,7 @@ class FileName(Attribute):
     def file_modification_time_datetime(self):
         try:
             if not hasattr(self, '_file_modification_time_datetime'):
-                self._file_modification_time_datetime = filetime_to_datetime(self.file_modification_time_raw)
+                self._file_modification_time_datetime = filetime_to_datetime(self.content_data[16:24])
             return self._file_modification_time_datetime
         except ValueError:
             return None
@@ -476,7 +285,7 @@ class FileName(Attribute):
     def mft_modification_time_datetime(self):
         try:
             if not hasattr(self, '_mft_modification_time_datetime'):
-                self._mft_modification_time_datetime = filetime_to_datetime(self.mft_modification_time_raw)
+                self._mft_modification_time_datetime = filetime_to_datetime(self.content_data[24:32])
             return self._mft_modification_time_datetime
         except ValueError:
             return None
@@ -484,7 +293,7 @@ class FileName(Attribute):
     def file_access_time_datetime(self):
         try:
             if not hasattr(self, '_file_access_time_datetime'):
-                self._file_access_time_datetime = filetime_to_datetime(self.file_access_time_raw)
+                self._file_access_time_datetime = filetime_to_datetime(self.content_data[32:40])
             return self._file_access_time_datetime
         except ValueError:
             return None
@@ -493,33 +302,20 @@ class FileName(Attribute):
     def flags_string(self):
         return '|'.join(self.flags_set.reason_list())
 
-    ####################################################################################################################
-    # Printing
-
     def all_fields_described(self):
         return (
-            (FileName.PARENT_DIRECTORY_FILE, self.parent_directory_file_reference, self.parent_directory_file_reference_raw),
-            (FileName.FILE_CREATION_TIME, self.file_creation_time, self.file_creation_time_raw),
-            (FileName.FILE_MODIFICATION_TIME, self.file_modification_time, self.file_modification_time_raw),
-            (FileName.MFT_MODIFICATION_TIME, self.mft_modification_time, self.file_modification_time_raw),
-            (FileName.FILE_ACCESS_TIME, self.file_access_time, self.file_access_time_raw),
-            (FileName.FILE_ALLOCATED_SIZE, self.file_allocated_size, self.file_allocated_size_raw),
-            (FileName.FILE_REAL_SIZE, self.file_real_size, self.file_real_size_raw),
-            (FileName.FLAGS, self.flags, self.flags_raw),
-            (FileName.REPARSE_VALUE, self.reparse_value, self.reparse_value_raw),
-            (FileName.NAME_LENGTH, self.name_length, self.name_length_raw),
-            (FileName.NAMESPACE, self.namespace, self.namespace_raw),
-            (FileName.NAME, self.name, self.name_raw)
-        )
-
-    def extra_pairs(self):
-        return (
-            ('parent directory file reference sequence number', self.parent_directory_file_reference_sequence_number),
-            ('parent_directory_file_reference_mft entry', self.parent_directory_file_reference_mft_entry),
-            ('file creation time datetime', self.file_creation_time_datetime),
-            ('file modified time datetime', self.file_modification_time_datetime),
-            ('mft modified time datetime', self.mft_modification_time_datetime),
-            ('file access time datetime', self.file_access_time_datetime)
+            (FileName.PARENT_DIRECTORY_FILE, self.parent_directory_file_reference),
+            (FileName.FILE_CREATION_TIME, self.file_creation_time),
+            (FileName.FILE_MODIFICATION_TIME, self.file_modification_time),
+            (FileName.MFT_MODIFICATION_TIME, self.mft_modification_time),
+            (FileName.FILE_ACCESS_TIME, self.file_access_time),
+            (FileName.FILE_ALLOCATED_SIZE, self.file_allocated_size),
+            (FileName.FILE_REAL_SIZE, self.file_real_size),
+            (FileName.FLAGS, self.flags),
+            (FileName.REPARSE_VALUE, self.reparse_value),
+            (FileName.NAME_LENGTH, self.name_length),
+            (FileName.NAMESPACE, self.namespace),
+            (FileName.NAME, self.name)
         )
 
     @staticmethod
@@ -542,10 +338,10 @@ class FileName(Attribute):
 
     def format_csv(self):
         return [
-            self.file_creation_time_datetime,
-            self.file_modification_time_datetime,
-            self.mft_modification_time_datetime,
-            self.file_access_time_datetime,
+            self.file_creation_time,
+            self.file_modification_time,
+            self.mft_modification_time,
+            self.file_access_time,
             self.file_allocated_size,
             self.file_real_size,
             self.flags_string,
@@ -562,76 +358,20 @@ class ObjectID(Attribute):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    ####################################################################################################################
-    # Raw values
-
-    ####################################################################################################################
-    # Interpreted values
-
-    ####################################################################################################################
-    # Derived values
-
-    ####################################################################################################################
-    # Printing
-
 
 class VolumeName(Attribute):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    ####################################################################################################################
-    # Raw values
-
-    ####################################################################################################################
-    # Interpreted values
-
-    ####################################################################################################################
-    # Derived values
-
-    ####################################################################################################################
-    # Printing
 
 
 class VolumeInformation(Attribute):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    ####################################################################################################################
-    # Raw values
-
-    ####################################################################################################################
-    # Interpreted values
-
-    ####################################################################################################################
-    # Derived values
-
-    ####################################################################################################################
-    # Printing
-
-
 class Data(Attribute):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    ####################################################################################################################
-    # Raw values
-
-    ####################################################################################################################
-    # Interpreted values
-
-    ####################################################################################################################
-    # Derived values
-
-    ####################################################################################################################
-    # Printing
-
-    '''
-    def extra_pairs(self):
-        if self.header.is_resident:
-            return (('data hex', self.content_data_hex),)
-        else:
-            return ()
-    '''
 
 class NodeHeader():
     OFFSET_START_INDEX_ENTRY_LIST   = ('offset start index entry list', 0, 3)
@@ -640,68 +380,34 @@ class NodeHeader():
     FLAGS                           = ('flags', 12, 15)
 
     def __init__(self, data):
-        # 16 bytes of note header data
         self.data = data
-
-    ####################################################################################################################
-    # Raw values
-
-    @property
-    def offset_start_index_entry_list_raw(self):
-        return self.data[0:4]
-
-    @property
-    def offset_to_end_used_portion_raw(self):
-        return self.data[4:8]
-
-    @property
-    def offset_to_end_allocation_raw(self):
-        return self.data[8:12]
-
-    @property
-    def flags_raw(self):
-        return self.data[12:16]
-
-    ####################################################################################################################
-    # Interpreted values
 
     @property
     def offset_start_index_entry_list(self):
-        return reverse_hexlify_int(self.offset_start_index_entry_list_raw)
+        return int.from_bytes(self.data[0:4], byteorder='little')
 
     @property
     def offset_to_end_used_portion(self):
-        return reverse_hexlify_int(self.offset_to_end_used_portion_raw)
+        return int.from_bytes(self.data[4:8], byteorder='little')
 
     @property
     def offset_to_end_allocation(self):
-        return reverse_hexlify_int(self.offset_to_end_allocation_raw)
+        return int.from_bytes(self.data[8:12], byteorder='little')
 
     @property
     def flags(self):
-        return reverse_hexlify_int(self.flags_raw)
-
-    ####################################################################################################################
-    # Derived values
+        return int.from_bytes(self.data[12:16], byteorder='little')
 
     @property
     def has_children(self):
         return bool(self.flags)
 
-    ####################################################################################################################
-    # Printing
-
     def all_fields_described(self):
         return (
-            (NodeHeader.OFFSET_START_INDEX_ENTRY_LIST, self.offset_start_index_entry_list, self.offset_start_index_entry_list_raw),
-            (NodeHeader.OFFSET_TO_END_USED_PORTION, self.offset_to_end_used_portion, self.offset_to_end_used_portion_raw),
-            (NodeHeader.OFFSET_TO_END_ALLOCATION, self.offset_to_end_allocation, self.offset_to_end_allocation_raw),
-            (NodeHeader.FLAGS, self.flags, self.flags_raw)
-        )
-
-    def extra_pairs(self):
-        return (
-            ('has children', 'Yes' if self.has_children else 'No'),
+            (NodeHeader.OFFSET_START_INDEX_ENTRY_LIST, self.offset_start_index_entry_list),
+            (NodeHeader.OFFSET_TO_END_USED_PORTION, self.offset_to_end_used_portion),
+            (NodeHeader.OFFSET_TO_END_ALLOCATION, self.offset_to_end_allocation),
+            (NodeHeader.FLAGS, self.flags)
         )
 
 
@@ -713,48 +419,24 @@ class IndexEntry():
 
     def __init__(self, data):
         # data is possiby larger than this entry + content actually is. We don't know until we parse this entry.
-        entry_length = reverse_hexlify_int(data[0:8])
+        entry_length = int.from_bytes(data[0:8], byteorder='little')
         self.data = data[0 : entry_length]
         self.content_data = self.data[16 : 16 + self.length_of_content]
 
-    ####################################################################################################################
-    # Raw values
-
-    @property
-    def first_eight_raw(self):
-        return self.data[0:8]
-
-    @property
-    def length_of_this_entry_raw(self):
-        return self.data[8:10]
-
-    @property
-    def length_of_content_raw(self):
-        return self.data[10:12]
-    @property
-    def flags_raw(self):
-        return self.data[12:16]
-
-    ####################################################################################################################
-    # Interpreted values
-
     @property
     def first_eight(self):
-        return reverse_hexlify_int(self.first_eight_raw)
+        return int.from_bytes(self.data[0:8], byteorder='little')
 
     @property
     def length_of_this_entry(self):
-        return reverse_hexlify_int(self.length_of_this_entry_raw)
+        return int.from_bytes(self.data[8:10], byteorder='little')
 
     @property
     def length_of_content(self):
-        return reverse_hexlify_int(self.length_of_content_raw)
+        return int.from_bytes(self.data[10:12], byteorder='little')
     @property
     def flags(self):
-        return reverse_hexlify_int(self.flags_raw)
-
-    ####################################################################################################################
-    # Derived values
+        return int.from_bytes(self.data[12:16], byteorder='little')
 
     @property
     def child_node_exists(self):
@@ -764,21 +446,12 @@ class IndexEntry():
     def last_entry_in_list(self):
         return bool(self.flags & 2)
 
-    ####################################################################################################################
-    # Printing
-
     def all_fields_described(self):
         return (
-            (self.FIRST_EIGHT, self.first_eight, self.first_eight_raw),
-            (self.LENGTH_OF_THIS_ENTRY, self.length_of_this_entry, self.length_of_this_entry_raw),
-            (self.LENGTH_OF_CONTENT, self.length_of_content, self.length_of_content_raw),
-            (self.FLAGS, self.flags, self.flags_raw)
-        )
-
-    def extra_pairs(self):
-        return (
-            ('child node exists', 'Yes' if self.child_node_exists else 'No'),
-            ('last entry in list', 'Yes' if self.last_entry_in_list else 'No')
+            (self.FIRST_EIGHT, self.first_eight),
+            (self.LENGTH_OF_THIS_ENTRY, self.length_of_this_entry),
+            (self.LENGTH_OF_CONTENT, self.length_of_content),
+            (self.FLAGS, self.flags)
         )
 
 
@@ -798,26 +471,13 @@ class DirectoryIndexEntry(IndexEntry):
         super().__init__(*args, **kwargs)
         self.content = FileName(header=HeaderStub(attribute_length=self.length_of_content, enum=AttributeTypeEnum.FILE_NAME), data=self.content_data)
 
-    ####################################################################################################################
-    # Derived values
-
     @property
     def file_reference_mft_entry(self):
-        return reverse_hexlify_int(self.first_eight_raw[0:6])
+        return int.from_bytes(self.data[0:6], byteorder='little')
 
     @property
     def file_reference_sequence_number(self):
-        return reverse_hexlify_int(self.first_eight_raw[6:8])
-
-    ####################################################################################################################
-    # Printing
-
-    def extra_pairs(self):
-        return (
-            ('file reference mft entry', self.file_reference_mft_entry),
-            ('file reference sequence number', self.file_reference_sequence_number)
-        ) + super().extra_pairs()
-
+        return int.from_bytes(self.data[6:8], byteorder='little')
 
 
 class IndexRoot(Attribute):
@@ -851,69 +511,36 @@ class IndexRoot(Attribute):
                 offset += entry.length_of_this_entry
                 more_entries = not entry.last_entry_in_list
 
-    ####################################################################################################################
-    # Raw values
-
-    @property
-    def type_of_attribute_in_index_raw(self):
-        return self.content_data[0:4]
-
-    @property
-    def collation_sorting_rule_raw(self):
-        return self.content_data[4:8]
-
-    @property
-    def size_of_each_record_bytes_raw(self):
-        return self.content_data[8:12]
-
-    @property
-    def size_of_each_record_clusters_raw(self):
-        return self.content_data[12:13]
-
-    ####################################################################################################################
-    # Interpreted values
-
     @property
     def type_of_attribute_in_index(self):
-        return reverse_hexlify_int(self.type_of_attribute_in_index_raw)
+        return int.from_bytes(self.content_data[0:4], byteorder='little')
 
     @property
     def collation_sorting_rule(self):
-        return reverse_hexlify_int(self.collation_sorting_rule_raw)
+        return int.from_bytes(self.content_data[4:8], byteorder='little')
 
     @property
     def size_of_each_record_bytes(self):
-        return reverse_hexlify_int(self.size_of_each_record_bytes_raw)
+        return int.from_bytes(self.content_data[8:12], byteorder='little')
 
     @property
     def size_of_each_record_clusters(self):
-        return reverse_hexlify_int(self.size_of_each_record_clusters_raw)
-
-    ####################################################################################################################
-    # Derived values
+        return int.from_bytes(self.content_data[12:13], byteorder='little')
 
     @property
     def type_of_attribute_in_index_enum(self):
         return AttributeTypeEnumConverter.from_identifier(self.type_of_attribute_in_index)
 
-    ####################################################################################################################
-    # Printing
 
     def all_fields_described(self):
         return (
-            (IndexRoot.TYPE_OF_ATTRIBUTE_IN_INDEX, self.type_of_attribute_in_index, self.type_of_attribute_in_index_raw),
-            (IndexRoot.COLLATION_SORTING_RULE, self.collation_sorting_rule, self.collation_sorting_rule_raw),
-            (IndexRoot.SIZE_OF_EACH_RECORD_BYTES, self.size_of_each_record_bytes, self.size_of_each_record_bytes_raw),
-            (IndexRoot.SIZE_OF_EACH_RECORD_CLUSTERS, self.size_of_each_record_clusters, self.size_of_each_record_clusters_raw)
+            (IndexRoot.TYPE_OF_ATTRIBUTE_IN_INDEX, self.type_of_attribute_in_index),
+            (IndexRoot.COLLATION_SORTING_RULE, self.collation_sorting_rule),
+            (IndexRoot.SIZE_OF_EACH_RECORD_BYTES, self.size_of_each_record_bytes),
+            (IndexRoot.SIZE_OF_EACH_RECORD_CLUSTERS, self.size_of_each_record_clusters)
         ) + (
             (('-- Node header:', '', ''), '', b''),
         ) +self.node_header.all_fields_described()
-
-    def extra_pairs(self):
-        return (
-            ('type of attribute in index enum', self.type_of_attribute_in_index_enum.value),
-            ('-- Node header', '')
-        ) + self.node_header.extra_pairs()
 
     def writeout_additional(self, out):
         for vals1 in self.entries.values():
@@ -941,133 +568,37 @@ class IndexAllocation(Attribute):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    ####################################################################################################################
-    # Raw values
-
-    ####################################################################################################################
-    # Interpreted values
-
-    ####################################################################################################################
-    # Derived values
-
-    ####################################################################################################################
-    # Printing
-
 
 class Bitmap(Attribute):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    ####################################################################################################################
-    # Raw values
-
-    ####################################################################################################################
-    # Interpreted values
-
-    ####################################################################################################################
-    # Derived values
-
-    ####################################################################################################################
-    # Printing
 
 
 class ReparsePoint(Attribute):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    ####################################################################################################################
-    # Raw values
-
-    ####################################################################################################################
-    # Interpreted values
-
-    ####################################################################################################################
-    # Derived values
-
-    ####################################################################################################################
-    # Printing
-
 
 class EAInformation(Attribute):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    ####################################################################################################################
-    # Raw values
-
-    ####################################################################################################################
-    # Interpreted values
-
-    ####################################################################################################################
-    # Derived values
-
-    ####################################################################################################################
-    # Printing
 
 
 class EA(Attribute):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    ####################################################################################################################
-    # Raw values
-
-    ####################################################################################################################
-    # Interpreted values
-
-    ####################################################################################################################
-    # Derived values
-
-    ####################################################################################################################
-    # Printing
-
 
 class PropertySet(Attribute):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    ####################################################################################################################
-    # Raw values
-
-    ####################################################################################################################
-    # Interpreted values
-
-    ####################################################################################################################
-    # Derived values
-
-    ####################################################################################################################
-    # Printing
 
 
 class LoggedUtilityStream(Attribute):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    ####################################################################################################################
-    # Raw values
-
-    ####################################################################################################################
-    # Interpreted values
-
-    ####################################################################################################################
-    # Derived values
-
-    ####################################################################################################################
-    # Printing
-
 
 class UnknownAttribute(Attribute):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-    ####################################################################################################################
-    # Raw values
-
-    ####################################################################################################################
-    # Interpreted values
-
-    ####################################################################################################################
-    # Derived values
-
-    ####################################################################################################################
-    # Printing

@@ -1,8 +1,7 @@
-import os, sys, csv
-from binascii import hexlify
-import os, sys
+import os
 
-from libs.ParseNTFS import reverse, reverse_hexlify, reverse_hexlify_int, filetime_to_datetime, FileAttributesFlag
+from binascii import hexlify
+from libs.ParseNTFS import reverse_hexlify_int, filetime_to_datetime, FileAttributesFlag
 
 class UsnJrnl():
     def __init__(self, file):
@@ -16,10 +15,9 @@ class UsnJrnl():
                 pos = f.tell()
 
                 bytes = f.read(4)
-                if len(bytes) == 0:
-                    # EOF
+                if len(bytes) == 0:     # EOF
                     break
-                size = reverse_hexlify_int(bytes)
+                size = int.from_bytes(bytes, byteorder='little')
                 if size == 0:
                     # We've hit a bunch of zeroes. Complete this useless line en start looping.
                     # The file often contains blobs of zeroes as it consists of multiple runs, each padded with zeroes
@@ -37,7 +35,7 @@ class UsnJrnl():
                             break
 
                     # Done skipping rows of zeroes.
-                    size = reverse_hexlify_int(line[0:4])
+                    size = int.from_bytes(line[0:4], byteorder='little')
 
                     # Reset from reading the last line
                     f.seek(-16, os.SEEK_CUR)
@@ -58,9 +56,6 @@ class UsnJrnl():
         for record in self.records[0:10]:
             record.print()
 
-    def print_statistics(self):
-        print('count:', len(self.records))
-
     @property
     def grouped_by_entry(self):
         result = {}
@@ -75,13 +70,12 @@ class UsnJrnl():
 
 class UsnRecord():
     def __new__(cls, data, offset_bytes):
-        major_version = reverse_hexlify_int(data[4:6])
+        major_version = int.from_bytes(data[4:6], byteorder='little')
         if major_version == 2:
             return UsnRecordV2(data, offset_bytes)
 
 
 class UsnRecordBase():
-    # Fields that are shared by both the USN record version 2 and 3 (4 is unknown at this moment)
     RECORD_LENGTH = ('record length', 0, 3)
     MAJOR_VERSION = ('major version', 4, 5)
     MINOR_VERSION = ('minor version', 6, 7)
@@ -134,8 +128,6 @@ class UsnRecordBase():
         (0x80000000, 'CLOSE')
     )
 
-
-
     # Source info
     USN_SOURCE_DATA_MANAGEMENT = 0x00000001
     USN_SOURCE_AUXILARY_DATA = 0x00000002
@@ -146,9 +138,6 @@ class UsnRecordBase():
         self.data = data[0:record_length]
         self.offset_bytes = offset_bytes
         self.file_attributes_object = FileAttributesFlag(self.file_attributes)
-
-    ####################################################################################################################
-    # Raw values
 
     @property
     def record_length_raw(self):
@@ -335,28 +324,6 @@ class UsnRecordBase():
         ]
         return formatted
 
-    def print(self):
-        _INDENT = '    '
-        for (description, low, high), value, value_raw in self.all_fields_described():
-            print(_INDENT + '%-26s | %-5s | %-18s | %s' % (description, str(low) + '-' + str(high), value, hexlify(value_raw)))
-        #print()
-        #print(_INDENT + '%-47s | %s' % ('parent directory file reference sequence number', self.parent_directory_file_reference_sequence_number))
-        #print(_INDENT + '%-47s | %s' % ('parent_directory_file_reference_mft entry', self.parent_directory_file_reference_mft_entry))
-        #print(_INDENT + '%-47s | %s' % ('file creation time datetime', self.file_creation_time_datetime))
-        #print(_INDENT + '%-47s | %s' % ('file modified time datetime', self.file_modification_time_datetime))
-        #print(_INDENT + '%-47s | %s' % ('mft modified time datetime', self.mft_modification_time_datetime))
-        #print(_INDENT + '%-47s | %s' % ('file access time datetime', self.file_access_time_datetime))
-        #self.print_attribute_bottom()
-    def print(self):
-        pass
-
-    def writeout_parsed(self, out, indent=0):
-        for (description, low, high), value, value_raw in self.all_fields_described():
-            out.write('%s%-26s | %-5s | %-18s | %s\n' % (indent * ' ', description, str(low) + '-' + str(high), value, hexlify(value_raw)))
-        for key, val in self.extra_pairs():
-            out.write('%-15s%s\n' % (key + ':', val))
-
-
 
 class UsnRecordV2(UsnRecordBase):
     # Fields that, although shared with USN record version 3, are in different positions.
@@ -485,14 +452,6 @@ class UsnRecordV2(UsnRecordBase):
             (UsnRecordV2.FILE_NAME, self.file_name, self.file_name_length_raw)
         )
 
-    def extra_pairs(self):
-        return super().extra_pairs() + (
-            ('frme', self.file_reference_mft_entry),
-            ('frsn', self.file_reference_sequence_number),
-            ('pfrme', self.parent_file_reference_mft_entry),
-            ('pfrsn', self.parent_file_reference_sequence_number)
-        )
-
 
 class UsnRecordV3(UsnRecordBase):
     # Fields that, although shared with USN record version 3, are in different positions.
@@ -561,10 +520,6 @@ class UsnRecordV3(UsnRecordBase):
         return self.data[self.file_name_offset:self.file_name_length]
 
     ####################################################################################################################
-    # Interpreted values
-
-
-    ####################################################################################################################
     # Derived values
 
     @property
@@ -579,23 +534,7 @@ class UsnRecordV3(UsnRecordBase):
     @property
     def file_reference_mft_entry(self): raise NotImplementedError('Not sure if and how to implement this.')
 
-    ####################################################################################################################
-    # Printing
-
-
 class UsnRecordV4(UsnRecordBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         raise NotImplementedError("There's no information on V4 available yet.")
-
-    ####################################################################################################################
-    # Raw values
-
-    ####################################################################################################################
-    # Interpreted values
-
-    ####################################################################################################################
-    # Derived values
-
-    ####################################################################################################################
-    # Printing

@@ -1,8 +1,3 @@
-import struct
-from binascii import hexlify
-from libs.ParseNTFS import reverse, reverse_hexlify
-
-
 class BootSector():
     OEM_NAME = 'OEM name'
     BYTES_PER_SECTOR = 'bytes per sector'
@@ -12,10 +7,10 @@ class BootSector():
     MFT_MIRROR_STARTING_CLUSTER = 'mft mirror starting cluster'
     MFT_ENTRY_SIZE = 'mft entry size'
     SERIAL_NUMBER = 'serial number'
-
     CLUSTER_SIZE = 'cluster size'
+    SIGNATURE = "Signature"
 
-    def __init__(self, image_name=None, offset_sectors=None, offset_bytes=None, sector_size=None):
+    def __init__(self, image_name=None, offset_sectors=None, offset_bytes=None, sector_size=512):
         self.image_name = image_name
         if offset_sectors is not None:
             self.offset_bytes = offset_sectors * sector_size
@@ -28,69 +23,29 @@ class BootSector():
             f.seek(self.offset_bytes)
             self.data = f.read(512)
 
-    ####################################################################################################################
-    # Raw values
-
-    @property
-    def oem_name_raw(self):
-        return self.data[3:11]
-
-    @property
-    def bytes_per_sector_raw(self):
-        return self.data[11:13]
-
-    @property
-    def sectors_per_cluster_raw(self):
-        return self.data[13:14]
-
-    @property
-    def total_number_of_sectors_raw(self):
-        return self.data[40:48]
-
-    @property
-    def mft_starting_cluster_raw(self):
-        return self.data[48:56]
-
-    @property
-    def mft_mirror_starting_cluster_raw(self):
-        return self.data[56:64]
-
-    @property
-    def mft_entry_size_raw(self):
-        return self.data[64:65]
-
-    @property
-    def serial_number_raw(self):
-        return self.data[72:80]
-
-    ####################################################################################################################
-    # Interpreted values
-
     @property
     def oem_name(self):
-        return self.oem_name_raw.decode()
+        return self.data[3:11].decode("unicode-escape")
 
     @property
     def bytes_per_sector(self):
-        return int(reverse_hexlify(self.bytes_per_sector_raw), 16)
+        return int.from_bytes(self.data[11:13], byteorder='little')
 
     @property
     def sectors_per_cluster(self):
-        return int(hexlify(self.sectors_per_cluster_raw), 16)
+        return int.from_bytes(self.data[13:14], byteorder='little')
 
     @property
     def total_number_of_sectors(self):
-        return int(reverse_hexlify(self.total_number_of_sectors_raw), 16)
+        return int.from_bytes(self.data[40:48], byteorder='little')
 
     @property
     def mft_starting_cluster(self):
-        # Value resembles the amount of clusters from the start of the partition
-        return int(reverse_hexlify(self.mft_starting_cluster_raw), 16)
+        return int.from_bytes(self.data[48:56], byteorder='little')
 
     @property
     def mft_mirror_starting_cluster(self):
-        # Value resembles the amount of clusters from the start of the partition
-        return int(reverse_hexlify(self.mft_mirror_starting_cluster_raw), 16)
+        return int.from_bytes(self.data[56:64], byteorder='little')
 
     @property
     def mft_entry_size(self):
@@ -98,18 +53,19 @@ class BootSector():
         #   - positive: it shows the number of clusters that are used for each entry
         #   - negative: it represents the base-2 log of the number of bytes.
         # it's negative when the size of a cluster is larger than a signle MFT entry
-        val = struct.unpack('b', self.mft_entry_size_raw)[0]
+        val = int.from_bytes(self.data[64:65], byteorder='little')
         if val > 0:
             return val * self.cluster_size
         else:
-            return 2**abs(val)
+            return 2 ** abs(val)
 
     @property
     def serial_number(self):
-        return reverse_hexlify(self.serial_number_raw).decode()
+        return int.from_bytes(self.data[72:80], byteorder='little')
 
-    ####################################################################################################################
-    # Derived values
+    @property
+    def signature(self):
+        return int.from_bytes(self.data[510:512], byteorder='little')
 
     @property
     def cluster_size(self):
@@ -118,9 +74,6 @@ class BootSector():
     @property
     def byte_offset(self):
         return self.offset_bytes
-
-    ####################################################################################################################
-    # Printing
 
     def all_fields_described(self):
         return (
@@ -132,13 +85,17 @@ class BootSector():
             (BootSector.MFT_MIRROR_STARTING_CLUSTER, self.mft_mirror_starting_cluster),
             (BootSector.MFT_ENTRY_SIZE, self.mft_entry_size),
             (BootSector.SERIAL_NUMBER, self.serial_number),
+            (BootSector.SIGNATURE, self.signature),
         )
 
-    def print(self):
-        print("Directly taken from the boot sector:")
-        print("-----------------------------------------------------")
+    def getResult(self):
+        if self.signature != 43605:
+            return False, "This Partition was damaged."
+        contents = "Directly taken from the boot sector:\n"
+        contents += "-----------------------------------------------------\n"
         for description, value in self.all_fields_described():
-            print('\t%-30s"%s"' % (description + ':', value))
-        print("Derived from the boot sector:")
-        print("-----------------------------------------------------")
-        print('\t%-30s"%s"' % (BootSector.CLUSTER_SIZE + ':', self.cluster_size))
+            contents += '%-30s%s\n' % (description + ':', value)
+        contents += "Derived from the boot sector:\n"
+        contents += "-----------------------------------------------------\n"
+        contents += '%-30s"%s"' % (BootSector.CLUSTER_SIZE + ':', self.cluster_size)
+        return True, contents

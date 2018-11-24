@@ -31,8 +31,6 @@ class LogFile:
                 os.makedirs(dump_path)
             self.dump_dir = dump_path
 
-    ####################################################################################################################
-    # class functions
     def parse_all(self, num=None):
             if num: num += 3
             with open(self.file_name, 'rb') as f:
@@ -107,20 +105,31 @@ class LogFile:
 
     def print_transactions(self):
         for key, transaction in self.transactions.items():
-            # print('Correct', key, [(h.previous_lsn, h.this_lsn, c.deriv_redo_operation_type, c.deriv_undo_operation_type) for h, c in transaction])
             print(transaction.format_string())
 
     def print_faulty_transactions(self):
         for transaction in self.faulty_transactions:
-            # print('Correct', key, [(h.previous_lsn, h.this_lsn, c.deriv_redo_operation_type, c.deriv_undo_operation_type) for h, c in transaction])
             print(transaction.format_string())
 
-    def export_parsed(self, export_file=None):
+
+    def export_csv(self, export_file = None):
+        if not self.rcrd_records:
+            return
+        first_rcrd = self.rcrd_records[0]
+        header = first_rcrd.formatted_csv_column_headers
+        header.extend(first_rcrd.lsn_header_csv_columns)
+        header.extend(first_rcrd.lsn_data_csv_columns)
         if export_file:
             with open(export_file, 'w') as f:
-                self.writeout_parsed(f)
+                csv_writer = csv.writer(f)
+                csv_writer.writerow(header)
+                for rcrd in self.rcrd_records:
+                    rcrd.export_csv(csv_writer)
         else:
-            self.writeout_parsed(sys.stdout)
+            csv_writer = csv.writer(sys.stdout)
+            csv_writer.writerow(header)
+            for rcrd in self.rcrd_records:
+                    rcrd.export_csv(csv_writer)
 
     def export_transactions(self, export_file=None):
         if not self.rcrd_records:
@@ -164,14 +173,6 @@ class LogFile:
                     tup = self.lsns[lsn]
                     self.export_parsed_lsn(tup=tup, out=sys.stdout)
 
-    def export_parsed_lsn(self, tup=None, out=None):
-        lsn_header = tup[0]
-        lsn_data = tup[1]
-        lsn_header.writeout_parsed(out)
-        lsn_data.writeout_parsed(out)
-        lsn_data.writeout_operation_data(out)
-        lsn_data.writeout_itrprt_op_data(out)
-
     # add if page has valid page header
     def add_if_valid(self, page):
         if page.header.magic_number != 'RCRD':
@@ -187,10 +188,6 @@ class LogFile:
                 self.this_lsn_index[lsn_header.this_lsn] = (lsn_header, lsn_content)
                 self.lsns[lsn_header.this_lsn] = (lsn_header, lsn_content)
 
-            #if page.connector_prev_lsn:
-            #    self.prev_lsn_index[page.connector_prev_lsn] = page
-            #self.last_lsn_index[page.connector_last_lsn] = page
-
     # keep count of the number of pages and total entries
     def keep_count(self, page):
         self.page_count += 1
@@ -202,27 +199,3 @@ class LogFile:
             self.error_start_from_offset += 1
         elif error > 1:
             self.error_discard_data += 1
-
-    ####################################################################################################################
-    # PRINT functions
-    def writeout_parsed(self, out):
-        out.write('\n'
-                  'Restart Area ####################################################################################\n')
-        for rstr in self.rstr_records:
-            rstr.writeout_parsed(out)
-        out.write('\n'
-                  'Logging Area ####################################################################################\n')
-        for buff in self.buff_records:
-            buff.writeout_parsed(out)
-        out.write('\n'
-                  'Actual records ##################################################################################\n')
-        for rcrd in self.rcrd_records:
-            # rcrd.writeout_parsed(out)
-            rcrd.writeout_all(out)
-
-    def print_performance(self):
-        print("Total invalid pages          : %7i" % self.invalid_page_count)
-        print("Total valid pages            : %7i" % self.page_count)
-        print("  errors -> start from offset: %7i" % self.error_start_from_offset)
-        print("  errors -> discard all data : %7i" % self.error_discard_data)
-        print("Total entries                : %7i" % self.total_entries)

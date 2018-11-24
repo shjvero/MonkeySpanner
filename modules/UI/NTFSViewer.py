@@ -1,12 +1,13 @@
 from PyQt5.QtGui import QCursor, QColor
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtWidgets import *
-from libs.ParseNTFS import MFT, LogFile, UsnJrnl, AttributeTypeEnum
+from libs.ParseNTFS import MFT, LogFile, UsnJrnl, AttributeTypeEnum, BootSector
 import datetime
 from threading import Thread
 
-
 class NTFSViewer(QWidget):
+    USNJRNL = 1
+    LOGFILE = 2
     ONLY_SHOW = 1
     ONLY_HIDE = 2
     SIMPLE_SHOW = 3
@@ -14,8 +15,6 @@ class NTFSViewer(QWidget):
     DELETE_KEYWORD = "FILE_DELETE"
     EXTEND_KEYWORD = "DATA_EXTEND"
     OVERWRITE_KEYWORD = "DATA_OVERWRITE"
-    USNJRNL = 1
-    LOGFILE = 2
 
     def __init__(self):
         QWidget.__init__(self)
@@ -23,6 +22,7 @@ class NTFSViewer(QWidget):
         self.ntfsDialog = NTFSLogFileDialog(self)
         self.ntfsDialog.submitBtn.clicked.connect(self.ready)
         self.selectedBtnNum = 0
+        self.isCarvingAllowed = False
         self.usnjrnlTableHeaderItems = ['Timestamp',
                                         'USN',
                                         'File Name',
@@ -48,18 +48,80 @@ class NTFSViewer(QWidget):
         }
 
     def ready(self):
-        self.ntfsDialog.importMFTBtn.setDisabled(True)
-        self.ntfsDialog.importUsnJrnlBtn.setDisabled(True)
-        self.ntfsDialog.importLogFileBtn.setDisabled(True)
-        self.ntfsDialog.submitBtn.setDisabled(True)
-        _path = [
-            self.ntfsDialog.mftPathTextBox.text(),
-            self.ntfsDialog.usnjrnlPathTextBox.text(),
-            self.ntfsDialog.logfilePathTextBox.text()
-        ]
-        self.ntfsDialog.mftPathTextBox.setDisabled(True)
-        self.ntfsDialog.usnjrnlPathTextBox.setDisabled(True)
-        self.ntfsDialog.logfilePathTextBox.setDisabled(True)
+        if not self.ntfsDialog.ntfsLogFileChkBox.isChecked() and not self.ntfsDialog.diskRawChkBox.isChecked():
+            QMessageBox.information(self, "Help", "Please Select analyzed file type.", QMessageBox.Ok)
+            return
+        if self.ntfsDialog.diskRawChkBox.isChecked():
+            _path = self.ntfsDialog.diskRawTextBox.text()
+            if self.ntfsDialog.selectedPartition == -1:
+                import os
+                disk_size = os.path.getsize(_path)
+                if disk_size < 500:
+                    QMessageBox.critical(self, "Error", "This is not a disk image file.", QMessageBox.Ok)
+                    return
+
+                disk_info = [[_path, str(disk_size)]]
+                with open(_path, 'rb') as f:
+                    checked = f.read(512)
+                    if checked[510:512] != b"\x55\xaa":
+                        QMessageBox.critical(self, "Error", "This is not a disk image file.", QMessageBox.Ok)
+                        return
+
+                    self.ntfsDialog.diskRawGroupBox.setDisabled(True)
+                    f.seek(0x1BE)
+                    for i in range(4):
+                        partition_info = []
+                        partition_table = f.read(16)
+                        if partition_table[4:5] == b"\x07":
+                            file_system = "NTFS"
+                        elif partition_table[4:5] in [b"\x05", b"\x0F"]:
+                            file_system = "Extended Partition"
+                        else:
+                            disk_info.append(None)
+                            continue
+                        partition_info.append(file_system)
+
+                        active = None
+                        if partition_table[0] == "\x80":
+                            active = "True"
+                        elif partition_table[0] == "\x00":
+                            active = "False"
+                        else:
+                            active = "Unknown"
+                        partition_info.append(active)
+
+                        partition_starting_sector = int.from_bytes(partition_table[8:12], byteorder='little')
+                        partition_info.append(str(hex(partition_starting_sector * 512)))
+
+                        partition_sector_number = int.from_bytes(partition_table[12:], byteorder='little')
+                        partition_info.append(str(partition_sector_number))
+                        partition_info.append(str(partition_sector_number * 512))
+
+                        disk_info.append(partition_info)
+
+                self.ntfsDialog.changeInterface(disk_info)
+                return
+            else:
+                partition_starting_offset = self.ntfsDialog.partitionItems[self.ntfsDialog.selectedPartition - 1].text(3)
+                self.sector = BootSector(image_name=_path,
+                                    offset_sectors=None,
+                                    offset_bytes=int(partition_starting_offset, 16),
+                                    sector_size=512)
+                rst, msg = self.sector.getResult()
+                if not rst:
+                    QMessageBox.critical(self, "Error", msg, QMessageBox.Ok)
+                    return
+                else:
+                    QMessageBox.information(self, "Help", msg, QMessageBox.Ok)
+                self.isCarvingAllowed = True
+        elif self.ntfsDialog.ntfsLogFileChkBox.isChecked():
+            _path = [
+                self.ntfsDialog.mftPathTextBox.text(),
+                self.ntfsDialog.usnjrnlPathTextBox.text(),
+                self.ntfsDialog.logfilePathTextBox.text()
+            ]
+            self.ntfsDialog.ntfsLogGroupBox.setDisabled(True)
+            self.ntfsDialog.diskRawChkBox.setDisabled(True)
         rst, msg = self.check(_path)
         if rst:
             self.initUI()
@@ -81,14 +143,32 @@ class NTFSViewer(QWidget):
         self.showMaximized()
 
     def check(self, path):
-        for p in path:
-            if not p:
-                return False, "Please import log file."
-        self.mft = MFT(image_name=path[0])
-        if not self.mft.mft.is_valid:
+        if self.isCarvingAllowed:
+            import os
+            dirName = os.getcwd() + "\\NTFS_" + datetime.datetime.strftime(datetime.datetime.now(), "%Y%m%d%H%M%S%f") + "\\"
+            if not os.path.exists(dirName):
+                os.mkdir(dirName)
+            self.mft = MFT(image_name=path, boot_sector=self.sector)
+            rst, output = self.mft.extract_data(inum=2, output_file=dirName, stream=0, isCarving=False)
+            logfile_path = output
+
+            usn_jrnl_inum = self.mft.entries[11]. \
+                attributes[AttributeTypeEnum.INDEX_ROOT][0]. \
+                entries[AttributeTypeEnum.FILE_NAME]['$UsnJrnl']. \
+                file_reference_mft_entry
+            rst, output = self.mft.extract_data(inum=usn_jrnl_inum, output_file=dirName, stream=0, isCarving=False)
+            usnjrnl_path = output
+        else:
+            for p in path:
+                if not p:
+                    return False, "Please import log file."
+            self.mft = MFT(image_name=path[0])
+            usnjrnl_path = path[1]
+            logfile_path = path[2]
+        if not self.mft.entries[0].is_valid:
             return False, "Not $MFT file"
-        self.usnjrnl = UsnJrnl(path[1])
-        self.logfile = LogFile(dump_dir="errorpages", file_name=path[2])
+        self.usnjrnl = UsnJrnl(usnjrnl_path)
+        self.logfile = LogFile(dump_dir="errorpages", file_name=logfile_path)
         return True, None
 
     def initUI(self):
@@ -179,7 +259,6 @@ class NTFSViewer(QWidget):
     def load(self):
         tArr = []
         try:
-            tArr.append(Thread(target=self.mft.parse_all, args=()))
             tArr.append(Thread(target=self.usnjrnl.parse, args=()))
             tArr.append(Thread(target=self.logfile.parse_all, args=()))
 
@@ -201,15 +280,18 @@ class NTFSViewer(QWidget):
             for t in tArr:
                 t.join()
             self.exportThread1 = ExportThread(self.usnjrnl.records, NTFSViewer.USNJRNL)
-            self.exportThread1.exported.connect(self.exported)
+            self.exportThread1.exported.connect(self.threadFinished)
             self.exportThread2 = ExportThread(self.logfile.rcrd_records, NTFSViewer.LOGFILE)
-            self.exportThread2.exported.connect(self.exported)
+            self.exportThread2.exported.connect(self.threadFinished)
+            if self.isCarvingAllowed:
+                self.carvingThread = CarvingThread(self.mft)
+                self.carvingThread.carved.connect(self.threadFinished)
         except Exception as e:
             raise Exception(e)
 
         alertStr = "MFT total entry: {0}\nUsnJrnl total record: {1}\nLogFile total record: {2}\nTransaction total: {3}"\
             .format(len(self.mft.entries), self.usnjrnl_len, self.logfile_len, len(self.logfile.transactions))
-        QMessageBox.information(self, "Help", alertStr, QMessageBox.Ok)
+        # QMessageBox.information(self, "Help", alertStr, QMessageBox.Ok)
         self.ntfsDialog.resume()
 
 
@@ -416,7 +498,6 @@ class NTFSViewer(QWidget):
         self.ntfsDetailViewer = NTFSDetailViewer()
         self.ntfsDetailViewer.initUI(self.details[row])
 
-
     def exportUSN(self):
         if self.exportThread1.isExporting: return
         self.exportThread1.start()
@@ -425,13 +506,13 @@ class NTFSViewer(QWidget):
         if self.exportThread2.isExporting: return
         self.exportThread2.start()
 
-    def exported(self, msg):
+    def threadFinished(self, msg):
         QMessageBox.question(self, "Help", msg, QMessageBox.Ok)
 
     def contextMenuEvent(self, event):
         menu = QMenu(self)
         copyAction = menu.addAction("Copy")
-        if not self.ntfsTabs.currentIndex():
+        if not self.ntfsTabs.currentIndex() and self.isCarvingAllowed:
             carveAction = menu.addAction("Carve")
         action = menu.exec_(self.mapToGlobal(event.pos()))
         if action == copyAction:
@@ -444,10 +525,48 @@ class NTFSViewer(QWidget):
             import pyperclip
             pyperclip.copy(copiedStr)
         elif action == carveAction:
-            self.carve()
-
-    def carve(self):
-        QMessageBox.information(self, "Help", "Preparing...", QMessageBox.Ok)
+            if self.carvingThread.isCarving:
+                return
+            import os
+            dirName = os.getcwd() + "\\Carving\\"
+            if not os.path.exists(dirName):
+                os.mkdir(dirName)
+            carving_item = [] # row, entry obj, output_file
+            overlap_inum = []
+            for item in self.usnjrnlTable.selectedItems():
+                row = item.row()
+                inum = int(self.details[item.row()][0][0])
+                if self.mft.entries[inum].is_directory:
+                    msg = "This entry-#{} is about directory not a file.".format(inum)
+                    QMessageBox.information(self, "Help", msg, QMessageBox.Ok)
+                    continue
+                fname_in_usn = self.usnjrnlTable.item(row, 2).text()
+                fname_in_mft = self.details[row][0][-1]
+                mft_names = [attr[0] for attr in fname_in_mft]
+                if not fname_in_mft:
+                    msg = '[{}] MFT Entry is changed, but want to recover? ' \
+                          'This entry-#{} has not $FileName Attribute. ' \
+                          'So, It will be saved as temporary name like "MFT_Entry_#43212"'.format(fname_in_usn, inum)
+                    reply = QMessageBox.question(self, "Help", msg, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                    if reply == QMessageBox.No:
+                        continue
+                    output_name = dirName + "MFT_Entry_#43212"
+                elif fname_in_usn not in mft_names:
+                    msg = 'MFT Entry is changed, but want to recover? ' \
+                          'This entry-#{} has names "{}"\n' \
+                          'So, It will be saved as temporary name like "{}"'.format(inum, ', '.join(mft_names), mft_names[0])
+                    reply = QMessageBox.question(self, "Help", msg, QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+                    if reply == QMessageBox.No:
+                        continue
+                    output_name = dirName + mft_names[0]
+                else:
+                    output_name = dirName + fname_in_usn
+                if inum in overlap_inum:
+                    continue
+                carving_item.append([fname_in_usn, inum, output_name])
+                overlap_inum.append(inum)
+            self.carvingThread.setItem(carving_item)
+            self.carvingThread.start()
 
 class ExportThread(QThread):
     exported = pyqtSignal(str)
@@ -489,3 +608,33 @@ class ExportThread(QThread):
                     rcrd.export_csv(csv_writer)
         self.isExporting = False
         self.exported.emit(msg)
+
+
+class CarvingThread(QThread):
+    carved = pyqtSignal(str)
+
+    def __init__(self, mft):
+        QThread.__init__(self)
+        self.isCarving= False
+        self.mft = mft
+
+    def setItem(self, carvedList):
+        self.carvedList = carvedList
+
+    def run(self):
+        self.isCarving = True
+        msg = ''
+        fail_cnt = 0
+        for item in self.carvedList:
+            print(item)
+            rst, output = self.mft.extract_data(inum=item[1], output_file=item[2], stream=0, isCarving=True)
+            if not rst:
+                msg += "{} can't be carved. cause: {}\n".format(item[0], output)
+                fail_cnt += 1
+        if not fail_cnt:
+            msg = "Success All."
+        else:
+            msg += "Fail: {}/{}".format(fail_cnt, len(self.carvedList))
+        self.isCarving = False
+        print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ")
+        self.carved.emit(msg)

@@ -1,11 +1,8 @@
-from binascii import hexlify
 from collections import OrderedDict
 
-from libs.ParseNTFS import reverse_hexlify
-from .common import _BIG_BAR, _SMALL_BAR, AttributeTypeEnum
+from .common import AttributeTypeEnum
 from .factories import AttributeFactory
 from .attributes import StandardInformation, FileName
-
 
 class MFTEntry():
     SIGNATURE = ('signature', 0, 3)
@@ -52,119 +49,59 @@ class MFTEntry():
             mem_view[e * 512 - 2 : e * 512] = fixup_part[2 * e : 2 * e + 2]
 
     def _check_validity(self):
-        if self.signature_raw != b'\x46\x49\x4c\x45':
-            return False
-        else:
-            return True
+        return True if self.signature == 'FILE' else False
 
     @property
     def is_valid(self):
         return self._is_valid
 
-    ####################################################################################################################
-    # Raw values
-
-    @property
-    def signature_raw(self):
-        return self.data[0:4]
-
-    @property
-    def fixup_array_offset_raw(self):
-        return self.data[4:6]
-
-    @property
-    def fixup_array_n_entries_raw(self):
-        return self.data[6:8]
-
-    @property
-    def lsn_raw(self):
-        return self.data[8:16]
-
-    @property
-    def sequence_value_raw(self):
-        return self.data[16:18]
-
-    @property
-    def link_count_raw(self):
-        return self.data[18:20]
-
-    @property
-    def first_attribute_offset_raw(self):
-        return self.data[20:22]
-
-    @property
-    def flags_raw(self):
-        return self.data[22:24]
-
-    @property
-    def mft_entry_used_size_raw(self):
-        return self.data[24:28]
-
-    @property
-    def mft_entry_allocated_size_raw(self):
-        return self.data[28:32]
-
-    @property
-    def file_reference_to_base_record_raw(self):
-        return self.data[32:40]
-
-    @property
-    def next_attribute_id_raw(self):
-        return self.data[40:42]
-
-    ####################################################################################################################
-    # Interpreted values
-
     @property
     def signature(self):
-        return self.signature_raw.decode()
+        return self.data[0:4].decode()
 
     @property
     def fixup_array_offset(self):
-        return int(reverse_hexlify(self.fixup_array_offset_raw), 16)
+        return int.from_bytes(self.data[4:6], byteorder='little')
 
     @property
     def fixup_array_n_entries(self):
-        return int(reverse_hexlify(self.fixup_array_n_entries_raw), 16)
+        return int.from_bytes(self.data[6:8], byteorder='little')
 
     @property
     def lsn(self):
-        return int(reverse_hexlify(self.lsn_raw), 16)
+        return int.from_bytes(self.data[8:16], byteorder='little')
 
     @property
     def sequence_value(self):
-        return int(reverse_hexlify(self.sequence_value_raw), 16)
+        return int.from_bytes(self.data[16:18], byteorder='little')
 
     @property
     def link_count(self):
-        return int(reverse_hexlify(self.link_count_raw), 16)
+        return int.from_bytes(self.data[18:20], byteorder='little')
 
     @property
     def first_attribute_offset(self):
-        return int(reverse_hexlify(self.first_attribute_offset_raw), 16)
+        return int.from_bytes(self.data[20:22], byteorder='little')
 
     @property
     def flags(self):
-        return int(reverse_hexlify(self.flags_raw), 16)
+        return int.from_bytes(self.data[22:24], byteorder='little')
 
     @property
     def mft_entry_used_size(self):
-        return int(reverse_hexlify(self.mft_entry_used_size_raw), 16)
+        return int.from_bytes(self.data[24:28], byteorder='little')
 
     @property
     def mft_entry_allocated_size(self):
-        return int(reverse_hexlify(self.mft_entry_allocated_size_raw), 16)
+        return int.from_bytes(self.data[28:32], byteorder='little')
 
     @property
     def file_reference_to_base_record(self):
-        return int(reverse_hexlify(self.file_reference_to_base_record_raw), 16)
+        return int.from_bytes(self.data[32:40], byteorder='little')
 
     @property
     def next_attribute_id(self):
-        return int(reverse_hexlify(self.next_attribute_id_raw), 16)
-
-    ####################################################################################################################
-    # Derived values
+        return int.from_bytes(self.data[40:42], byteorder='little')
 
     @property
     def is_base_entry(self):
@@ -181,67 +118,21 @@ class MFTEntry():
         """Boolean. Is True when the entry denotes a directory (the 0x02 flag is set)."""
         return bool(self.flags & 2)
 
-    ####################################################################################################################
-    # Printing
-
     def all_fields_described(self):
         return (
-            (MFTEntry.SIGNATURE, self.signature, self.signature_raw),
-            (MFTEntry.OFFSET_TO_FIXUP_ARRAY, self.fixup_array_offset, self.fixup_array_offset_raw),
-            (MFTEntry.NUMBER_OF_ENTRIES_IN_FIXUP_ARRAY, self.fixup_array_n_entries, self.fixup_array_n_entries_raw),
-            (MFTEntry.LOGFILE_SEQUENCE_NUMBER, self.lsn, self.lsn_raw),
-            (MFTEntry.SEQUENCE_VALUE, self.sequence_value, self.sequence_value_raw),
-            (MFTEntry.LINK_COUNT, self.link_count, self.link_count_raw),
-            (MFTEntry.OFFSET_TO_FIRST_ATTRIBUTE, self.first_attribute_offset, self.first_attribute_offset_raw),
-            (MFTEntry.FLAGS, self.flags, self.flags_raw),
-            (MFTEntry.USED_SIZE_OF_MFT_ENTRY, self.mft_entry_used_size, self.mft_entry_used_size_raw),
-            (MFTEntry.ALLOCATED_SIZE_OF_MFT_ENTRY, self.mft_entry_allocated_size, self.mft_entry_allocated_size_raw),
-            (MFTEntry.FILE_REFERENCE_TO_BASE_RECORD, self.file_reference_to_base_record, self.file_reference_to_base_record_raw),
-            (MFTEntry.NEXT_ATTRIBUTE_ID, self.next_attribute_id, self.next_attribute_id_raw)
+            (MFTEntry.SIGNATURE, self.signature),
+            (MFTEntry.OFFSET_TO_FIXUP_ARRAY, self.fixup_array_offset),
+            (MFTEntry.NUMBER_OF_ENTRIES_IN_FIXUP_ARRAY, self.fixup_array_n_entries),
+            (MFTEntry.LOGFILE_SEQUENCE_NUMBER, self.lsn),
+            (MFTEntry.SEQUENCE_VALUE, self.sequence_value),
+            (MFTEntry.LINK_COUNT, self.link_count),
+            (MFTEntry.OFFSET_TO_FIRST_ATTRIBUTE, self.first_attribute_offset),
+            (MFTEntry.FLAGS, self.flags),
+            (MFTEntry.USED_SIZE_OF_MFT_ENTRY, self.mft_entry_used_size),
+            (MFTEntry.ALLOCATED_SIZE_OF_MFT_ENTRY, self.mft_entry_allocated_size),
+            (MFTEntry.FILE_REFERENCE_TO_BASE_RECORD, self.file_reference_to_base_record),
+            (MFTEntry.NEXT_ATTRIBUTE_ID, self.next_attribute_id)
         )
-
-    def writeout_parsed(self, out):
-        if not self.logfile_parse:
-            #out.write('\nMFT ENTRY %d, image offset: %d bytes\n' % (self.inum, self.image_byte_offset))
-            out.write('\nMFT ENTRY %d, image offset: %d bytes\n' % (self.inum, self.image_byte_offset))
-        out.write(_BIG_BAR)
-        out.write('MFT entry header\n')
-        out.write(_SMALL_BAR)
-        for (description, low, high), value, value_raw in self.all_fields_described():
-            out.write('    %-32s | %-5s | %-9s | %s\n' % (description, str(low) + '-' + str(high), value, hexlify(value_raw)))
-
-        out.write('\n')
-
-        out.write('    %-14s %s\n' % ('base_entry:', str(self.is_base_entry)))
-        out.write('    %-14s %s\n' % ('in use:', str(self.is_in_use)))
-        out.write('    %-14s %s\n' % ('directory:', str(self.is_directory)))
-        out.write(_BIG_BAR)
-
-        for key, arr in self.attributes.items():
-            for attribute in arr:
-                attribute.writeout_parsed(out)
-
-    def detail(self):
-        fileNameAttrList = []
-        if AttributeTypeEnum.FILE_NAME in self.attributes.keys():
-            FileNameAttrs = self.attributes[AttributeTypeEnum.FILE_NAME]
-            import datetime
-            for attr in FileNameAttrs:
-                fileNameAttrList.append([
-                    attr.name,
-                    datetime.datetime.strftime(attr.file_creation_time_datetime, "%Y-%m-%d %H:%M:%S.%f"),
-                    datetime.datetime.strftime(attr.file_modification_time_datetime, "%Y-%m-%d %H:%M:%S.%f"),
-                    datetime.datetime.strftime(attr.mft_modification_time_datetime, "%Y-%m-%d %H:%M:%S.%f"),
-                    datetime.datetime.strftime(attr.file_access_time_datetime, "%Y-%m-%d %H:%M:%S.%f"),
-                    ])
-        return [
-            str(self.inum),
-            str(self.sequence_value),
-            str(self.is_base_entry),
-            str(self.is_in_use),
-            str(self.lsn),
-            fileNameAttrList,
-        ]
 
     def format_csv(self):
         formatted = [
@@ -260,9 +151,6 @@ class MFTEntry():
             self.next_attribute_id
         ]
 
-        #formatted.extend([
-        #    len(self.attributes[type]) if type in self.attributes.keys() else None for type in AttributeTypeEnum.__iter__()
-        #])
         if AttributeTypeEnum.STANDARD_INFORMATION in self.attributes.keys():
             formatted.extend(self.attributes[AttributeTypeEnum.STANDARD_INFORMATION][0].format_csv())
         else:
@@ -274,7 +162,6 @@ class MFTEntry():
             formatted.extend(len(FileName.format_csv_column_headers()) * [None])
 
         return formatted
-
 
     def format_csv_column_headers(self):
         formatted = [
@@ -293,13 +180,31 @@ class MFTEntry():
             MFTEntry.NEXT_ATTRIBUTE_ID[0]
         ]
 
-        # Columns describing whether certain attributes are found of not
-        #formatted.extend([type.value for type in AttributeTypeEnum.__iter__()])
-
         formatted.extend(StandardInformation.format_csv_column_headers())
         formatted.extend(FileName.format_csv_column_headers())
         return formatted
 
-
-    def writeout_raw(self, out):
-        out.write(self.data)
+    def detail(self):
+        fileNameAttrList = []
+        if AttributeTypeEnum.FILE_NAME in self.attributes.keys():
+            FileNameAttrs = self.attributes[AttributeTypeEnum.FILE_NAME]
+            for attr in FileNameAttrs:
+                fileNameAttrList.append([
+                    attr.name,
+                    attr.file_creation_time,
+                    attr.file_modification_time,
+                    attr.mft_modification_time,
+                    attr.file_access_time,
+                ])
+        usnList = None
+        if AttributeTypeEnum.STANDARD_INFORMATION in self.attributes.keys():
+            usnList = [str(si.usn) for si in self.attributes[AttributeTypeEnum.STANDARD_INFORMATION]]
+        return [
+            str(self.inum),
+            str(self.sequence_value),
+            str(self.is_base_entry),
+            str(self.is_in_use),
+            ', '.join(usnList) if usnList else [],
+            str(self.lsn),
+            fileNameAttrList,
+        ]
