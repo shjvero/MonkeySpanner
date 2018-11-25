@@ -20,7 +20,6 @@ import logging
 import datetime
 from collections import namedtuple
 
-import unicodecsv
 from libs.ParseRegistry import Registry
 from libs.ParseRegistry.RegistryParse import parse_windows_timestamp as _parse_windows_timestamp
 
@@ -166,54 +165,31 @@ def parse_execution_entries(registry):
 
 TimelineEntry = namedtuple("TimelineEntry", ["timestamp", "type", "entry"])
 
-
-def main(do_timeline):
-    from modules.constant import APPCOMPAT
-    _path = APPCOMPAT + "Amcache.hve"
-
-    if sys.platform == "win32":
-        import os, msvcrt
-        msvcrt.setmode(sys.stdout.fileno(), os.O_BINARY)
-
-    r = Registry.Registry(_path)
+def get(path):
+    r = Registry.Registry(path)
 
     try:
         ee = parse_execution_entries(r)
     except NotAnAmcacheHive as e:
-        print(e)
-        # g_logger.error("doesn't appear to be an Amcache.hve hive")
-        return
-
-    if do_timeline:
-        entries = []
-        for e in ee:
-            for t in ["source_key_timestamp", "created_timestamp", "modified_timestamp",
-                      "modified_timestamp2", "linker_timestamp"]:
-                ts = getattr(e, t)
-                print(ts)
-                if ts == UNIX_TIMESTAMP_ZERO:
-                    continue
-                if ts == WINDOWS_TIMESTAMP_ZERO:
-                    continue
-                if ts == datetime.datetime.min:
-                    continue
-                entry = TimelineEntry(ts, t, e)
-                print(entry)
-                # entries.append(TimelineEntry(ts, t, e))
-                entries.append(entry)
-        w = unicodecsv.writer(sys.stdout, delimiter="|", quotechar="\"",
-                              quoting=unicodecsv.QUOTE_MINIMAL, encoding="utf-8")
-        w.writerow(["timestamp", "timestamp_type", "path", "sha1"])
-        for e in sorted(entries, key=lambda e: e.timestamp):
-            w.writerow([e.timestamp, e.type, e.entry.path, e.entry.sha1])
-    else:
-        w = unicodecsv.writer(sys.stdout, delimiter="|", quotechar="\"",
-                              quoting=unicodecsv.QUOTE_MINIMAL, encoding="utf-8")
-        w.writerow(map(lambda e: e.name, FIELDS))
-        for e in ee:
-            w.writerow(map(lambda i: getattr(e, i.name), FIELDS))
-
-
-if __name__ == "__main__":
-    main(True) # Do Timeline
-    # main(False)
+        return False, "{}".format(e)
+    return True, ee
+    # import os, csv, datetime
+    # csv_name = os.getcwd() + "\\amcache_{}.csv".format(datetime.datetime.strftime(datetime.datetime.now(), "%Y%m%d%H%M%S%f"))
+    # if do_timeline:
+    #     entries = []
+    #     for e in ee:
+    #         for t in ["source_key_timestamp", "created_timestamp", "modified_timestamp",
+    #                   "modified_timestamp2", "linker_timestamp"]:
+    #             ts = getattr(e, t)
+    #             if ts == UNIX_TIMESTAMP_ZERO:
+    #                 continue
+    #             if ts == WINDOWS_TIMESTAMP_ZERO:
+    #                 continue
+    #             if ts == datetime.datetime.min:
+    #                 continue
+    #             entries.append(TimelineEntry(ts, t, e))
+    #     with open(csv_name, 'w', encoding='utf-8', newline='') as csv_file:
+    #         w = csv.writer(csv_file)
+    #         w.writerow["timestamp", "type", "path", "sha1"]
+    #         for e in sorted(entries, key=lambda e: e.timestamp):
+    #             w.writerow([e.timestamp, e.type, e.entry.path, e.entry.sha1])

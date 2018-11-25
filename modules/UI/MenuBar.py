@@ -50,9 +50,9 @@ class MenuBar(QMenuBar):
         amcacheMenu.triggered.connect(self.showAmcache)
         viewMenu.addAction(amcacheMenu)
 
-        registryMenu = QAction(self.action[1][4], self)
-        registryMenu.triggered.connect(self.importRegistry)
-        viewMenu.addAction(registryMenu)
+        # registryMenu = QAction(self.action[1][4], self)
+        # registryMenu.triggered.connect(self.importRegistry)
+        # viewMenu.addAction(registryMenu)
 
         # Settings
         # reloadAction1 = QAction(self.action[2][0], self)
@@ -127,7 +127,14 @@ class MenuBar(QMenuBar):
             QMessageBox.information(self, "Help", contents, QMessageBox.Ok)
 
     def showAmcache(self):
-        QMessageBox.question(self, "Help", "Preparing...", QMessageBox.Ok)
+        from modules.UI.TableViewer import TableViewer
+        from libs.ParseRegistry.Amcache import get
+        fileName = QFileDialog.getOpenFileName(self)
+        rst, contents = get(fileName[0])
+        if rst:
+            self.parent().tableViewer = TableViewer("RecentFileCache Viewer", contents)
+        else:
+            QMessageBox.information(self, "Help", contents, QMessageBox.Ok)
 
     def export(self):
         QMessageBox.question(self, "Help", "Preparing...", QMessageBox.Ok)
