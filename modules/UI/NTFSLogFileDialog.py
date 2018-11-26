@@ -25,7 +25,7 @@ class NTFSLogFileDialog(QDialog, QObject):
         self.diskRawChkBox = QCheckBox("In this case, it's possible to carve some files.", self)
         self.diskRawChkBox.stateChanged.connect(lambda: self.selectedType(self.diskRawChkBox))
         self.diskRawGroupBox = QGroupBox(self)
-        self.diskRawGroupBox.setStyleSheet("margin: 0;")
+        self.diskRawGroupBox.setStyleSheet("margin-top: 0;")
         self.diskRawGroupBox.setDisabled(True)
         diskRawGroupBoxLayout = QHBoxLayout(self.diskRawGroupBox)
         self.diskRawGroupBox.setLayout(diskRawGroupBoxLayout)
@@ -52,7 +52,7 @@ class NTFSLogFileDialog(QDialog, QObject):
         self.ntfsLogFileChkBox.stateChanged.connect(lambda: self.selectedType(self.ntfsLogFileChkBox))
 
         self.ntfsLogGroupBox = QGroupBox(self)
-        self.ntfsLogGroupBox.setStyleSheet("margin: 0;")
+        self.ntfsLogGroupBox.setStyleSheet("margin-top: 0;")
         self.ntfsLogGroupBox.setDisabled(True)
         ntfsLogGroupBoxLayout = QGridLayout(self)
         self.ntfsLogGroupBox.setLayout(ntfsLogGroupBoxLayout)
@@ -112,8 +112,8 @@ class NTFSLogFileDialog(QDialog, QObject):
         self.barThread = LoadingBarThread(self)
         self.barThread.change_value.connect(self.loadingBar.setValue)
 
-        self.spacerItem2 = QSpacerItem(10, 10)
-        self.spacerItem3 = QSpacerItem(10, 10)
+        self.spacerItem2 = QSpacerItem(10, 15)
+        self.spacerItem3 = QSpacerItem(10, 20)
         self.layout.addItem(self.spacerItem2)
         self.layout.addWidget(self.ntfsLogFileChkBox)
         self.layout.addWidget(self.ntfsLogGroupBox)
@@ -236,9 +236,11 @@ class NTFSLogFileDialog(QDialog, QObject):
                 if item is not changedItem:
                     item.setCheckState(0, Qt.Unchecked)
 
-# if __name__ == '__main__':
-#     from PyQt5.QtWidgets import QApplication
-#     import sys
-#     app = QApplication(sys.argv)
-#     w = NTFSLogFileDialog()
-#     sys.exit(app.exec_())
+if __name__ == '__main__':
+    from PyQt5.QtWidgets import QApplication
+    import sys
+    import qdarkstyle
+    app = QApplication(sys.argv)
+    w = NTFSLogFileDialog()
+    app.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
+    sys.exit(app.exec_())

@@ -31,34 +31,34 @@ class LogFile:
                 os.makedirs(dump_path)
             self.dump_dir = dump_path
 
+    ####################################################################################################################
+    # class functions
     def parse_all(self, num=None):
-            if num: num += 3
-            with open(self.file_name, 'rb') as f:
-                # first and second RSTR record
-                for x in range(1, 3):
-                    rstr_record = RSTRRecord(f.read(self.cluster_size))
-                    self.rstr_records.append(rstr_record)
-                # first and second Buffer Pages
-                for x in range(1, 3):
-                    buff_record = RCRDRecord(f.read(self.cluster_size), x, self.dump_dir)
-                    self.buff_records.append(buff_record)
-                i = 3
-                prev_page = RCRDRecord(f.read(self.cluster_size), i, self.dump_dir)
-                self.add_if_valid(prev_page)
-                self.keep_count(prev_page)
-                while True:
-                    buffer = f.read(self.cluster_size)
-                    if len(buffer) != self.cluster_size:
+        if num: num += 3
+        with open(self.file_name, 'rb') as f:
+            # first and second RSTR record
+            for x in range(1, 3):
+                rstr_record = RSTRRecord(f.read(self.cluster_size))
+                self.rstr_records.append(rstr_record)
+            # first and second Buffer Pages
+            for x in range(1, 3):
+                buff_record = RCRDRecord(f.read(self.cluster_size), x, self.dump_dir)
+                self.buff_records.append(buff_record)
+            i = 3
+            prev_page = RCRDRecord(f.read(self.cluster_size), i, self.dump_dir)
+            self.add_if_valid(prev_page)
+            self.keep_count(prev_page)
+            while True:
+                buffer = f.read(self.cluster_size)
+                if len(buffer) != self.cluster_size:
+                    break
+                else:
+                    i += 1
+                    curr_page = RCRDRecord(buffer, i, self.dump_dir, prev_page.leftover)
+                    self.add_if_valid(curr_page)
+                    prev_page = curr_page
+                    if i == num:
                         break
-                    else:
-                        i += 1
-                        curr_page = RCRDRecord(buffer, i, self.dump_dir, prev_page.leftover)
-                        self.add_if_valid(curr_page)
-                        prev_page = curr_page
-                        if i == num:
-                            break
-            if self.performance:
-                self.print_performance()
 
     def connect_transactions(self):
         transaction_num = 0
@@ -102,34 +102,6 @@ class LogFile:
             transaction.transaction_num = transaction_num
             transaction.attach_transaction_number_to_lsns()
             transaction_num += 1
-
-    def print_transactions(self):
-        for key, transaction in self.transactions.items():
-            print(transaction.format_string())
-
-    def print_faulty_transactions(self):
-        for transaction in self.faulty_transactions:
-            print(transaction.format_string())
-
-
-    def export_csv(self, export_file = None):
-        if not self.rcrd_records:
-            return
-        first_rcrd = self.rcrd_records[0]
-        header = first_rcrd.formatted_csv_column_headers
-        header.extend(first_rcrd.lsn_header_csv_columns)
-        header.extend(first_rcrd.lsn_data_csv_columns)
-        if export_file:
-            with open(export_file, 'w') as f:
-                csv_writer = csv.writer(f)
-                csv_writer.writerow(header)
-                for rcrd in self.rcrd_records:
-                    rcrd.export_csv(csv_writer)
-        else:
-            csv_writer = csv.writer(sys.stdout)
-            csv_writer.writerow(header)
-            for rcrd in self.rcrd_records:
-                    rcrd.export_csv(csv_writer)
 
     def export_transactions(self, export_file=None):
         if not self.rcrd_records:

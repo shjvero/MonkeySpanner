@@ -56,6 +56,7 @@ class Main(QMainWindow):
         # Set up Layout
         self.screenWidget = QWidget()
         self.windowLayout = QBoxLayout(QBoxLayout.TopToBottom, self.screenWidget)
+        self.windowLayout.addItem(QSpacerItem(10, 5))
         self.topLayout = QBoxLayout(QBoxLayout.LeftToRight)
         self.bottomLayout = QBoxLayout(QBoxLayout.TopToBottom)
         self.windowLayout.addLayout(self.topLayout)

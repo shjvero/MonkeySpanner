@@ -52,10 +52,6 @@ class UsnJrnl():
                 self.records.append(record)
                 n_parsed += 1
 
-    def print_all(self):
-        for record in self.records[0:10]:
-            record.print()
-
     @property
     def grouped_by_entry(self):
         result = {}
@@ -283,9 +279,6 @@ class UsnRecordBase():
             (UsnRecordBase.MAJOR_VERSION, self.major_version, self.major_version_raw),
             (UsnRecordBase.MINOR_VERSION, self.minor_version, self.minor_version_raw),
         )
-
-    def extra_pairs(self):
-        return ()
 
     def formatted_csv(self):
         return [

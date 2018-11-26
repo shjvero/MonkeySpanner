@@ -139,7 +139,23 @@ class NTFSViewer(QWidget):
             self.ntfsDialog.accept()
 
     def showViewer(self):
+        alertStr = "MFT total entry: {0}\nUsnJrnl total record: {1}\nLogFile total record: {2}\nTransaction total: {3}" \
+            .format(len(self.mft.entries), self.usnjrnl_len, self.logfile_len, len(self.logfile.transactions))
+        QMessageBox.information(self, "Help", alertStr, QMessageBox.Ok)
         self.ntfsDialog.accept()
+
+        self.exportBar1.setMaximum(self.usnjrnl_len)
+        self.exportBar2.setMaximum(self.logfile_len)
+        self.exportThread1 = ExportThread(self.usnjrnl.records, self.USNJRNL)
+        self.exportThread1.change_value.connect(self.exportBar1.setValue)
+        self.exportThread1.exported.connect(self.threadFinished)
+        self.exportThread2 = ExportThread(self.logfile.rcrd_records, self.LOGFILE)
+        self.exportThread2.change_value.connect(self.exportBar2.setValue)
+        self.exportThread2.exported.connect(self.threadFinished)
+
+        if self.isCarvingAllowed:
+            self.carvingThread = CarvingThread(self.mft)
+
         self.showMaximized()
 
     def check(self, path):
@@ -183,6 +199,7 @@ class NTFSViewer(QWidget):
         self.groupBox = QGroupBox(self)
         chkLayout = QHBoxLayout()
         self.groupBox.setLayout(chkLayout)
+        self.groupBox.setMaximumWidth(860)
         self.createChkBox = QCheckBox('File Create', self)
         self.deleteChkBox = QCheckBox('File Delete', self)
         self.extendChkBox = QCheckBox('Data Extend', self)
@@ -250,6 +267,16 @@ class NTFSViewer(QWidget):
         self.windowLayout.addWidget(self.ntfsTabs)
         self.setLayout(self.windowLayout)
 
+        # Export Progress Bar
+        self.exportBar1 = QProgressBar(self)
+        self.exportBar1.setFixedSize(200, 40)
+        self.exportBar1.setAlignment(Qt.AlignCenter)
+        self.exportBar1.hide()
+        self.exportBar2 = QProgressBar(self)
+        self.exportBar2.setFixedSize(200, 40)
+        self.exportBar2.setAlignment(Qt.AlignCenter)
+        self.exportBar2.hide()
+
     def tabChanged(self, idx):
         if idx:
             self.groupBox.setDisabled(True)
@@ -289,9 +316,6 @@ class NTFSViewer(QWidget):
         except Exception as e:
             raise Exception(e)
 
-        alertStr = "MFT total entry: {0}\nUsnJrnl total record: {1}\nLogFile total record: {2}\nTransaction total: {3}"\
-            .format(len(self.mft.entries), self.usnjrnl_len, self.logfile_len, len(self.logfile.transactions))
-        # QMessageBox.information(self, "Help", alertStr, QMessageBox.Ok)
         self.ntfsDialog.resume()
 
 
@@ -499,21 +523,39 @@ class NTFSViewer(QWidget):
         self.ntfsDetailViewer.initUI(self.details[row])
 
     def exportUSN(self):
-        if self.exportThread1.isExporting: return
+        self.exportUSNBtn.hide()
+        self.optionsLayout.replaceWidget(self.exportUSNBtn, self.exportBar1)
+        self.exportBar1.show()
         self.exportThread1.start()
 
     def exportLSN(self):
-        if self.exportThread2.isExporting: return
+        self.exportLSNBtn.hide()
+        self.optionsLayout.replaceWidget(self.exportLSNBtn, self.exportBar2)
+        self.exportBar2.show()
         self.exportThread2.start()
 
     def threadFinished(self, msg):
+        if not self.exportBar1.isHidden():
+            self.exportBar1.hide()
+            self.optionsLayout.replaceWidget(self.exportBar1, self.exportUSNBtn)
+            self.exportUSNBtn.show()
+            self.exportBar1.setValue(0)
+        if not self.exportBar2.isHidden():
+            self.exportBar2.hide()
+            self.optionsLayout.replaceWidget(self.exportBar2, self.exportLSNBtn)
+            self.exportLSNBtn.show()
+            self.exportBar2.setValue(0)
         QMessageBox.question(self, "Help", msg, QMessageBox.Ok)
 
     def contextMenuEvent(self, event):
         menu = QMenu(self)
-        copyAction = menu.addAction("Copy")
-        if not self.ntfsTabs.currentIndex() and self.isCarvingAllowed:
-            carveAction = menu.addAction("Carve")
+        menu.setCursor(QCursor(Qt.PointingHandCursor))
+        copyAction = QAction("Copy")
+        carveAction = QAction("Carve")
+        menu.addAction(copyAction)
+        menu.addAction(carveAction)
+        if self.ntfsTabs.currentIndex() or not self.isCarvingAllowed:
+            carveAction.setDisabled(True)
         action = menu.exec_(self.mapToGlobal(event.pos()))
         if action == copyAction:
             table = self.logfileTable if self.ntfsTabs.currentIndex() else self.usnjrnlTable
@@ -531,7 +573,7 @@ class NTFSViewer(QWidget):
             dirName = os.getcwd() + "\\Carving\\"
             if not os.path.exists(dirName):
                 os.mkdir(dirName)
-            carving_item = [] # row, entry obj, output_file
+            carving_item = []
             overlap_inum = []
             for item in self.usnjrnlTable.selectedItems():
                 row = item.row()
@@ -569,34 +611,39 @@ class NTFSViewer(QWidget):
             self.carvingThread.start()
 
 class ExportThread(QThread):
+    change_value = pyqtSignal(int)
     exported = pyqtSignal(str)
 
     def __init__(self, records, type):
         QThread.__init__(self)
-        self.isExporting = False
         self.records = records
         self.type = type
 
     def run(self):
-        self.isExporting = True
         import csv, os, datetime
-        datetime_str = datetime.datetime.strftime(datetime.datetime.now(), "%Y%m%d%H%M%S%F")
+        datetime_str = datetime.datetime.strftime(datetime.datetime.now(), "%Y%m%d%H%M%S%f")
         msg = ''
+        self.isExporting = True
+        self.cnt = 0
+        self.msleep(500)
         if self.type == NTFSViewer.USNJRNL:
             output_file = "{}\\usnjrnl_{}.csv".format(os.getcwd(), datetime_str)
             msg = "Success! - Export $UsnJrnl as CSV"
-            if len(self.records) == 0: return
+            if not self.records:
+                return
             first = self.records[0]
             with open(output_file, 'w') as f:
                 csv_writer = csv.writer(f)
                 csv_writer.writerow(first.formatted_csv_column_headers())
-                for index in range(len(self.records)):
-                    record = self.records[index]
+                for record in self.records:
                     csv_writer.writerow(record.formatted_csv())
+                    self.cnt += 1
+                    self.change_value.emit(self.cnt)
         elif self.type == NTFSViewer.LOGFILE:
             output_file = "{}\\logfile_{}.csv".format(os.getcwd(), datetime_str)
             msg = "Success! - Export $LogFile as CSV"
-            if not self.records: return
+            if not self.records:
+                return
             first_rcrd = self.records[0]
             header = first_rcrd.formatted_csv_column_headers
             header.extend(first_rcrd.lsn_header_csv_columns)
@@ -606,7 +653,8 @@ class ExportThread(QThread):
                 csv_writer.writerow(header)
                 for rcrd in self.records:
                     rcrd.export_csv(csv_writer)
-        self.isExporting = False
+                    self.cnt += 1
+                    self.change_value.emit(self.cnt)
         self.exported.emit(msg)
 
 
@@ -636,5 +684,4 @@ class CarvingThread(QThread):
         else:
             msg += "Fail: {}/{}".format(fail_cnt, len(self.carvedList))
         self.isCarving = False
-        print("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ")
         self.carved.emit(msg)
