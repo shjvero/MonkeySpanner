@@ -1,3 +1,4 @@
+import logging
 import sys
 import struct
 import zipfile
@@ -83,7 +84,7 @@ def convert_filetime(dwLowDateTime, dwHighDateTime):
 				return None
 		return res
 	except OverflowError as err:
-		print("{} in convert_filetime at ShimCacheParse.py".format(err))
+		logging.info("[Error] AppCompatCache: {}".format(err))
 		return None
 
 # Return a unique list while preserving ordering.
@@ -113,15 +114,12 @@ def write_it(rows, outfile=None):
 		print("[-] Error writing output file: %s" % str(err))
 		return
 
-# Read the Shim Cache format, return a list of last modified dates/paths.
 def read_cache(cachebin, quiet=False):
 
 	if len(cachebin) < 16:
-		# Data size less than minimum header size.
 		return None
 
 	try:
-		# Get the format type
 		magic = struct.unpack("<L", cachebin[:4])[0]
 		# This is a Windows 7/2k8-R2 Shim Cache.
 		if magic == CACHE_MAGIC_NT6_1:
@@ -130,42 +128,38 @@ def read_cache(cachebin, quiet=False):
 						 CACHE_HEADER_SIZE_NT6_1 + 2])[0])
 			test_max_size = (struct.unpack("<H", cachebin[CACHE_HEADER_SIZE_NT6_1+2:
 							 CACHE_HEADER_SIZE_NT6_1 + 4])[0])
-							 
-			# Shim Cache types can come in 32-bit or 64-bit formats.
-			# We can determine this because 64-bit entries are serialized with
-			# u_int64 pointers. This means that in a 64-bit entry, valid
-			# UNICODE_STRING sizes are followed by a NULL DWORD. Check for this here.
+
 			if (test_max_size-test_size == 2 and
 				struct.unpack("<L", cachebin[CACHE_HEADER_SIZE_NT6_1+4:
 				CACHE_HEADER_SIZE_NT6_1 + 8])[0] ) == 0:
 				if not quiet:
-					print("[+] Found 64bit Windows 7/2k8-R2 Shim Cache data...")
+					logging.info("[+] Found 64bit Windows 7/2k8-R2 Shim Cache data...")
 				entry = CacheEntryNt6(False)
 				return read_nt6_entries(cachebin, entry)
 			else:
 				if not quiet:
-					print("[+] Found 32bit Windows 7/2k8-R2 Shim Cache data...")
+					logging.info("[+] Found 32bit Windows 7/2k8-R2 Shim Cache data...")
 				entry = CacheEntryNt6(True)
 				return read_nt6_entries(cachebin, entry)
 
 		# Windows 10 will use a different magic dword, check for it
 		elif len(cachebin) > WIN10_STATS_SIZE and cachebin[WIN10_STATS_SIZE:WIN10_STATS_SIZE+4].decode() == WIN10_MAGIC:
 			if not quiet:
-				print("[+] Found Windows 10 Apphelp Cache data...")
+				logging.info("[+] Found Windows 10 Apphelp Cache data...")
 			return read_win10_entries(cachebin, WIN10_MAGIC)
 
 		# Windows 10 Creators Update will use a different STATS_SIZE, account for it
 		elif len(cachebin) > WIN10_CREATORS_STATS_SIZE and cachebin[WIN10_CREATORS_STATS_SIZE:WIN10_CREATORS_STATS_SIZE+4].decode() == WIN10_MAGIC:
 			if not quiet:
-				print("[+] Found Windows 10 Creators Update Apphelp Cache data...")
+				logging.info("[+] Found Windows 10 Creators Update Apphelp Cache data...")
 			return read_win10_entries(cachebin, WIN10_MAGIC, creators_update=True)
 
 		else:
-			print("[-] Got an unrecognized magic value of 0x%x... bailing" % magic)
+			logging.info('[Error] AppCompatCache: Got an unrecognized magic value of 0x%x... bailing' % magic)
 			return None
 
 	except (RuntimeError, TypeError, NameError) as err:
-		print("[-] Error reading Shim Cache data: %s" % err)
+		logging.info('[Error] reading Shim Cache data: {}'.format(err))
 		return None
 
 # Read Windows 10 Apphelp Cache entry format
@@ -221,8 +215,8 @@ def read_win10_entries(bin_data, ver_magic, creators_update=False):
 			try:
 				last_mod_date = last_mod_date.strftime("%Y-%m-%d %H:%M:%S.%f")
 			except ValueError as e:
+				logging.info('[Error] AppCompatCache: {}'.format(e))
 				continue
-				#last_mod_date = bad_entry_data
 
 			row = [head, last_mod_date, path, 'N/A', 'N/A', "AppCompatCache"]
 
@@ -230,7 +224,7 @@ def read_win10_entries(bin_data, ver_magic, creators_update=False):
 				entry_list.append(row)
 		return entry_list
 	except (RuntimeError, ValueError, NameError) as err:
-		print('[-] Error reading Shim Cache data: %s...' % err)
+		logging.info('[Error] reading Shim Cache data: {}...'.format(err))
 		return None
 
 # Read the Shim Cache Windows 7/2k8-R2 entry format,
@@ -258,7 +252,8 @@ def read_nt6_entries(bin_data, entry):
 			try:
 				last_mod_date = last_mod_date.strftime("%Y-%m-%d %H:%M:%S.%f")
 			except ValueError as e:
-				print(e)
+				logging.info('[Error] AppCompatCache: {}'.format(e))
+				continue
 			path = (bin_data.decode("unicode-escape")[entry.Offset:entry.Offset +
 							 entry.wLength])[8:].replace("\x00", "")
 			from modules.constant import SYSTEMROOT, LOCALAPPDATA
@@ -269,7 +264,6 @@ def read_nt6_entries(bin_data, entry):
 			else:
 				continue
 
-			# Test to see if the file may have been executed.
 			if (entry.FileFlags & CSRSS_FLAG):
 				exec_flag = 'True'
 			else:
@@ -282,7 +276,7 @@ def read_nt6_entries(bin_data, entry):
 		return entry_list
 
 	except (RuntimeError, ValueError, NameError) as err:
-		print('[-] Error reading Shim Cache data: %s...' % err)
+		logging.info('[Error] reading Shim Cache data: {}...'.format(err))
 		return None
 
 # Get Shim Cache data from a registry hive.
@@ -376,15 +370,14 @@ def get_local_data(timeline=None):
 	try:
 		import winreg as reg
 	except ImportError as e:
-		print(e)
-		sys.exit(1)
+		logging.info("{}".format(e))
+		return
 	g_timeline = timeline
 	hReg = reg.ConnectRegistry(None, reg.HKEY_LOCAL_MACHINE)
 	hSystem = reg.OpenKey(hReg, r'SYSTEM')
 	for i in range(1024):
 		try:
 			control_name = reg.EnumKey(hSystem, i)
-			# if 'controlset' in control_name.lower():
 			if 'currentcontrolset' in control_name.lower():
 				hSessionMan = reg.OpenKey(hReg, 'SYSTEM\\%s\\Control\\Session Manager' % control_name)
 				for i in range(1024):
@@ -403,19 +396,17 @@ def get_local_data(timeline=None):
 									if row not in out_list:
 										out_list.append(row)
 					except EnvironmentError as e:
-						print(e)
+						logging.info("[Error] {}".format(e))
 						break
 		except EnvironmentError as e:
-			print(e)
+			logging.info("[Error] {}".format(e))
 			break
 	g_timeline = None
 	if len(out_list) == 0:
 		return None
 	else:
 		if g_verbose:
-			#out_list.insert(0, output_header + ['Key Path'])
 			return out_list
 		else:
 			out_list = unique_list(out_list)
-			#out_list.insert(0, output_header)
 			return out_list

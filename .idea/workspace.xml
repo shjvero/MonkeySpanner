@@ -2,13 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="23378966-e248-43e1-9817-746140378983" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MainWindow.py" beforeDir="false" afterPath="$PROJECT_DIR$/MainWindow.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/ParseNTFS/logfile/logfile.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseNTFS/logfile/logfile.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/libs/ParseNTFS/usn_jrnl/usn_jrnl.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseNTFS/usn_jrnl/usn_jrnl.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/NTFSLogFileDialog.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSLogFileDialog.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/UI/NTFSViewer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/NTFSViewer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" beforeDir="false" afterPath="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/AnalyzerForEdge.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/AnalyzerForEdge.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/AnalyzerForHWP.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/AnalyzerForHWP.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/AnalyzerForIE.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/AnalyzerForIE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/AnalyzerForOffice.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/AnalyzerForOffice.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/ArtifactAnalyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/ArtifactAnalyzer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/UI/LoadingScreen.py" beforeDir="false" afterPath="$PROJECT_DIR$/modules/UI/LoadingScreen.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,7 +21,7 @@
     <session id="-1788526241">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="87" />
+          <entry key="project.closed" value="88" />
           <entry key="project.open.time.10" value="2" />
           <entry key="project.open.time.11" value="2" />
           <entry key="project.open.time.12" value="1" />
@@ -46,7 +47,7 @@
           <entry key="gif" value="7" />
           <entry key="jpg" value="4" />
           <entry key="png" value="2" />
-          <entry key="py" value="644" />
+          <entry key="py" value="656" />
           <entry key="txt" value="23" />
         </counts>
       </usages-collector>
@@ -54,20 +55,20 @@
         <counts>
           <entry key="Image" value="13" />
           <entry key="PLAIN_TEXT" value="23" />
-          <entry key="Python" value="644" />
+          <entry key="Python" value="656" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="2979" />
           <entry key="dummy" value="80" />
-          <entry key="py" value="186093" />
+          <entry key="py" value="187249" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="80" />
-          <entry key="Python" value="189072" />
+          <entry key="Python" value="190228" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -78,44 +79,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MainWindow.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="912">
-              <caret line="58" column="51" selection-start-line="58" selection-start-column="51" selection-end-line="58" selection-end-column="51" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/modules/UI/NTFSViewer.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="146">
-              <caret line="554" column="34" lean-forward="true" selection-start-line="554" selection-start-column="34" selection-end-line="554" selection-end-column="34" />
-              <folding>
-                <element signature="e#0#39#0" expanded="true" />
-                <element signature="e#6454#7766#0" />
-                <element signature="e#11643#11753#0" />
-                <element signature="e#13430#16586#0" />
-                <element signature="e#16630#20144#0" />
-                <element signature="e#20183#22346#0" />
-                <element signature="e#22381#23846#0" />
-                <element signature="e#23895#24058#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="137">
-              <caret line="52" column="37" selection-start-line="52" selection-start-column="37" selection-end-line="52" selection-end-column="37" />
-              <folding>
-                <element signature="e#0#14#0" expanded="true" />
-                <marker date="1543240561469" expanded="true" signature="2006:2007" ph="..." />
-                <marker date="1543240561469" expanded="true" signature="2006:2015" ph="..." />
-              </folding>
+            <state relative-caret-position="184">
+              <caret line="105" column="67" lean-forward="true" selection-start-line="105" selection-start-column="67" selection-end-line="105" selection-end-column="67" />
             </state>
           </provider>
         </entry>
@@ -131,10 +99,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>Edit</find>
-      <find>Place</find>
-      <find>resize</find>
-      <find>setLast</find>
       <find>search</find>
       <find>getattr</find>
       <find>Entry</find>
@@ -161,6 +125,10 @@
       <find>self.optio</find>
       <find>setValue</find>
       <find>setVisi</find>
+      <find>remove</find>
+      <find>getPrefetch</find>
+      <find>getJump</find>
+      <find>getAppli</find>
     </findStrings>
     <replaceStrings>
       <replace>hashList</replace>
@@ -221,18 +189,11 @@
         <option value="$PROJECT_DIR$/modules/UI/WebArtifactDetailViewer.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/modules/UI/JumpListViewer.py" />
-        <option value="$PROJECT_DIR$/modules/UI/LoadingScreen.py" />
         <option value="$PROJECT_DIR$/MonkeySpanner.py" />
         <option value="$PROJECT_DIR$/modules/test2.py" />
         <option value="$PROJECT_DIR$/modules/UI/FilteringWidget.py" />
         <option value="$PROJECT_DIR$/modules/constant.py" />
         <option value="$PROJECT_DIR$/libs/ParseJumpList/JumpListParser.py" />
-        <option value="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" />
-        <option value="$PROJECT_DIR$/modules/ArtifactAnalyzer.py" />
-        <option value="$PROJECT_DIR$/modules/AnalyzerForIE.py" />
-        <option value="$PROJECT_DIR$/modules/AnalyzerForEdge.py" />
-        <option value="$PROJECT_DIR$/modules/AnalyzerForHWP.py" />
-        <option value="$PROJECT_DIR$/modules/AnalyzerForOffice.py" />
         <option value="$PROJECT_DIR$/modules/UI/AboutWidget.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSDiskInfoDialog.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/mft/attribute_headers.py" />
@@ -243,15 +204,22 @@
         <option value="$PROJECT_DIR$/modules/UI/AmcacheHveViewer.py" />
         <option value="$PROJECT_DIR$/modules/UI/PrototpyeTable.py" />
         <option value="$PROJECT_DIR$/modules/UI/MenuBar.py" />
-        <option value="$PROJECT_DIR$/MainWindow.py" />
         <option value="$PROJECT_DIR$/modules/UI/TableViewer.py" />
         <option value="$PROJECT_DIR$/libs/ParseRegistry/Amcache.py" />
-        <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSLogFileDialog.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/logfile/logfile.py" />
         <option value="$PROJECT_DIR$/libs/ParseNTFS/usn_jrnl/usn_jrnl.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py" />
         <option value="$PROJECT_DIR$/modules/UI/NTFSViewer.py" />
+        <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/MainWindow.py" />
+        <option value="$PROJECT_DIR$/modules/UI/LoadingScreen.py" />
+        <option value="$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py" />
+        <option value="$PROJECT_DIR$/modules/AnalyzerForIE.py" />
+        <option value="$PROJECT_DIR$/modules/AnalyzerForHWP.py" />
+        <option value="$PROJECT_DIR$/modules/AnalyzerForOffice.py" />
+        <option value="$PROJECT_DIR$/modules/AnalyzerForEdge.py" />
+        <option value="$PROJECT_DIR$/modules/ArtifactAnalyzer.py" />
       </list>
     </option>
   </component>
@@ -276,24 +244,7 @@
             <path>
               <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
               <item name="Parser" type="462c0819:PsiDirectoryNode" />
-              <item name="libs" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Parser" type="462c0819:PsiDirectoryNode" />
-              <item name="libs" type="462c0819:PsiDirectoryNode" />
-              <item name="ParseNTFS" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Parser" type="462c0819:PsiDirectoryNode" />
               <item name="modules" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Parser" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Parser" type="462c0819:PsiDirectoryNode" />
-              <item name="modules" type="462c0819:PsiDirectoryNode" />
-              <item name="UI" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -373,10 +324,37 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Parser" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.MonkeySpanner" />
       <item itemvalue="Python.NTFSLogViewerMain" />
+      <item itemvalue="Python.test" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.test" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -402,17 +380,16 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="1320" height="784" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49683544" visible="true" weight="0.22619048" />
       <window_info id="Structure" order="1" sideWeight="0.5031645" side_tool="true" weight="0.21111111" />
       <window_info id="Favorites" order="2" sideWeight="0.5016835" side_tool="true" weight="0.19689542" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.32973805" />
       <window_info anchor="bottom" id="Terminal" order="1" sideWeight="0.49920633" weight="0.26" />
-      <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.50079364" side_tool="true" visible="true" weight="0.17103235" />
+      <window_info anchor="bottom" id="Event Log" order="2" sideWeight="0.50079364" side_tool="true" weight="0.36517718" />
       <window_info anchor="bottom" id="Message" order="3" />
-      <window_info anchor="bottom" id="Find" order="4" weight="0.36517718" />
-      <window_info anchor="bottom" id="Run" order="5" sideWeight="0.49920633" visible="true" weight="0.17103235" />
+      <window_info anchor="bottom" id="Find" order="4" sideWeight="0.49920633" weight="0.36517718" />
+      <window_info anchor="bottom" id="Run" order="5" sideWeight="0.49920633" weight="0.22804314" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32973805" />
       <window_info anchor="bottom" id="Debug" order="7" type="SLIDING" weight="0.3990755" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
@@ -521,36 +498,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="37" selection-start-line="37" selection-end-line="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForHWP.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="53" column="29" lean-forward="true" selection-start-line="53" selection-start-column="29" selection-end-line="53" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/AnalyzerForFlash.py">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForEdge.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="65" selection-start-line="65" selection-end-line="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForOffice.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1330">
-          <caret line="79" column="27" lean-forward="true" selection-start-line="79" selection-start-column="27" selection-end-line="79" selection-end-column="27" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/AboutWidget.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -563,13 +512,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="332">
           <caret line="31" column="80" lean-forward="true" selection-start-line="31" selection-start-column="80" selection-end-line="31" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForIE.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="19" column="11" selection-start-line="19" selection-start-column="11" selection-end-line="19" selection-end-column="11" />
         </state>
       </provider>
     </entry>
@@ -671,13 +613,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/ArtifactAnalyzer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="57" column="58" selection-start-line="57" selection-start-column="58" selection-end-line="57" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Programs/Python/Python36/Lib/logging/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="142">
@@ -689,13 +624,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="142">
           <caret line="915" selection-start-line="915" selection-end-line="915" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MainWindow.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="912">
-          <caret line="58" column="51" selection-start-line="58" selection-start-column="51" selection-end-line="58" selection-end-column="51" />
         </state>
       </provider>
     </entry>
@@ -723,13 +651,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/LoadingScreen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-228">
-          <caret line="10" column="8" selection-start-line="10" selection-start-column="8" selection-end-line="10" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/NTFSDetailViewer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
@@ -737,33 +658,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/modules/UI/NTFSLogFileDialog.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1311">
-          <caret line="170" column="38" lean-forward="true" selection-start-line="170" selection-start-column="38" selection-end-line="170" selection-end-column="38" />
-          <folding>
-            <element signature="e#0#48#0" expanded="true" />
-            <marker date="1543242285929" expanded="true" signature="5730:6324" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="52" column="37" selection-start-line="52" selection-start-column="37" selection-end-line="52" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-            <marker date="1543240561469" expanded="true" signature="2006:2007" ph="..." />
-            <marker date="1543240561469" expanded="true" signature="2006:2015" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/modules/UI/NTFSViewer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="554" column="34" lean-forward="true" selection-start-line="554" selection-start-column="34" selection-end-line="554" selection-end-column="34" />
+        <state relative-caret-position="89">
+          <caret line="551" column="54" lean-forward="true" selection-start-line="551" selection-start-column="54" selection-end-line="551" selection-end-column="54" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
             <element signature="e#6454#7766#0" />
@@ -774,6 +672,92 @@
             <element signature="e#22381#23846#0" />
             <element signature="e#23895#24058#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/NTFSLogFileDialog.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="164" column="30" lean-forward="true" selection-start-line="164" selection-start-column="30" selection-end-line="164" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#48#0" expanded="true" />
+            <marker date="1543242285929" expanded="true" signature="5730:6324" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="72" column="8" selection-start-line="72" selection-start-column="8" selection-end-line="72" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/libs/ParseRegistry/ShimCacheParser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1368">
+          <caret line="82" column="32" lean-forward="true" selection-start-line="82" selection-start-column="32" selection-end-line="82" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForEdge.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="139">
+          <caret line="53" column="41" selection-start-line="53" selection-start-column="41" selection-end-line="53" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForOffice.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="73" selection-start-line="73" selection-end-line="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForHWP.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="68" selection-start-line="68" selection-end-line="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/AnalyzerForIE.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1349">
+          <caret line="71" selection-start-line="71" selection-end-line="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/UI/LoadingScreen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="963">
+          <caret line="113" column="48" lean-forward="true" selection-start-line="113" selection-start-column="48" selection-end-line="113" selection-end-column="48" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/modules/ArtifactAnalyzer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MainWindow.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="105" column="67" lean-forward="true" selection-start-line="105" selection-start-column="67" selection-end-line="105" selection-end-column="67" />
         </state>
       </provider>
     </entry>

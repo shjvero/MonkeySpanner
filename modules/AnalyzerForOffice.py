@@ -71,18 +71,17 @@ def getPrototype(env, office_msg=None):
     t_list.append(Thread(target=getWebArtifactItems, args=(env, CONSTANT.OFFICE, office_msg, limitedTime, prototype)))
     total = len(t_list)
 
-    # print("Total Thread: {}".format(total))
     for i in range(total):
         t_list[i].start()
     for i in range(total):
         t_list[i].join()
-    # print(len(prototype))
     prototype.sort(key=itemgetter(1))
     return True, prototype
 
     '''
-    [빨] MS-Office 프리패치: WINWORD.EXE, POWERPNT.EXE, EXCEL.EXE
-    [빨] 점프리스트
+    [빨] MS-Office 프리패치: 생성 -- WINWORD.EXE, POWERPNT.EXE, EXCEL.EXE
+    [주] MS-Office 프리패치: 실행
+    [주] 점프리스트
     [주] 오피스 프로세스 프리패치: WMIPRVSE.EXE, EQNEDT32.EXE, DW20.EXE, DWWIN.EXE, FLTLDR.EXE
     [노] 이벤트로그: Microsoft-Office-Alerts.evtx EID:300
     [노] 이벤트로그: Application.evtx EID 1001, Windows Error Reporting

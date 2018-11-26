@@ -1,4 +1,6 @@
-from PyQt5.QtGui import QMovie
+import logging
+
+from PyQt5.QtGui import QMovie, QFont
 from PyQt5.QtWidgets import QWidget, QProgressBar, QLabel, QSizePolicy, QBoxLayout
 from PyQt5.QtCore import Qt, QThread, QWaitCondition, QMutex, pyqtSignal, QObject
 
@@ -68,17 +70,24 @@ class LoadingWidget(QWidget, QObject):
         self.loadingImg.setMovie(self.loadingMovie)
         self.loadingImg.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.loadingImg.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.loadingImg)
+
+        self.logLabel = QLabelLogger(self)
+        self.logLabel.setFormatter(logging.Formatter('%(message)s'))
+        logging.getLogger().addHandler(self.logLabel)
+        logging.getLogger().setLevel(logging.INFO)
 
         self.loadingBar = QProgressBar(self)
         self.loadingBar.setStyleSheet(qdarkstyle.load_stylesheet_pyqt5())
         self.loadingBar.setFixedHeight(10)
         self.loadingBar.setTextVisible(False)
-        layout.addWidget(self.loadingBar)
 
         self.barThread = LoadingBarThread(self)
         self.barThread.change_value.connect(self.loadingBar.setValue)
         self.barThread.complete.connect(self.clear)
+
+        layout.addWidget(self.loadingImg)
+        layout.addWidget(self.logLabel.widget)
+        layout.addWidget(self.loadingBar)
         self.layout().setContentsMargins(0, 0, 0, 0)
 
     def start(self):
@@ -97,3 +106,14 @@ class LoadingWidget(QWidget, QObject):
     def clear(self):
         self.loadingMovie.stop()
         self.complete.emit()
+
+class QLabelLogger(logging.Handler):
+    def __init__(self, parent):
+        super().__init__()
+        self.widget = QLabel("Collecting...", parent)
+        self.widget.setAlignment(Qt.AlignCenter)
+        self.widget.setFont(QFont("Times New Roman", 11))
+
+    def emit(self, msg):
+        msg = self.format(msg)
+        self.widget.setText(msg)

@@ -62,24 +62,21 @@ def getPrototype(env):
     t_list.append(Thread(target=getAppCompatCache, args=(prototype, limitedTime,)))
     total = len(t_list)
 
-    # print("Total Thread: {}".format(total))
     for i in range(total):
         t_list[i].start()
     for i in range(total):
         t_list[i].join()
-    # print(len(prototype))
     prototype.sort(key=itemgetter(1))
     return prototype
 
     '''
-    [빨] HWP 프리패치: HWP.EXE
-    [빨] 점프리스트
-    [주] 연관 프로세스 프리패치: GBB.EXE, GSWIN32C.EXE
-    [노] 이벤트 로그: Application.evtx EID 1000, 1001
-    [노] 이벤트 로그: WER-Diag%4Operational.evtx EID 2 -- win7만 
-    [초] 이벤트 로그: Fault...heap.evtx EID 1001
+    [빨] HWP 프리패치: 생성 -- HWP.EXE
+    [주] HWP 프리패치: 실행
+    [주] 점프리스트
+    [노] 연관 프로세스 프리패치: GBB.EXE, GSWIN32C.EXE
     [파] WER 프리패치: WERFAULT.EXE
     [남] Report.wer
+    [남] 이벤트 로그: Application.evtx EID 1000, 1001
     [보] Cmd, Powershell 프리패치 - 첫 타임라인 이후 (생성, 실행 모두)
 
     [회] 프리패치 - 첫 타임라인 이후 생성된 것만

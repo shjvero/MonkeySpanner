@@ -105,7 +105,6 @@ class Main(QMainWindow):
         self.filteringWidget = FilteringWidget()
         self.filteringWidget.itemChanged.connect(self.table.filter)
 
-
         self.topLayout.addWidget(self.selection)
         self.topLayout.addWidget(self.loadBtn)
         self.topLayout.addItem(QSpacerItem(10, self.topWidgetHeight))
@@ -113,7 +112,7 @@ class Main(QMainWindow):
         self.topLayout.addItem(QSpacerItem(10, self.topWidgetHeight))
         self.topLayout.addWidget(self.search)
         self.bottomLayout.addWidget(self.table)
-
+        self.bottomLayout.addItem(QSpacerItem(10, 10))
         self.showMaximized()
 
     def filtering(self):
@@ -125,8 +124,7 @@ class Main(QMainWindow):
     def completeSelection(self):
         if self.isLoaded: return
         self.isLoaded = True
-        self.bottomLayout.removeWidget(self.table)
-        self.bottomLayout.addWidget(self.loadingWidget)
+        self.bottomLayout.replaceWidget(self.table, self.loadingWidget)
         self.table.hide()
         self.loadingWidget.start()
         from threading import Thread
@@ -145,8 +143,7 @@ class Main(QMainWindow):
         self.timeline = None
         self.isLoaded = False
         self.loadingWidget.hide()
-        self.bottomLayout.removeWidget(self.loadingWidget)
-        self.bottomLayout.addWidget(self.table)
+        self.bottomLayout.replaceWidget(self.loadingWidget, self.table)
         self.table.show()
 
     def enterPressed(self):

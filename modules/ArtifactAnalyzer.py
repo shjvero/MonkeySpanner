@@ -1,3 +1,4 @@
+import logging
 import modules.constant as CONSTANT
 
 from libs.ParsePrefetch.prefetch import *
@@ -16,8 +17,10 @@ def getApplicationEvtx(type, compared, prototype, checkedSW, timeline=None):
     elif type in [CONSTANT.EDGE]:
         head1000 = [CONSTANT.EVENTLOG_KEYWORD, 2]
         head1001 = [CONSTANT.EVENTLOG_KEYWORD, 5]
-    elif type in [CONSTANT.OFFICE, CONSTANT.HWP]:
+    elif type in [CONSTANT.OFFICE]:
         head1000 = head1001 = [CONSTANT.EVENTLOG_KEYWORD, 3]
+    elif type in [CONSTANT.HWP]:
+        head1000 = head1001 = [CONSTANT.EVENTLOG_KEYWORD, 6]
 
     fullPath = CONSTANT.EVENTLOG + compared['channel']
     checkedEID = compared['eid']
@@ -27,13 +30,13 @@ def getApplicationEvtx(type, compared, prototype, checkedSW, timeline=None):
             try:
                 systemTag = event.lxml()[0]
                 loggedTime = systemTag[5].get("SystemTime")
-                if not loggedTime: continue
                 providerName = systemTag[0].get("Name")
                 eventID = systemTag[1].text
+                if not loggedTime: continue
                 if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
                     if timeline:
                         if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
-                            print(providerName + " skipped, because of timeline")
+                            logging.info("[Exception] EID - {}, {} was skipped, it's more older timeline".format(eventID, providerName))
                             continue
 
                     if systemTag[2].text == '4':
@@ -59,8 +62,8 @@ def getApplicationEvtx(type, compared, prototype, checkedSW, timeline=None):
                         wer_info.append([eventDataTag[16].text, eventDataTag[8].text, eventDataTag[11].text])
                         items.append([head1001, loggedTime, providerName, eventID, level, etc, event.xml()])
             except Exception as e:
-                print("Error: Application.evtx {}".format(e))
-            continue
+                if int(eventID) in checkedEID:
+                    logging.info('[Error] EID - {} in "Application.evtx": {}'.format(eventID, e))
     if wer_info:
         type = CONSTANT.IE if not checkedSW[1] else CONSTANT.OFFICE
         getReportWER(wer_info, items, type)
@@ -79,12 +82,13 @@ def getWERDiagEvtxForWin7(compared, prototype, timeline=None):
             try:
                 systemTag = event.lxml()[0]
                 loggedTime = systemTag[7].get("SystemTime")
-                if not loggedTime: continue
                 providerName = systemTag[0].get("Name")
                 eventID = systemTag[1].text
+                if not loggedTime: continue
                 if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
                     if timeline:
                         if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                            logging.info("[Exception] EID - {}, {} was skipped, it's more older timeline".format(eventID, providerName))
                             continue
                     if systemTag[3].text == '1':
                         level = 'Fatal'
@@ -97,7 +101,8 @@ def getWERDiagEvtxForWin7(compared, prototype, timeline=None):
                     etc = 'Heap Corruption'
                     items.append([yellowHead, loggedTime, providerName, eventID, level, etc, event.xml()])
             except Exception as e:
-                print("Error: {}".format(e))
+                if int(eventID) in checkedEID:
+                    logging.info('[Error] EID - {} in "WER-Diag/Operational.evtx": {}'.format(eventID, e))
     prototype += items
 
 
@@ -117,12 +122,13 @@ def getFalutHeapEvtx(type, compared, prototype, timeline=None):
             try:
                 systemTag = event.lxml()[0]
                 loggedTime = systemTag[7].get("SystemTime")
-                if not loggedTime: continue
                 providerName = systemTag[0].get("Name")
                 eventID = systemTag[1].text
+                if not loggedTime: continue
                 if int(eventID) in checkedEID and providerName == checkedProviders[eventID]:
                     if timeline:
                         if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                            logging.info("[Exception] EID - {}, {} was skipped, it's more older timeline".format(eventID, providerName))
                             continue
                     if systemTag[3].text == '1':
                         level = 'Fatal'
@@ -136,7 +142,8 @@ def getFalutHeapEvtx(type, compared, prototype, timeline=None):
                     etc = eventDataTag.get("Name")
                     items.append([head, loggedTime, providerName, eventID, level, etc, event.xml()])
             except Exception as e:
-                print("Error: Fault.evtx {}".format(e))
+                if int(eventID) in checkedEID:
+                    logging.info('[Error] EID - {} in "Fault-Tolerant-Heap/Operational.evtx": {}'.format(eventID, e))
     prototype += items
 
 
@@ -151,12 +158,13 @@ def getOAlertsEvtx(compared, prototype, timeline=None):
             try:
                 systemTag = event.lxml()[0]
                 loggedTime = systemTag[5].get("SystemTime")
-                if not loggedTime: continue
                 providerName = systemTag[0].get("Name")
                 eventID = systemTag[1].text
+                if not loggedTime: continue
                 if int(eventID) in checkedEID:
                     if timeline:
                         if datetime.datetime.strptime(loggedTime, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                            logging.info("[Exception] EID - {}, {} was skipped, it's more older timeline".format(eventID, providerName))
                             continue
                     if systemTag[2].text == '1':
                         level = 'Fatal'
@@ -170,7 +178,8 @@ def getOAlertsEvtx(compared, prototype, timeline=None):
                     etc = eventDataTag[0].text
                     items.append([yellowHead, loggedTime, providerName, eventID, level, etc, event.xml()])
             except Exception as e:
-                print("Error: OAlert.evtx {}".format(e))
+                if int(eventID) in checkedEID:
+                    logging.info('[Error] EID - {} in "OAlerts.evtx": {}'.format(eventID, e))
     prototype += items
 
 
@@ -194,27 +203,6 @@ def getReportWER(wer_info, prototype, type):
             prototype.append(
                 [head, "{}".format(modifiedTime), fullpath, data[1], data[2], "{}".format(createdTime), content])
 
-
-#
-# def getDirectlyReportWER(type, env, prototype, reportArchive):
-#     items = []
-#     headStr = "Report.wer"
-#     head = None
-#     if type == CONSTANT.HWP:
-#         head = [headStr, 5]
-#
-#     for dirname in os.listdir(CONSTANT.WER[env]):
-#         frontDirName = dirname.rsplit('_', 2)[0]
-#         if frontDirName.lower() in reportArchive:
-#             fullpath = CONSTANT.WER[env] + dirname + "\\Report.wer"
-#             f = open(fullpath, "rb")
-#             content = f.read().decode('utf-16')
-#             createdTime = datetime.datetime.fromtimestamp(os.path.getctime(fullpath))
-#             modifiedTime = datetime.datetime.fromtimestamp(os.path.getmtime(fullpath))
-#             items.append([head, "{}".format(modifiedTime), fullpath, "", "", "{}".format(createdTime), content])
-#     prototype += items
-
-
 def getPrefetchItems(type, prototype, included, timeline=None):
     items = []
     headStr = "Prefetch"
@@ -227,13 +215,13 @@ def getPrefetchItems(type, prototype, included, timeline=None):
         shellHead = [headStr, 7]        # [보] Cmd, Powershell 프리패치
     elif type == CONSTANT.OFFICE:
         originHead = [headStr, 1]       # [빨] WINWORD.EXE, POWERPNT.EXE, EXCEL.EXE: 생성
-        reExecutionHead = [headStr, 1]  # [빨] WINWORD.EXE, POWERPNT.EXE, EXCEL.EXE: 생성
+        reExecutionHead = [headStr, 2]  # [주] WINWORD.EXE, POWERPNT.EXE, EXCEL.EXE: 생성
         relatedHead = [headStr, 2]      # [주] WMIPRVSE.EXE, EQNEDT32.EXE, DW20.EXE, DWWIN.EXE: 관련 프로세스 프리패치
         werHead = [headStr, 3]          # [노] WERFAULT 프리패치: 생성, 실행 모두
     elif type == CONSTANT.HWP:
         originHead = [headStr, 1]       # [빨] HWP.EXE: 생성
-        reExecutionHead = [headStr, 1]  # [빨] HWP.EXE: 실행
-        relatedHead = [headStr, 3]      # [주] GBB.EXE, GSWIN32C.EXE: 관련 프로세스 프리패치
+        reExecutionHead = [headStr, 2]  # [주] HWP.EXE: 실행
+        relatedHead = [headStr, 3]      # [노] GBB.EXE, GSWIN32C.EXE: 관련 프로세스 프리패치
         werHead = [headStr, 5]          # [파] WER 프리패치: WERFAULT.EXE
     elif type == CONSTANT.EDGE:
         originHead = [headStr, 1]       # [빨] MICROSOFTEDGE.EXE: 생성
@@ -263,19 +251,17 @@ def getPrefetchItems(type, prototype, included, timeline=None):
     for fname in os.listdir(CONSTANT.PREFETCH):
         if fname.endswith(".pf"):
             if os.path.getsize(CONSTANT.PREFETCH + fname) == 0:
-                print("[ - ] {}: Zero-byte Prefetch File".format(fname))
                 continue
             try:
                 p = Prefetch(CONSTANT.PREFETCH + fname)
             except Exception as e:
-                print("[ - ] {} could not be parsed. {}".format(fname, e))
-
+                logging.info("[Error] {} could not be parsed. {}".format(fname, e))
             pf_name = "{}-{}.pf".format(p.executableName, p.hash)
             createdTime = p.volumesInformationArray[0]["Creation Date"]
             try:
                 createdTimeObj = datetime.datetime.strptime(createdTime, "%Y-%m-%d %H:%M:%S.%f")
             except Exception as e:
-                print(e)
+                logging.info("{} in Parser Prefetch.".format(e))
                 continue
             if p.executableName in included[0]:  # 특정 SW
                 content = p.getContents()
@@ -324,6 +310,7 @@ def getJumplistItemsVerSummary(type, prototype, timeline=None):
         fullpath = CONSTANT.JUMPLIST[0] + content[1] + ".automaticDestinations-ms"
         if not os.path.exists(fullpath):
             _list.remove(content)
+            logging.info("[Exception] {} JumpList doesn't exists".format(contents[0]))
             continue
         ole = olefile.OleFileIO(fullpath)
 
@@ -331,13 +318,14 @@ def getJumplistItemsVerSummary(type, prototype, timeline=None):
         for item in ole.listdir():
             file = ole.openstream(item)
             file_data = file.read()
-            header_value = file_data[:4]  # first four bytes value should be 76 bytes
+            header_value = file_data[:4]
             try:
-                if header_value[0] == 76:  # first four bytes value should be 76 bytes
+                if header_value[0] == 76:
                     lnk_header = lnk_file_header(file_data[:76])
-                    lnk_after_header = lnk_file_after_header(file_data)  # after 76 bytes to last 100 bytes
+                    lnk_after_header = lnk_file_after_header(file_data)
                     if timeline:
                         if datetime.datetime.strptime(lnk_header, "%Y-%m-%d %H:%M:%S.%f") < timeline:
+                            logging.info("[Exception] A log in {} JumpList is skipped, it's more older timeline".format(contents[0]))
                             continue
                     items.append([
                         LNKhead,
@@ -348,13 +336,7 @@ def getJumplistItemsVerSummary(type, prototype, timeline=None):
                         lnk_header[2],  # Created Time
                         [fullpath.rsplit("\\", 1)[-1], _list[idx][0], "LNK", lnk_header + lnk_after_header]
                     ])
-                    # lnk_tracker_value = file_data[ole.get_size(item) - 100:ole.get_size(item) - 96]
-                    # if lnk_tracker_value[0] == 96:  # link tracker information 4 byte value = 96
-                    #     try:
-                    #         lnk_tracker = lnk_file_tracker_data(file_data[ole.get_size(item) - 100:])  # last 100 bytes
-                    #     except:
-                    #         pass
-                else:  # if first four byte value is not 76 then it is DestList stream
+                else:
                     DestLists = destlist_data(file_data[:ole.get_size(item)])
                     for destList in DestLists:
                         items.append([
@@ -402,13 +384,7 @@ def getJumplistItems(contents):
                         lnk_after_header[1],
                         lnk_after_header[2],
                     ])
-                    lnk_tracker_value = file_data[ole.get_size(item) - 100:ole.get_size(item) - 96]
-                    if lnk_tracker_value[0] == 96:  # link tracker information 4 byte value = 96
-                        try:
-                            lnk_tracker = lnk_file_tracker_data(file_data[ole.get_size(item) - 100:])  # last 100 bytes
-                        except:
-                            pass
-                else:  # if first four byte value is not 76 then it is DestList stream
+                else:
                     DestList = destlist_data(file_data[:ole.get_size(item)])
             except:
                 pass
@@ -430,7 +406,6 @@ def getWebArtifactItems(env, type, prefetchList=None, timeline=None, prototype=N
     if not fileList:
         dirname = CONSTANT.IE_ARTIFACT_PATH[env]["History"]
         fullpath = glob.glob(dirname + "WebCacheV*.dat")[0]
-        logPath = cwd + '\\temp.txt'
         if os.path.exists(fullpath):
             _log = ''
             si = subprocess.STARTUPINFO()
@@ -441,7 +416,7 @@ def getWebArtifactItems(env, type, prefetchList=None, timeline=None, prototype=N
             import shutil
             try:
                 shutil.copy(fullpath, cwd + "\\WebCacheV01.dat")
-            except Exception as e:
+            except Exception:
                 if type == CONSTANT.OFFICE:
                     prefetchList = "Please terminate any process using " + fullpath
                 return False, "Please terminate any process using " + fullpath
@@ -466,13 +441,9 @@ def getAppCompatCache(prototype, timeline):
 def getRecentFileCache(filepath):
     contents = []
     with open(filepath, "rb") as f:
-        # Offset
         offset = 0x14
-        # File Size
         file_size = os.stat(filepath)[6]
-        # Go to beginning of file.
         f.seek(0)
-        # Read forward 0x14 (20).
         f.seek(offset)
         while (offset < file_size):
             try:
@@ -485,28 +456,3 @@ def getRecentFileCache(filepath):
             except Exception as e:
                 return False, "{}".format(e)
     return True, contents
-
-
-def getRecentFileItems(type, prototype, extension):
-    import glob
-    head = None
-    navyHead = ["Recent", 6]
-    if type == CONSTANT.OFFICE:
-        head = navyHead
-    elif type == CONSTANT.HWP:
-        head = navyHead
-
-    fileList = []
-    for ex in extension:
-        fileList += glob.glob(CONSTANT.RECENT + "*.{}".format(ex))
-
-    items = []
-    for fname in fileList:
-        accessedTime = datetime.datetime.fromtimestamp(os.path.getatime(fname))
-        modifiedTime = datetime.datetime.fromtimestamp(os.path.getmtime(fname))
-        createdTime = datetime.datetime.fromtimestamp(os.path.getctime(fname))
-        fileSize = os.path.getsize(fname)
-        items.append(
-            [head, "{}".format(accessedTime), fname, "{}".format(modifiedTime), fileSize, "{}".format(createdTime),
-             "None"])
-    prototype += items
