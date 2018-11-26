@@ -1,21 +1,3 @@
-#!/usr/bin/python
-#    This file is part of python-registry.
-#
-#   Copyright 2015 Will Ballenthin <william.ballenthin@mandiant.com>
-#                    while at Mandiant <http://www.mandiant.com>Exe
-#
-#   Licensed under the Apache License, Version 2.0 (the "License");
-#   you may not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#       http://www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an "AS IS" BASIS,
-#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-import sys
 import logging
 import datetime
 from collections import namedtuple
@@ -25,7 +7,6 @@ from libs.ParseRegistry.RegistryParse import parse_windows_timestamp as _parse_w
 
 g_logger = logging.getLogger("amcache")
 Field = namedtuple("Field", ["name", "getter"])
-
 
 def make_value_getter(value_name):
     """ return a function that fetches the value from the registry key """
@@ -56,7 +37,6 @@ def make_windows_timestamp_value_getter(value_name):
 
 
 def parse_unix_timestamp(qword):
-    # return datetime.datetime.fromtimestamp(qword)
     return datetime.datetime.utcfromtimestamp(qword)
 
 
@@ -118,78 +98,38 @@ WINDOWS_TIMESTAMP_ZERO = parse_windows_timestamp(0)
 
 # note: order here implicitly orders CSV column ordering cause I'm lazy
 FIELDS = [
-    Field("path", make_value_getter("15")),
-    Field("sha1", make_value_getter("101")),
-    Field("size", make_value_getter("6")),
-    Field("file_description", make_value_getter("c")),
-    Field("source_key_timestamp", lambda key: key.timestamp()),
-    Field("created_timestamp", make_windows_timestamp_value_getter("12")),
-    Field("modified_timestamp", make_windows_timestamp_value_getter("11")),
-    Field("modified_timestamp2", make_windows_timestamp_value_getter("17")),
-    Field("linker_timestamp", make_unix_timestamp_value_getter("f")),
-    Field("product", make_value_getter("0")),
-    Field("company", make_value_getter("1")),
-    Field("pe_sizeofimage", make_value_getter("7")),
-    Field("version_number", make_value_getter("2")),
-    Field("version", make_value_getter("5")),
-    Field("language", make_value_getter("3")),
-    Field("header_hash", make_value_getter("8")),
-    Field("pe_checksum", make_value_getter("9")),
-    Field("id", make_value_getter("100")),
-    Field("switchbackcontext", make_value_getter("4")),
+    Field("Source_Key_Timestamp", lambda key: key.timestamp()),
+    Field("Path", make_value_getter("15")),
+    Field("SHA1", make_value_getter("101")),
+    Field("Size", make_value_getter("6")),
+    Field("File_Description", make_value_getter("c")),
+    Field("Created_Time", make_windows_timestamp_value_getter("12")),
+    Field("Modified_Time", make_windows_timestamp_value_getter("11")),
+    Field("Modified_Time2", make_windows_timestamp_value_getter("17")),
+    Field("Linker_Time", make_unix_timestamp_value_getter("f")),
+    Field("Product", make_value_getter("0")),
+    Field("Company", make_value_getter("1")),
+    Field("PE_Size_of_Image", make_value_getter("7")),
+    Field("Version_Number", make_value_getter("2")),
+    Field("Version", make_value_getter("5")),
+    Field("Language", make_value_getter("3")),
+    Field("Header_Hash", make_value_getter("8")),
+    Field("PE_Checksum", make_value_getter("9")),
+    Field("ID", make_value_getter("100")),
+    Field("SwitchBackContext", make_value_getter("4")),
 ]
 
-ExecutionEntry = namedtuple("ExecutionEntry", map(lambda e: e.name, FIELDS))
-
-
-def parse_execution_entry(key):
-    return ExecutionEntry(**dict((e.name, e.getter(key)) for e in FIELDS))
-
-
-class NotAnAmcacheHive(Exception):
-    pass
-
-
-def parse_execution_entries(registry):
+def get(path):
     try:
-        volumes = registry.open("Root\\File")
-    except Registry.RegistryKeyNotFoundException:
-        raise NotAnAmcacheHive()
+        reg = Registry.Registry(path)
+        volumes = reg.open("Root\\File")
+    except Registry.RegistryKeyNotFoundException as e:
+        return False, "{}".format(e)
 
-    ret = []
+    contents = []
     for volumekey in volumes.subkeys():
         for filekey in volumekey.subkeys():
-            ret.append(parse_execution_entry(filekey))
-    return ret
+            contents.append(["{}".format(e.getter(filekey)) for e in FIELDS])
 
-
-TimelineEntry = namedtuple("TimelineEntry", ["timestamp", "type", "entry"])
-
-def get(path):
-    r = Registry.Registry(path)
-
-    try:
-        ee = parse_execution_entries(r)
-    except NotAnAmcacheHive as e:
-        return False, "{}".format(e)
-    return True, ee
-    # import os, csv, datetime
-    # csv_name = os.getcwd() + "\\amcache_{}.csv".format(datetime.datetime.strftime(datetime.datetime.now(), "%Y%m%d%H%M%S%f"))
-    # if do_timeline:
-    #     entries = []
-    #     for e in ee:
-    #         for t in ["source_key_timestamp", "created_timestamp", "modified_timestamp",
-    #                   "modified_timestamp2", "linker_timestamp"]:
-    #             ts = getattr(e, t)
-    #             if ts == UNIX_TIMESTAMP_ZERO:
-    #                 continue
-    #             if ts == WINDOWS_TIMESTAMP_ZERO:
-    #                 continue
-    #             if ts == datetime.datetime.min:
-    #                 continue
-    #             entries.append(TimelineEntry(ts, t, e))
-    #     with open(csv_name, 'w', encoding='utf-8', newline='') as csv_file:
-    #         w = csv.writer(csv_file)
-    #         w.writerow["timestamp", "type", "path", "sha1"]
-    #         for e in sorted(entries, key=lambda e: e.timestamp):
-    #             w.writerow([e.timestamp, e.type, e.entry.path, e.entry.sha1])
+    from operator import itemgetter
+    return True, sorted(contents, key=itemgetter(0))

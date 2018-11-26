@@ -35,29 +35,10 @@ class TableViewer(QWidget):
 
         for row in range(len(self.contents)):
             self.table.insertRow(row)
-            item = list(map(lambda i: getattr(self.contents[row], i.name), FIELDS))
-            self.table.setItem(row, 0, QTableWidgetItem(item[0]))   # Path
-            self.table.setItem(row, 1, QTableWidgetItem(item[1]))   # Sha-1
-            self.table.setItem(row, 2, QTableWidgetItem(str(item[2])))   # ?
-            self.table.setItem(row, 3, QTableWidgetItem(item[3]))   # ?
-            self.table.setItem(row, 4, QTableWidgetItem("{}".format(item[4])))   # createTime
-            self.table.setItem(row, 5, QTableWidgetItem("{}".format(item[5])))
-            self.table.setItem(row, 6, QTableWidgetItem("{}".format(item[6])))
-            self.table.setItem(row, 7, QTableWidgetItem("{}".format(item[7])))
-            self.table.setItem(row, 8, QTableWidgetItem("{}".format(item[8])))
-            self.table.setItem(row, 9, QTableWidgetItem(item[9]))
-            self.table.setItem(row, 10, QTableWidgetItem(item[10]))
-            self.table.setItem(row, 11, QTableWidgetItem(str(item[11])))
-            self.table.setItem(row, 12, QTableWidgetItem(item[12])) # version
-            self.table.setItem(row, 13, QTableWidgetItem(item[13]))
-            self.table.setItem(row, 14, QTableWidgetItem(str(item[14])))
-            self.table.setItem(row, 15, QTableWidgetItem(item[15]))
-            self.table.setItem(row, 16, QTableWidgetItem(str(item[16])))
-            self.table.setItem(row, 17, QTableWidgetItem(str(item[17])))
-            # for col in range(len(self.columnHeader)):
-            #     item = list(map(lambda i: getattr(self.contents[row], i.name), FIELDS))
-            #     print(item)
-            #     self.table.setItem(row, col, QTableWidgetItem(item[col]))
+            for col in range(len(self.columnHeader)):
+                self.table.setItem(row, col, QTableWidgetItem(self.contents[row][col]))
+                self.table.item(row, col).setTextAlignment(Qt.AlignCenter)
+            self.table.item(row, 1).setTextAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
         self.table.resizeColumnsToContents()
         self.table.resizeRowsToContents()
