@@ -82,11 +82,14 @@ class MenuBar(QMenuBar):
         self.selected = self.parent().presentSelected
         hashList = []
         if self.selected == CONSTANT.ADOBE_READER:
-            print("Adobe Reader")
             for i in range(18, 24):
                 hashList.append(CONSTANT.JUMPLIST_HASH[i])
         elif self.selected == CONSTANT.ADOBE_FLASH_PLAYER:
-            print("Adobe Flash Player in JumpListViewer")
+            hashList.append(CONSTANT.JUMPLIST_HASH[12])     # IE
+            hashList.append(CONSTANT.JUMPLIST_HASH[13])     # IE
+            for i in range(12):
+                hashList.append(CONSTANT.JUMPLIST_HASH[i])  # Office
+            hashList.append(CONSTANT.JUMPLIST_HASH[24])     # Chrome
             hashList.append(CONSTANT.JUMPLIST_HASH[14])
         elif self.selected == CONSTANT.EDGE:
             hashList.append(CONSTANT.JUMPLIST_HASH[25])

@@ -73,11 +73,6 @@ class PrototypeTable(QTableWidget):
         elif sw == CONSTANT.LPE:
             QMessageBox.information(self, "Help", "Preparing...[Kerenl]", QMessageBox.Ok)
             return
-        #
-        # if timeline:
-        #     print("타임라인 설정 O")
-        # else:
-        #     print("타임라인 설정 X")
         self.initUI()
 
     def initUI(self):
@@ -106,7 +101,9 @@ class PrototypeTable(QTableWidget):
             self.item(row, 0).setTextAlignment(Qt.AlignCenter)
             self.item(row, 4).setTextAlignment(Qt.AlignCenter)
             self.verticalHeaderItem(row).setTextAlignment(Qt.AlignRight)
-            for c in range(self.columnCount()):  # Adjust COLOR of Row
+
+            # Adjust COLOR of Row
+            for c in range(self.columnCount()):
                 self.item(row, c).setBackground(self.COLOR[list[0][1]])
             row += 1
 

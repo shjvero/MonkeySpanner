@@ -368,6 +368,13 @@ class NTFSViewer(QWidget):
                             ])
                             for c in range(self.usnjrnlTable.columnCount()):  # Adjust COLOR of Row
                                 self.usnjrnlTable.item(usn_row, c).setBackground(QColor(125, 125, 125, 30))
+
+            if self.DELETE_KEYWORD in record.reason_string:
+               if record.file_name.endswith(".ps"):
+                   self.usnjrnlTable.item(usn_row, c).setBackground(QColor(0, 255, 0, 30))
+               elif record.file_name[0] == '~' and record.file_name.endswith(".tmp"):
+                   self.usnjrnlTable.item(usn_row, c).setBackground(QColor(0, 125, 255, 30))
+
             self.details.append(detail)
             usn_row += 1
 
